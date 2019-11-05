@@ -2,6 +2,7 @@ import React, { Fragment, useContext } from 'react';
 import { observer } from 'mobx-react';
 import rootStore from '../../stores';
 
+import { EDIT_ACCOUNT } from '../../../background/config';
 import './account.pcss';
 
 const Account = observer(() => {
@@ -23,9 +24,8 @@ const Account = observer(() => {
                 </div>
 
                 <div className="account__actions">
-                    {/* TODO tds link */}
                     <a
-                        href="https://adguard.com/forward.html?action=account_settings&from=options_screen_account&app=vpn_extension"
+                        href={EDIT_ACCOUNT}
                         className="button button--medium button--outline-primary account__action"
                         target="_blank"
                         rel="noopener noreferrer"

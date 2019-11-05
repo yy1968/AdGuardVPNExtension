@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { WEBSITE, DISCUSS, GITHUB } from '../../../background/config';
 import './footer.pcss';
 
 const getCurrentYear = () => new Date().getFullYear();
@@ -13,21 +14,20 @@ const Footer = () => {
                     {getCurrentYear()}
                 </div>
                 <nav className="footer__nav">
-                    {/* TODO tds links */}
                     <a
-                        href="https://adguard.com/forward.html?action=adguard_site&from=options_screen_footer&app=vpn_extension"
+                        href={WEBSITE}
                         className="footer__link"
                     >
                         Website
                     </a>
                     <a
-                        href="https://adguard.com/forward.html?action=discuss&from=options_screen_footer&app=vpn_extension"
+                        href={DISCUSS}
                         className="footer__link"
                     >
                         Discuss
                     </a>
                     <a
-                        href="https://adguard.com/forward.html?action=github&from=options_screen_footer&app=vpn_extension"
+                        href={GITHUB}
                         className="footer__link"
                     >
                         Github
