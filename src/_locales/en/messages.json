@@ -52,5 +52,26 @@
     },
     "global_error_can_control": {
         "message": "Other extension prevents us from setting up the tunnel. Please disable it in browser settings."
+    },
+    "about_title": {
+        "message": "About"
+    },
+    "about_description": {
+        "message": "We are the team of experienced specialists from Adguard Software Limited — an IT company that develops a range of AdGuard software products for internet filtering. We are not just creators of AdGuard, but rather jedi of the light side of the Internet."
+    },
+    "account_title": {
+        "message": "Account"
+    },
+    "account_edit": {
+        "message": "Edit"
+    },
+    "account_sign_out": {
+        "message": "Sign out"
+    },
+    "rate_description": {
+        "message": "Hey, we are a team from AdGuard and it is very important for us to know your opinion about our product. Please rate it."
+    },
+    "rate_hide": {
+        "message": "Hide"
     }
 }

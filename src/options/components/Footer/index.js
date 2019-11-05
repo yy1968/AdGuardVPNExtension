@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { WEBSITE, DISCUSS, GITHUB } from '../../../background/config';
+import { WEBSITE_URL, EULA_URL, PRIVACY_URL } from '../../../background/config';
 import './footer.pcss';
 
 const getCurrentYear = () => new Date().getFullYear();
@@ -9,28 +9,22 @@ const Footer = () => {
     return (
         <footer className="footer">
             <div className="footer__inner">
-                <div className="footer__copyright">
+                <a href={WEBSITE_URL} className="footer__copyright">
                     &copy; AdGuard, 2009–
                     {getCurrentYear()}
-                </div>
+                </a>
                 <nav className="footer__nav">
                     <a
-                        href={WEBSITE}
+                        href={EULA_URL}
                         className="footer__link"
                     >
-                        Website
+                        EULA
                     </a>
                     <a
-                        href={DISCUSS}
+                        href={PRIVACY_URL}
                         className="footer__link"
                     >
-                        Discuss
-                    </a>
-                    <a
-                        href={GITHUB}
-                        className="footer__link"
-                    >
-                        Github
+                        Privacy policy
                     </a>
                 </nav>
             </div>

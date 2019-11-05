@@ -12,20 +12,14 @@ const About = observer(() => {
     return (
         <Fragment>
             <h2 className="content__title">
-                About
+                {browser.i18n.getMessage('about_title')}
             </h2>
             <div className="about">
-                {/* TODO get current version */}
                 <div className="about__version">
                     {aboutVersionStr}
                 </div>
-                {/* TODO get content for description */}
                 <div className="about__description">
-                    We are the team of experienced specialists from
-                    Adguard Software Limited — an IT company
-                    that develops a range of AdGuard software products for internet filtering.
-                    We are not just creators of AdGuard, but rather
-                    jedi of the light side of the Internet.
+                    {browser.i18n.getMessage('about_description')}
                 </div>
             </div>
         </Fragment>

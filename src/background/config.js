@@ -26,8 +26,6 @@ export const BUY_LICENSE_URL = 'https://adguard.com/forward.html?action=buy_lice
 export const OTHER_PRODUCTS_URL = 'https://adguard.com/forward.html?action=other_products&from=popup&app=vpn_extension';
 
 // Options page
-export const EDIT_ACCOUNT = 'https://adguard.com/forward.html?action=account_settings&from=options_screen_account&app=vpn_extension';
-export const WEBSITE = 'https://adguard.com/forward.html?action=adguard_site&from=options_screen_footer&app=vpn_extension';
-export const DISCUSS = 'https://adguard.com/forward.html?action=discuss&from=options_screen_footer&app=vpn_extension';
-export const GITHUB = 'https://adguard.com/forward.html?action=github&from=options_screen_footer&app=vpn_extension';
+export const EDIT_ACCOUNT_URL = 'https://adguard.com/forward.html?action=account_settings&from=options_screen_account&app=vpn_extension';
+export const WEBSITE_URL = 'https://adguard.com/forward.html?action=adguard_site&from=options_screen_footer&app=vpn_extension';
 export const STORE_URL = 'https://adguard.com/forward.html?action=store&from=options_screen_footer&app=vpn_extension';
