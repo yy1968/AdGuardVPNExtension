@@ -14,3 +14,5 @@ export const MESSAGES_TYPES = {
     EXCLUSION_ADDED: 'exclusions.added',
     EXCLUSION_REMOVED: 'exclusions.removed',
 };
+
+export const NETWORK_ERROR = 'network.error';
