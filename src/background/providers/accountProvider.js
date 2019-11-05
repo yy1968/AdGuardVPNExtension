@@ -30,6 +30,11 @@ const getVpnToken = async (accessToken) => {
     };
 };
 
+const getAccountInfo = async (accessToken) => {
+    return accountApi.getAccountInfo(accessToken);
+};
+
 export default {
     getVpnToken,
+    getAccountInfo,
 };

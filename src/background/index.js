@@ -29,6 +29,7 @@ global.adguard = {
     authCache,
     vpn,
     popupData,
+    credentials,
 };
 
 // init credentials

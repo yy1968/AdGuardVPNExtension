@@ -11,6 +11,17 @@ class AccountApi extends Api {
         };
         return this.makeRequest(path, method, config);
     }
+
+    GET_ACCOUNT_INFO = { path: 'get_info', method: 'GET' };
+
+    // TODO [maximtop] change when api for getting email will be ready
+    getAccountInfo() {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve('maxaimtop@gmail.com');
+            }, 500);
+        });
+    }
 }
 
 const accountApi = new AccountApi(ACCOUNT_API_URL);

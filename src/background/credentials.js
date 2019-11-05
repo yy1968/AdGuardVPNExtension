@@ -156,10 +156,22 @@ class Credentials {
         return this.appId;
     }
 
+    async fetchUsername() {
+        return accountProvider.getAccountInfo();
+    }
+
+    async getUsername() {
+        if (this.currentUsername) {
+            return this.currentUsername;
+        }
+        return this.fetchUsername();
+    }
+
     async init() {
         try {
             this.appId = await this.gainAppId();
             this.vpnCredentials = await this.getVpnCredentialsRemote();
+            this.currentUsername = await this.fetchUsername();
         } catch (e) {
             log.debug('unable to init credentials due: ', e.message);
         }

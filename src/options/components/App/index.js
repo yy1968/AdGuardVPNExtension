@@ -27,6 +27,7 @@ const App = observer(() => {
             authStore.isAuthenticated();
             settingsStore.getExclusions();
             settingsStore.getVersion();
+            settingsStore.getUsername();
         })();
 
         const messageHandler = async (message) => {

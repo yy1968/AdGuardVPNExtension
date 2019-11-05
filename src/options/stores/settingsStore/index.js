@@ -43,6 +43,8 @@ class SettingsStore {
 
     @observable appVersion;
 
+    @observable currentUsername;
+
     // New actions
     @action
     getExclusions = () => {
@@ -84,6 +86,15 @@ class SettingsStore {
     @action
     getVersion = () => {
         this.appVersion = adguard.appStatus.version;
+    };
+
+    @action
+    getUsername = async () => {
+        const username = await adguard.credentials.getUsername();
+
+        runInAction(() => {
+            this.currentUsername = username;
+        });
     };
 
     // Old actions

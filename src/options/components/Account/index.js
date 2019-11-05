@@ -5,7 +5,7 @@ import rootStore from '../../stores';
 import './account.pcss';
 
 const Account = observer(() => {
-    const { authStore } = useContext(rootStore);
+    const { authStore, settingsStore } = useContext(rootStore);
 
     const signOut = async () => {
         await authStore.deauthenticate();
@@ -19,7 +19,7 @@ const Account = observer(() => {
             <div className="account">
                 <div className="account__email">
                     {/* TODO get current email */}
-                    ouomuo@gmail.com
+                    {settingsStore.currentUsername}
                 </div>
 
                 <div className="account__actions">
