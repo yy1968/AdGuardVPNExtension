@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
 
+import { STORE_URL } from '../../../../background/config';
 import './rate.pcss';
 
 const RATING_STARS = [1, 2, 3, 4, 5];
