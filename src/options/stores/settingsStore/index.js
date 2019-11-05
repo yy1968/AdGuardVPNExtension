@@ -41,11 +41,13 @@ class SettingsStore {
 
     @observable isFormVisible = false;
 
+    @observable appVersion;
+
     // New actions
     @action
     getExclusions = () => {
         this.exclusions = adguard.whitelist.getExclusions();
-    }
+    };
 
     @action
     removeFromExclusions = async (hostName) => {
@@ -77,7 +79,12 @@ class SettingsStore {
     @action
     toggleExclusionsForm = () => {
         this.isFormVisible = !this.isFormVisible;
-    }
+    };
+
+    @action
+    getVersion = () => {
+        this.appVersion = adguard.appStatus.version;
+    };
 
     // Old actions
     @action

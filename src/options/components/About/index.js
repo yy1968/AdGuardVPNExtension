@@ -1,8 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
+import { observer } from 'mobx-react';
+import browser from 'webextension-polyfill';
+import rootStore from '../../stores';
 
 import './about.pcss';
 
-const About = () => {
+const About = observer(() => {
+    const { settingsStore } = useContext(rootStore);
+
+    const aboutVersionStr = `${browser.i18n.getMessage('name')} ${settingsStore.appVersion}`;
     return (
         <Fragment>
             <h2 className="content__title">
@@ -11,7 +17,7 @@ const About = () => {
             <div className="about">
                 {/* TODO get current version */}
                 <div className="about__version">
-                    AdGuard VPN v.0.01.11
+                    {aboutVersionStr}
                 </div>
 
                 {/* TODO get content for description */}
@@ -22,6 +28,6 @@ const About = () => {
             </div>
         </Fragment>
     );
-};
+});
 
 export default About;

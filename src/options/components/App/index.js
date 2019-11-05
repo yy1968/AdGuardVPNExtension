@@ -26,6 +26,7 @@ const App = observer(() => {
         (async () => {
             authStore.isAuthenticated();
             settingsStore.getExclusions();
+            settingsStore.getVersion();
         })();
 
         const messageHandler = async (message) => {
