@@ -1,7 +1,7 @@
-import Whitelist from '../src/background/whitelist/whitelist';
+import Exclusions from '../src/background/exclusions/exclusions';
 
 const proxy = {
-    setBypassWhitelist: jest.fn(() => {}),
+    setBypassList: jest.fn(() => {}),
 };
 
 const storage = (() => {
@@ -16,59 +16,59 @@ const storage = (() => {
     };
 })();
 
-const whitelist = new Whitelist(proxy, storage);
+const exclusions = new Exclusions(proxy, storage);
 
 beforeAll(async (done) => {
-    await whitelist.init();
+    await exclusions.init();
     done();
 });
 
-describe('modules bound with whitelist', () => {
+describe('modules bound with exclusions', () => {
     it('should be called once after initialization', async () => {
-        expect(proxy.setBypassWhitelist).toHaveBeenCalledTimes(1);
+        expect(proxy.setBypassList).toHaveBeenCalledTimes(1);
         expect(storage.get).toHaveBeenCalledTimes(1);
         expect(storage.set).toHaveBeenCalledTimes(1);
     });
 
     it('should be called once when adding to index', async () => {
-        await whitelist.addToWhitelist('http://example.com');
-        expect(proxy.setBypassWhitelist).toHaveBeenCalledTimes(2);
+        await exclusions.addToExclusions('http://example.com');
+        expect(proxy.setBypassList).toHaveBeenCalledTimes(2);
         expect(storage.set).toHaveBeenCalledTimes(2);
         expect(storage.get).toHaveBeenCalledTimes(1);
     });
 
     it('should be called once when removing from index', async () => {
-        await whitelist.removeFromWhitelist('http://example.com');
-        expect(proxy.setBypassWhitelist).toHaveBeenCalledTimes(3);
+        await exclusions.removeFromExclusions('http://example.com');
+        expect(proxy.setBypassList).toHaveBeenCalledTimes(3);
         expect(storage.set).toHaveBeenCalledTimes(3);
         expect(storage.get).toHaveBeenCalledTimes(1);
     });
 });
 
-describe('whitelist', () => {
+describe('exclusions', () => {
     it('should be empty before initialization', () => {
-        expect(whitelist.whitelisted.length).toEqual(0);
+        expect(exclusions.exclusions.length).toEqual(0);
     });
 
-    it('should return false if hostname is NOT whitelisted', () => {
-        expect(whitelist.isWhitelisted('http://example.com')).toEqual(false);
+    it('should return false if hostname is NOT exclusions', () => {
+        expect(exclusions.isExcluded('http://example.com')).toEqual(false);
     });
 
-    it('should return true if hostname is whitelisted', async () => {
-        await whitelist.addToWhitelist('http://example.com');
-        expect(whitelist.isWhitelisted('http://example.com')).toEqual(true);
+    it('should return true if hostname is exclusions', async () => {
+        await exclusions.addToExclusions('http://example.com');
+        expect(exclusions.isExcluded('http://example.com')).toEqual(true);
     });
 
     it('should add element correctly', () => {
-        expect(whitelist.whitelisted.length).toEqual(1);
+        expect(exclusions.exclusions.length).toEqual(1);
     });
 
-    it('should return false if hostname is removed from whitelisted', async () => {
-        await whitelist.removeFromWhitelist('http://example.com');
-        expect(whitelist.isWhitelisted('http://example.com')).toEqual(false);
+    it('should return false if hostname is removed from exclusions', async () => {
+        await exclusions.removeFromExclusions('http://example.com');
+        expect(exclusions.isExcluded('http://example.com')).toEqual(false);
     });
 
     it('should remove element correctly', () => {
-        expect(whitelist.whitelisted.length).toEqual(0);
+        expect(exclusions.exclusions.length).toEqual(0);
     });
 });

@@ -55,7 +55,7 @@ const SiteInfo = observer(() => {
         );
     }
 
-    if (settingsStore.isWhitelisted) {
+    if (settingsStore.isExcluded) {
         return (
             <Modal
                 isOpen

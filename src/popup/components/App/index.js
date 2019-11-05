@@ -37,7 +37,7 @@ const App = observer(() => {
             await settingsStore.checkProxyControl();
             await settingsStore.getGlobalProxyEnabled();
             await globalStore.init();
-            settingsStore.checkIsWhitelisted();
+            settingsStore.checkIsExcluded();
         })();
 
         const messageHandler = async (message) => {

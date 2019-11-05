@@ -23,7 +23,7 @@ class SettingsStore {
 
     @observable gettingEndpointsState;
 
-    @observable isWhitelisted;
+    @observable isExcluded;
 
     @observable currentTabHostname;
 
@@ -48,13 +48,13 @@ class SettingsStore {
     // New actions
     @action
     getExclusions = () => {
-        this.exclusions = adguard.whitelist.getExclusions();
+        this.exclusions = adguard.exclusions.getExclusions();
     };
 
     @action
     removeFromExclusions = async (hostName) => {
         try {
-            await adguard.whitelist.removeFromWhitelist(hostName);
+            await adguard.exclusions.removeFromExclusions(hostName);
         } catch (e) {
             log.error(e);
         }
@@ -63,7 +63,7 @@ class SettingsStore {
     @action
     addToExclusions = async () => {
         try {
-            await adguard.whitelist.addToWhitelist(this.exclusionsInput);
+            await adguard.exclusions.addToExclusions(this.exclusionsInput);
             runInAction(() => {
                 this.isFormVisible = false;
                 this.exclusionInput = '';
@@ -198,12 +198,12 @@ class SettingsStore {
     };
 
     @action
-    checkIsWhitelisted = async () => {
+    checkIsExcluded = async () => {
         try {
             await this.getCurrentTabHostname();
-            const result = adguard.whitelist.isWhitelisted(this.currentTabHostname);
+            const result = adguard.exclusions.isExcluded(this.currentTabHostname);
             runInAction(() => {
-                this.isWhitelisted = result;
+                this.isExcluded = result;
             });
         } catch (e) {
             log.error(e);
