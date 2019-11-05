@@ -1,0 +1,41 @@
+.form {
+    &__group {
+        position: relative;
+        width: 100%;
+
+        &--settings {
+            display: flex;
+            padding: 5px 7px 15px 45px;
+        }
+    }
+
+    &__input {
+        font-family: var(--font-stack);
+
+        &--transparent {
+            width: 100%;
+            font-size: 1.2rem;
+            color: var(--gray-base);
+            border: 0;
+
+            &:focus {
+                outline: 0;
+            }
+        }
+    }
+
+    &__submit {
+        width: 24px;
+        height: 24px;
+        background-image: url("../../assets/images/check.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 15px 17px;
+        border-radius: 0;
+
+        &:hover,
+        &:focus {
+            background-color: var(--grayF3);
+        }
+    }
+}

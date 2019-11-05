@@ -1,0 +1,46 @@
+.checkbox {
+    &__input {
+        display: none;
+
+        &:checked + .checkbox__label {
+            &:after {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+
+    &__label {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 8px 15px;
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+        user-select: none;
+
+        &:before {
+            content: "";
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            background-image: url("../../../../assets/images/rectangle.svg");
+            background-repeat: no-repeat;
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            top: 14px;
+            left: 19px;
+            width: 12px;
+            height: 10px;
+            background-image: url("../../../../assets/images/check.svg");
+            background-repeat: no-repeat;
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+}

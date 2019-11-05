@@ -1,5 +1,7 @@
+import browser from 'webextension-polyfill';
 import { getHostname } from '../../lib/helpers';
 import log from '../../lib/logger';
+import { MESSAGES_TYPES } from '../../lib/constants';
 
 export default class Whitelist {
     constructor(proxy, storage) {
@@ -39,6 +41,7 @@ export default class Whitelist {
 
         this.whitelisted.push(hostname);
         await this.handleWhitelistUpdate();
+        browser.runtime.sendMessage({ type: MESSAGES_TYPES.EXCLUSION_ADDED, data: hostname });
     };
 
     removeFromWhitelist = async (url) => {
@@ -49,6 +52,7 @@ export default class Whitelist {
         this.whitelisted = this.whitelisted
             .filter(hostname => hostname !== getHostname(url));
         await this.handleWhitelistUpdate();
+        browser.runtime.sendMessage({ type: MESSAGES_TYPES.EXCLUSION_REMOVED, data: hostname });
     };
 
     isWhitelisted = (url) => {
@@ -58,4 +62,8 @@ export default class Whitelist {
         }
         return false;
     };
+
+    getExclusions = () => {
+        return this.whitelisted;
+    }
 }

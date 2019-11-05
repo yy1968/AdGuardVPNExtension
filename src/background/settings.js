@@ -8,6 +8,7 @@ import actions from './actions';
 
 const DEFAULT_SETTINGS = {
     [SETTINGS_IDS.PROXY_ENABLED]: false,
+    [SETTINGS_IDS.SHOW_RATE]: true,
 };
 
 const SETTINGS = Object.entries(DEFAULT_SETTINGS)
@@ -47,10 +48,11 @@ const getHandler = (settingId) => {
             return proxyEnabledHandler;
         }
         default:
-            return null;
+            return () => {};
     }
 };
 
+// TODO save settings in storage
 const setSetting = async (id, value, force) => {
     const setting = SETTINGS[id];
     // No need to change same value unless is not force set
