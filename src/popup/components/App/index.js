@@ -34,10 +34,7 @@ const App = observer(() => {
 
     useEffect(() => {
         (async () => {
-            await settingsStore.checkProxyControl();
-            await settingsStore.getGlobalProxyEnabled();
             await globalStore.init();
-            settingsStore.checkIsWhitelisted();
         })();
 
         const messageHandler = async (message) => {
@@ -75,23 +72,14 @@ const App = observer(() => {
         };
     }, []);
 
-    const {
-        canControlProxy,
-        globalError,
-    } = settingsStore;
-
-    const { requestProcessState, authenticated } = authStore;
-    const { isOpenEndpointsSearch, isOpenOptionsModal } = uiStore;
     const { status } = globalStore;
 
-    // TODO [maximtop] move all necessary data into globalStore init method
+    // show nothing while data is loading
     if (status === REQUEST_STATUSES.PENDING) {
-        return (
-            <Fragment>
-                <Preloader />
-            </Fragment>
-        );
+        return null;
     }
+
+    const { requestProcessState, authenticated } = authStore;
 
     if (!authenticated) {
         return (
@@ -104,6 +92,9 @@ const App = observer(() => {
             </Fragment>
         );
     }
+
+    const { canControlProxy, globalError } = settingsStore;
+    const { isOpenEndpointsSearch, isOpenOptionsModal } = uiStore;
 
     const showWarning = !canControlProxy || globalError;
 
