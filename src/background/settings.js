@@ -8,7 +8,7 @@ import actions from './actions';
 
 const DEFAULT_SETTINGS = {
     [SETTINGS_IDS.PROXY_ENABLED]: false,
-    [SETTINGS_IDS.SHOW_RATE]: true,
+    [SETTINGS_IDS.RATE_SHOW]: true,
 };
 
 const SETTINGS = Object.entries(DEFAULT_SETTINGS)

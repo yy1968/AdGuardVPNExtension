@@ -41,6 +41,8 @@ class SettingsStore {
 
     @observable isFormVisible = false;
 
+    @observable isRateVisible = true;
+
     @observable appVersion;
 
     @observable currentUsername;
@@ -103,6 +105,22 @@ class SettingsStore {
 
         runInAction(() => {
             this.currentUsername = username;
+        });
+    };
+
+    @action
+    checkRateStatus = async () => {
+        const { value } = await adguard.settings.getSetting(SETTINGS_IDS.RATE_SHOW);
+        runInAction(() => {
+            this.isRateVisible = value;
+        });
+    }
+
+    @action
+    hideRate = async () => {
+        await adguard.settings.setSetting(SETTINGS_IDS.RATE_SHOW, false);
+        runInAction(() => {
+            this.isRateVisible = false;
         });
     };
 

@@ -1,8 +1,9 @@
 import React, { Fragment, useContext } from 'react';
 import { observer } from 'mobx-react';
-import rootStore from '../../stores';
+import browser from 'webextension-polyfill';
 
-import { EDIT_ACCOUNT } from '../../../background/config';
+import rootStore from '../../stores';
+import { EDIT_ACCOUNT_URL } from '../../../background/config';
 import './account.pcss';
 
 const Account = observer(() => {
@@ -15,22 +16,22 @@ const Account = observer(() => {
     return (
         <Fragment>
             <h2 className="content__title">
-                Account
+                {browser.i18n.getMessage('account_title')}
             </h2>
+
             <div className="account">
                 <div className="account__email">
-                    {/* TODO get current email */}
                     {settingsStore.currentUsername}
                 </div>
 
                 <div className="account__actions">
                     <a
-                        href={EDIT_ACCOUNT}
+                        href={EDIT_ACCOUNT_URL}
                         className="button button--medium button--outline-primary account__action"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Edit
+                        {browser.i18n.getMessage('account_edit')}
                     </a>
 
                     <button
@@ -38,7 +39,7 @@ const Account = observer(() => {
                         className="button button--medium button--outline-secondary account__action"
                         onClick={signOut}
                     >
-                        Sing out
+                        {browser.i18n.getMessage('account_sign_out')}
                     </button>
                 </div>
             </div>

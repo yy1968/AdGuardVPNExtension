@@ -28,6 +28,7 @@ const App = observer(() => {
             settingsStore.getExclusions();
             settingsStore.getVersion();
             settingsStore.getUsername();
+            settingsStore.checkRateStatus();
         })();
 
         const messageHandler = async (message) => {
