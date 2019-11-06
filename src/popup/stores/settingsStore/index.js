@@ -194,7 +194,7 @@ class SettingsStore {
     isTabRoutable = async () => {
         try {
             const currentTab = await tabs.getCurrent();
-            const isRoutable = adguard.tabsContext.isTabRoutable(currentTab.id);
+            const isRoutable = adguard.ip.isUrlRoutable(currentTab.url);
             runInAction(() => {
                 this.isRoutable = isRoutable;
             });
