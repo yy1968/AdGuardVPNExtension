@@ -1,16 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Modal from 'react-modal';
 import { observer } from 'mobx-react';
 import rootStore from '../../../stores';
 
 const SiteInfo = observer(() => {
     const { settingsStore } = useContext(rootStore);
-
-    useEffect(() => {
-        (async () => {
-            await settingsStore.isTabRoutable();
-        })();
-    }, []);
 
     const removeFromWhitelist = async () => {
         await settingsStore.removeFromWhitelist();
