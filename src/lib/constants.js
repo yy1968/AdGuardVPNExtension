@@ -11,8 +11,7 @@ export const MESSAGES_TYPES = {
     VPN_INFO_UPDATED: 'vpnInfo.updated',
     AUTHENTICATE_SOCIAL: 'authenticate.social',
     PERMISSIONS_UPDATE_ERROR: 'permissions.update.error',
-    EXCLUSION_ADDED: 'exclusions.added',
-    EXCLUSION_REMOVED: 'exclusions.removed',
+    EXCLUSION_UPDATED: 'exclusions.updated',
 };
 
 export const NETWORK_ERROR = 'network.error';

@@ -61,6 +61,15 @@ class SettingsStore {
     };
 
     @action
+    toggleExclusion = async (id) => {
+        try {
+            await adguard.exclusions.toggleExclusion(id);
+        } catch (e) {
+            log.error(e);
+        }
+    };
+
+    @action
     addToExclusions = async () => {
         try {
             await adguard.exclusions.addToExclusions(this.exclusionsInput);

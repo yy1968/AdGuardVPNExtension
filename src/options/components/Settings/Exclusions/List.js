@@ -10,21 +10,31 @@ const Exclusions = observer(() => {
         exclusions,
     } = settingsStore;
 
-    const exclusionsArr = Object.keys(exclusions).map(host => exclusions[host]);
+    // const exclusionsArr = Object.keys(exclusions).map(host => exclusions[host]);
+    console.log(exclusions);
 
     const removeFromExclusions = async (host) => {
         await settingsStore.removeFromExclusions(host);
     };
 
+    const toggleExclusionHandler = id => async () => {
+        await settingsStore.toggleExclusion(id);
+    };
+
     return (
         <div className="settings__list">
-            {exclusionsArr.reverse().map(host => (
-                <div className="settings__list-item" key={host}>
-                    <Checkbox id={host} label={host} />
+            {exclusions.slice().reverse().map(({ id, hostname, enabled }) => (
+                <div className="settings__list-item" key={id}>
+                    <Checkbox
+                        id={id}
+                        label={hostname}
+                        checked={enabled}
+                        onChange={toggleExclusionHandler(id)}
+                    />
                     <button
                         type="button"
                         className="button button--icon settings__list-remove"
-                        onClick={() => removeFromExclusions(host)}
+                        onClick={() => removeFromExclusions(id)}
                     />
                 </div>
             ))}
