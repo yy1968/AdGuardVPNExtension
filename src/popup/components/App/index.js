@@ -105,8 +105,10 @@ const App = observer(() => {
             {isOpenEndpointsSearch && <Endpoints />}
             <MapContainer />
             <Settings />
-            {!showWarning && <Stats />}
-            {!showWarning && <InfoMessage />}
+            <div className="footer">
+                {!showWarning && <Stats />}
+                {!showWarning && <InfoMessage />}
+            </div>
         </Fragment>
     );
 });
