@@ -19,7 +19,7 @@ const About = observer(() => {
                     {aboutVersionStr}
                 </div>
                 <div className="about__description">
-                    {browser.i18n.getMessage('about_description')}
+                    {browser.i18n.getMessage('description')}
                 </div>
             </div>
         </Fragment>

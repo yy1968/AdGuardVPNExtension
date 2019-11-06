@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import browser from 'webextension-polyfill';
 
 import log from '../../../lib/logger';
 import { MESSAGES_TYPES } from '../../../lib/constants';
+import { REQUEST_STATUSES } from '../../stores/consts';
 
 import '../../styles/main.pcss';
 import './app.pcss';
@@ -15,6 +16,37 @@ import Footer from '../Footer';
 import Settings from '../Settings';
 import Account from '../Account';
 import About from '../About';
+import Auth from '../Auth';
+import Icons from '../ui/Icons';
+
+import Preloader from '../../../popup/components/Preloader';
+
+const getContent = (authenticated, requestProcessState) => {
+    if (authenticated) {
+        return (
+            <div className="container">
+                <div className="wrapper">
+                    <Sidebar />
+                    <div className="content">
+                        <Switch>
+                            <Route path="/" exact component={Settings} />
+                            <Route path="/account" component={Account} />
+                            <Route path="/about" component={About} />
+                            <Route component={Settings} />
+                        </Switch>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <Fragment>
+            {requestProcessState === REQUEST_STATUSES.PENDING && <Preloader />}
+            <Auth />
+        </Fragment>
+    );
+};
 
 const App = observer(() => {
     const {
@@ -54,31 +86,12 @@ const App = observer(() => {
         };
     }, []);
 
-    const { authenticated } = authStore;
-
-    if (!authenticated) {
-        return (
-            <div className="container">
-                TODO
-            </div>
-        );
-    }
+    const { authenticated, requestProcessState } = authStore;
 
     return (
         <HashRouter hashType="noslash">
-            <div className="container">
-                <div className="wrapper">
-                    <Sidebar />
-                    <div className="content">
-                        <Switch>
-                            <Route path="/" exact component={Settings} />
-                            <Route path="/account" component={Account} />
-                            <Route path="/about" component={About} />
-                            <Route component={Settings} />
-                        </Switch>
-                    </div>
-                </div>
-            </div>
+            {getContent(authenticated, requestProcessState)}
+            <Icons />
             <Footer />
         </HashRouter>
     );

@@ -56,9 +56,6 @@
     "about_title": {
         "message": "About"
     },
-    "about_description": {
-        "message": "We are the team of experienced specialists from Adguard Software Limited — an IT company that develops a range of AdGuard software products for internet filtering. We are not just creators of AdGuard, but rather jedi of the light side of the Internet."
-    },
     "account_title": {
         "message": "Account"
     },
@@ -73,5 +70,41 @@
     },
     "rate_hide": {
         "message": "Hide"
+    },
+    "auth_title": {
+        "message": "Get started absolutely free!"
+    },
+    "auth_description": {
+        "message": "Uncompromising online privacy protection. Over 20 Million people have already chosen AdGuard."
+    },
+    "auth_code": {
+        "message": "Code from app:"
+    },
+    "auth_confirm": {
+        "message": "Confirm"
+    },
+    "auth_social": {
+        "message": "Login by social:"
+    },
+    "auth_email": {
+        "message": "Email:"
+    },
+    "auth_password": {
+        "message": "Password:"
+    },
+    "auth_password_repeat": {
+        "message": "Password again:"
+    },
+    "auth_recover": {
+        "message": "Lost it?"
+    },
+    "auth_login": {
+        "message": "Log in"
+    },
+    "auth_account": {
+        "message": "Don’t have an account?"
+    },
+    "auth_register": {
+        "message": "Register"
     }
 }
