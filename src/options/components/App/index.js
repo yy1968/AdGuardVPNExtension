@@ -67,8 +67,7 @@ const App = observer(() => {
             const { type } = message;
 
             switch (type) {
-                case MESSAGES_TYPES.EXCLUSION_ADDED:
-                case MESSAGES_TYPES.EXCLUSION_REMOVED: {
+                case MESSAGES_TYPES.EXCLUSION_UPDATED: {
                     settingsStore.getExclusions();
                     break;
                 }
