@@ -1,9 +1,8 @@
 import { createContext } from 'react';
 import { configure } from 'mobx';
 
-import GlobalStore from '../../popup/stores/globalStore';
-import AuthStore from '../../popup/stores/authStore';
-
+import GlobalStore from './globalStore';
+import AuthStore from './authStore';
 import SettingsStore from './settingsStore';
 
 // Do not allow property change outside of store actions

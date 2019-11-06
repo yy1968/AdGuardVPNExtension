@@ -17,9 +17,8 @@ import Settings from '../Settings';
 import Account from '../Account';
 import About from '../About';
 import Auth from '../Auth';
+import Preloader from '../Preloader';
 import Icons from '../ui/Icons';
-
-import Preloader from '../../../popup/components/Preloader';
 
 const getContent = (authenticated, requestProcessState) => {
     if (authenticated) {
