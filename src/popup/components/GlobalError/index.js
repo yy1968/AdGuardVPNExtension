@@ -13,21 +13,29 @@ const GlobalError = observer(() => {
 
     return (
         <div className="global-error">
-            <div className="global-error__icon" />
-            <div className="global-error__title">
-                {browser.i18n.getMessage('global_error_title')}
+            <div className="global-error__content">
+                <div className="global-error__icon" />
+                <div className="global-error__title">
+                    {browser.i18n.getMessage('global_error_title')}
+                </div>
+                <div className="global-error__description">
+                    {browser.i18n.getMessage('global_error_description')}
+                </div>
             </div>
-            <div className="global-error__description">
-                {browser.i18n.getMessage('global_error_description')}
-            </div>
-            <div className="button">
-                {browser.i18n.getMessage('global_error_learn_more')}
-            </div>
-            <div
-                className="button"
-                onClick={handleTryAgain}
-            >
-                {browser.i18n.getMessage('global_error_try_again')}
+            <div className="global-error__actions">
+                <button
+                    type="button"
+                    className="button button--uppercase button--m button--green global-error__button"
+                >
+                    {browser.i18n.getMessage('global_error_learn_more')}
+                </button>
+                <button
+                    type="button"
+                    className="button button--uppercase button--m button--link global-error__button"
+                    onClick={handleTryAgain}
+                >
+                    {browser.i18n.getMessage('global_error_try_again')}
+                </button>
             </div>
         </div>
     );
