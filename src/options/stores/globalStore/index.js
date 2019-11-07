@@ -21,11 +21,11 @@ class globalStore {
         this.setInitStatus(REQUEST_STATUSES.PENDING);
 
         try {
-            authStore.isAuthenticated();
+            await authStore.isAuthenticated();
             settingsStore.getExclusions();
             settingsStore.getVersion();
-            settingsStore.getUsername();
-            settingsStore.checkRateStatus();
+            await settingsStore.getUsername();
+            await settingsStore.checkRateStatus();
             this.setInitStatus(REQUEST_STATUSES.DONE);
         } catch (e) {
             log.error(e.message);

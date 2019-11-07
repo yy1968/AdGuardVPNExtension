@@ -8,8 +8,7 @@ import { PASSWORD_RECOVERY_URL } from '../../../../background/config';
 const SignInForm = observer(() => {
     const { authStore } = useContext(rootStore);
     const { error, credentials, disableLogin } = authStore;
-    // TODO undefined password field after load
-    const { username, password = '' } = credentials;
+    const { username, password } = credentials;
 
     useEffect(() => {
         (async () => {

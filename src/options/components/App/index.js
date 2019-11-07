@@ -57,7 +57,6 @@ const App = observer(() => {
         globalStore,
     } = useContext(rootStore);
 
-    const { authenticated, requestProcessState } = authStore;
     const { status } = globalStore;
 
     useEffect(() => {
@@ -91,6 +90,8 @@ const App = observer(() => {
     if (status === REQUEST_STATUSES.PENDING) {
         return null;
     }
+
+    const { authenticated, requestProcessState } = authStore;
 
     return (
         <HashRouter hashType="noslash">
