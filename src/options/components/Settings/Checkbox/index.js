@@ -11,12 +11,17 @@ const Checkbox = ({
     handleRemove,
 }) => {
     const [hostname, setHostname] = useState(label);
-    const isEdited = label !== hostname;
+    const [isChanged, setIsChanged] = useState(false);
 
-    // TODO remove focus after sumbit ?
+    const handleChange = (e) => {
+        setHostname(e.target.value);
+        setIsChanged(label !== e.target.value);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         handleRename(hostname);
+        setIsChanged(false);
     };
 
     return (
@@ -35,10 +40,10 @@ const Checkbox = ({
                     type="text"
                     name="hostname"
                     className="form__input form__input--transparent checkbox__edit"
-                    onChange={e => setHostname(e.target.value)}
+                    onChange={handleChange}
                     value={hostname}
                 />
-                {isEdited ? (
+                {isChanged ? (
                     <button
                         type="submit"
                         className="button button--icon checkbox__button"
