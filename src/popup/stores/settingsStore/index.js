@@ -34,6 +34,12 @@ class SettingsStore {
 
     @observable globalError;
 
+    @observable checkPermissionsState = REQUEST_STATUSES.DONE;
+
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+    }
+
     @action
     getProxyPing = () => {
         this.ping = adguard.connectivity.getPing();
@@ -223,13 +229,27 @@ class SettingsStore {
     }
 
     @action
-    setGlobalError = (data) => {
+    setGlobalError(data) {
         this.globalError = data;
     }
 
     @computed
     get proxyIsEnabling() {
         return this.proxyEnablingStatus === REQUEST_STATUSES.PENDING;
+    }
+
+    @action
+    async checkPermissions() {
+        this.checkPermissionsState = REQUEST_STATUSES.PENDING;
+        try {
+            await adguard.permissionsChecker.checkPermissions();
+            await this.rootStore.globalStore.getPopupData(10);
+        } catch (e) {
+            log.info(e.message);
+        }
+        runInAction(() => {
+            this.checkPermissionsState = REQUEST_STATUSES.DONE;
+        });
     }
 }
 

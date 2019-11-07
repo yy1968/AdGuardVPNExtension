@@ -13,7 +13,8 @@ import messaging from './messaging';
 import vpn from './vpn';
 import popupData from './popupData';
 import credentials from './credentials';
-import permissionsUpdater from './permissionsUpdater';
+import permissionsChecker from './permissionsChecker';
+import storage from './storage';
 
 global.adguard = {
     settings,
@@ -29,6 +30,9 @@ global.adguard = {
     authCache,
     vpn,
     popupData,
+    storage,
+    permissionsChecker,
+    valid: false,
 };
 
 // init credentials
@@ -43,4 +47,4 @@ messaging.init();
 whitelist.init();
 
 // init tokens updater
-permissionsUpdater.init();
+permissionsChecker.init();

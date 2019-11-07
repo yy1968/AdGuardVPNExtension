@@ -52,5 +52,17 @@
     },
     "global_error_can_control": {
         "message": "Other extension prevents us from setting up the tunnel. Please disable it in browser settings."
+    },
+    "global_error_title": {
+        "message": "Error occurred"
+    },
+    "global_error_description": {
+        "message": "Please contact us if you keep seeing this message"
+    },
+    "global_error_learn_more": {
+        "message": "Learn more"
+    },
+    "global_error_try_again": {
+        "message": "Try again"
     }
 }

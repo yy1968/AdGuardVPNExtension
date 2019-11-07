@@ -13,4 +13,7 @@ export const MESSAGES_TYPES = {
     PERMISSIONS_UPDATE_ERROR: 'permissions.update.error',
 };
 
-export const NETWORK_ERROR = 'network.error';
+export const ERROR_STATUSES = {
+    NETWORK_ERROR: 'network.error',
+    INVALID_TOKEN_ERROR: 'invalid.token.error',
+};

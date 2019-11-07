@@ -6,6 +6,7 @@ import React, {
 import { observer } from 'mobx-react';
 import Modal from 'react-modal';
 import browser from 'webextension-polyfill';
+import { toJS } from 'mobx';
 import Header from '../Header';
 import MapContainer from '../MapContainer';
 import InfoMessage from '../InfoMessage';
@@ -14,6 +15,7 @@ import Authentication from '../Authentication';
 import ExtraOptions from '../ExtraOptions';
 import Preloader from '../Preloader';
 import Stats from '../Stats';
+import GlobalError from '../GlobalError';
 import Settings from '../Settings';
 import rootStore from '../../stores';
 import { REQUEST_STATUSES } from '../../stores/consts';
@@ -85,7 +87,7 @@ const App = observer(() => {
         return (
             <Fragment>
                 {requestProcessState === REQUEST_STATUSES.PENDING
-                && <Preloader />
+                && <Preloader isOpen={requestProcessState === REQUEST_STATUSES.PENDING} />
                 }
                 <Header authenticated={authenticated} />
                 <Authentication />
@@ -93,10 +95,25 @@ const App = observer(() => {
         );
     }
 
-    const { canControlProxy, globalError } = settingsStore;
+    const { canControlProxy, globalError, checkPermissionsState } = settingsStore;
     const { isOpenEndpointsSearch, isOpenOptionsModal } = uiStore;
 
-    const showWarning = !canControlProxy || globalError;
+    if (globalError) {
+        console.log('global error', toJS(globalError));
+        console.log({ checkPermissionsState });
+        return (
+            <Fragment>
+                {checkPermissionsState === REQUEST_STATUSES.PENDING
+                && <Preloader isOpen={checkPermissionsState === REQUEST_STATUSES.PENDING} />
+                }
+                {isOpenOptionsModal && <ExtraOptions />}
+                <Header authenticated={authenticated} />
+                <GlobalError />
+            </Fragment>
+        );
+    }
+
+    const showWarning = !canControlProxy;
 
     return (
         <Fragment>

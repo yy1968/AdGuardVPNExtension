@@ -5,11 +5,11 @@ import { observer } from 'mobx-react';
 import rootStore from '../../stores';
 import { REQUEST_STATUSES } from '../../stores/consts';
 
-const Preloader = observer(() => {
-    const { authStore, globalStore } = useContext(rootStore);
-
-    const isOpen = globalStore.status === REQUEST_STATUSES.PENDING
-        || authStore.requestProcessState === REQUEST_STATUSES.PENDING;
+const Preloader = observer(({isOpen}) => {
+    // const { authStore, globalStore } = useContext(rootStore);
+    //
+    // const isOpen = globalStore.status === REQUEST_STATUSES.PENDING
+    //     || authStore.requestProcessState === REQUEST_STATUSES.PENDING;
 
     return (
         <Modal

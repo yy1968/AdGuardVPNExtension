@@ -31,21 +31,25 @@ const sleep = waitTime => new Promise((resolve) => {
     setTimeout(resolve, waitTime);
 });
 
+let retryCounter = 0;
 const getPopupDataRetry = async (retryNum = 1, retryDelay = 100) => {
     const backoffIndex = 1.5;
     const data = await getPopupData();
-    if (!data.isAuthenticated) {
+    retryCounter += 1;
+    if (!data.isAuthenticated || data.permissionsError) {
+        retryCounter = 0;
         return data;
     }
     const { vpnInfo, endpoints, selectedEndpoint } = data;
     if (!vpnInfo || !endpoints || !selectedEndpoint) {
         if (retryNum <= 1) {
-            throw new Error(`Unable to get data in ${retryNum} retries`);
+            throw new Error(`Unable to get data in ${retryCounter} retries`);
         }
         await sleep(retryDelay);
-        log.debug('Retry get popup data again');
+        log.debug(`Retry get popup data again retry: ${retryCounter}`);
         return getPopupDataRetry(retryNum - 1, retryDelay * backoffIndex);
     }
+    retryCounter = 0;
     return data;
 };
 

@@ -9,14 +9,10 @@ class AppStatus {
     }
 
     setPermissionsError(error) {
-        if (error === null) {
-            this.permissionsError = null;
-            return;
-        }
         this.permissionsError = error;
         browserApi.runtime.sendMessage({
             type: MESSAGES_TYPES.PERMISSIONS_UPDATE_ERROR,
-            data: error.message,
+            data: error,
         });
     }
 

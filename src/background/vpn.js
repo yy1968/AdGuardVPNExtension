@@ -64,10 +64,12 @@ const vpnTokenChanged = (oldVpnToken, newVpnToken) => {
 };
 
 const getVpnInfoRemotely = async () => {
-    const vpnToken = await credentials.gainVpnToken();
-    if (!vpnToken) {
-        log.debug('Can not get vpn info because vpnToken is null');
-        return null;
+    let vpnToken;
+    try {
+        vpnToken = await credentials.gainVpnToken();
+    } catch (e) {
+        log.debug('Unable to get vpn info because: ', e.message);
+        return;
     }
     let vpnInfo = await vpnProvider.getVpnExtensionInfo(vpnToken.token);
     let shouldReconnect = false;
