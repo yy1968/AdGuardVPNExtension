@@ -10,12 +10,16 @@ const Exclusions = observer(() => {
         exclusions,
     } = settingsStore;
 
-    const removeFromExclusions = async (host) => {
-        await settingsStore.removeFromExclusions(host);
+    const handleRemove = id => async () => {
+        await settingsStore.removeFromExclusions(id);
     };
 
-    const toggleExclusionHandler = id => async () => {
+    const handleToggle = id => async () => {
         await settingsStore.toggleExclusion(id);
+    };
+
+    const handleRename = id => async (name) => {
+        await settingsStore.renameExclusion(id, name);
     };
 
     return (
@@ -26,12 +30,9 @@ const Exclusions = observer(() => {
                         id={id}
                         label={hostname}
                         checked={enabled}
-                        onChange={toggleExclusionHandler(id)}
-                    />
-                    <button
-                        type="button"
-                        className="button button--icon settings__list-remove"
-                        onClick={() => removeFromExclusions(id)}
+                        handleToggle={handleToggle(id)}
+                        handleRename={handleRename(id)}
+                        handleRemove={handleRemove(id)}
                     />
                 </div>
             ))}

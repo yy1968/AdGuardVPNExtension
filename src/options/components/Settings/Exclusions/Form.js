@@ -49,9 +49,13 @@ const Form = observer(() => {
                     />
                     <button
                         type="submit"
-                        className="button button--icon form__submit"
+                        className="button button--icon form__submit form__submit--icon"
                         disabled={!exclusionsInput}
-                    />
+                    >
+                        <svg className="icon icon--button icon--check">
+                            <use xlinkHref="#check" />
+                        </svg>
+                    </button>
                 </form>
             )}
         </div>

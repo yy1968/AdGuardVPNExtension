@@ -72,6 +72,15 @@ class SettingsStore {
     };
 
     @action
+    renameExclusion = async (id, name) => {
+        try {
+            await adguard.exclusions.renameExclusion(id, name);
+        } catch (e) {
+            log.error(e);
+        }
+    };
+
+    @action
     addToExclusions = async () => {
         try {
             await adguard.exclusions.addToExclusions(this.exclusionsInput);
