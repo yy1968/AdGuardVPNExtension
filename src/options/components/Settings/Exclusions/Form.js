@@ -43,6 +43,7 @@ const Form = observer(() => {
                         type="text"
                         className="form__input form__input--transparent"
                         onChange={inputChangeHandler}
+                        value={exclusionsInput}
                         // eslint-disable-next-line jsx-a11y/no-autofocus
                         autoFocus
                     />

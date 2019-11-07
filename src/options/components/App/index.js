@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import browser from 'webextension-polyfill';
+import Modal from 'react-modal';
 
 import log from '../../../lib/logger';
 import { MESSAGES_TYPES } from '../../../lib/constants';
@@ -19,6 +20,8 @@ import About from '../About';
 import Auth from '../Auth';
 import Preloader from '../Preloader';
 import Icons from '../ui/Icons';
+
+Modal.setAppElement('#root');
 
 const getContent = (authenticated, requestProcessState) => {
     if (authenticated) {

@@ -47,7 +47,7 @@ class SettingsStore {
 
     @observable currentUsername;
 
-    // New actions
+    // Options page actions
     @action
     getExclusions = () => {
         this.exclusions = adguard.exclusions.getExclusions();
@@ -92,6 +92,7 @@ class SettingsStore {
     @action
     toggleExclusionsForm = () => {
         this.isFormVisible = !this.isFormVisible;
+        this.exclusionsInput = '';
     };
 
     @action
@@ -124,7 +125,7 @@ class SettingsStore {
         });
     };
 
-    // Old actions
+    // Popup actions
     @action
     getProxyPing = () => {
         this.ping = adguard.connectivity.getPing();

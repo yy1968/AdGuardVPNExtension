@@ -10,9 +10,6 @@ const Exclusions = observer(() => {
         exclusions,
     } = settingsStore;
 
-    // const exclusionsArr = Object.keys(exclusions).map(host => exclusions[host]);
-    console.log(exclusions);
-
     const removeFromExclusions = async (host) => {
         await settingsStore.removeFromExclusions(host);
     };
