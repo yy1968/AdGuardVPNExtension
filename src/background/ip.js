@@ -44,19 +44,17 @@ const isUrlRoutable = (url) => {
         return false;
     }
 
-    let address;
-
-    try {
-        address = ipaddr.parse(hostname);
-    } catch (e) {
+    if (!ipaddr.isValid(hostname)) {
         return true;
     }
 
-    if (address.kind() === 'ipv6') {
+    const addr = ipaddr.parse(hostname);
+
+    if (addr.kind() === 'ipv6') {
         return true;
     }
 
-    return !parsedCIDRList.some(parsedCIDR => address.match(parsedCIDR));
+    return !parsedCIDRList.some(parsedCIDR => addr.match(parsedCIDR));
 };
 
 export default { isIpRoutable, isUrlRoutable };
