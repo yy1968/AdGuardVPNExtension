@@ -15,42 +15,17 @@ class globalStore {
     }
 
     @action
-    async getPopupData(retryNum = 1) {
-        const { rootStore: { vpnStore, settingsStore, authStore } } = this;
+    async getOptionsData() {
+        const { rootStore: { settingsStore, authStore } } = this;
 
         this.setInitStatus(REQUEST_STATUSES.PENDING);
 
         try {
-            let popupData;
-
-            if (retryNum > 1) {
-                popupData = await adguard.popupData.getPopupDataRetry(retryNum);
-            } else {
-                popupData = await adguard.popupData.getPopupData();
-            }
-
-            const {
-                vpnInfo,
-                endpoints,
-                selectedEndpoint,
-                permissionsError,
-                isAuthenticated,
-            } = popupData;
-
-            if (!isAuthenticated) {
-                authStore.setIsAuthenticated(isAuthenticated);
-                this.setInitStatus(REQUEST_STATUSES.DONE);
-                return;
-            }
-
-            if (permissionsError) {
-                settingsStore.setGlobalError(permissionsError);
-            }
-
-            authStore.setIsAuthenticated(isAuthenticated);
-            vpnStore.setVpnInfo(vpnInfo);
-            vpnStore.setEndpoints(endpoints);
-            vpnStore.setSelectedEndpoint(selectedEndpoint);
+            authStore.isAuthenticated();
+            settingsStore.getExclusions();
+            settingsStore.getVersion();
+            settingsStore.getUsername();
+            settingsStore.checkRateStatus();
             this.setInitStatus(REQUEST_STATUSES.DONE);
         } catch (e) {
             log.error(e.message);
@@ -60,7 +35,7 @@ class globalStore {
 
     @action
     async init() {
-        await this.getPopupData(10);
+        await this.getOptionsData();
     }
 
     @action

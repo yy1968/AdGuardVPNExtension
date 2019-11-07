@@ -130,7 +130,7 @@ class AuthStore {
 
         if (response.status === 'ok') {
             adguard.authCache.clearAuthCache();
-            await this.rootStore.globalStore.getPopupData(10);
+            await this.rootStore.globalStore.getOptionsData();
             runInAction(() => {
                 this.requestProcessState = REQUEST_STATUSES.DONE;
                 this.authenticated = true;
@@ -162,7 +162,7 @@ class AuthStore {
         }
         if (response.status === 'ok') {
             adguard.authCache.clearAuthCache();
-            await this.rootStore.globalStore.getPopupData(10);
+            await this.rootStore.globalStore.getOptionsData();
             runInAction(() => {
                 this.requestProcessState = REQUEST_STATUSES.DONE;
                 this.authenticated = true;

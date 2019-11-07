@@ -54,15 +54,15 @@ const App = observer(() => {
     const {
         authStore,
         settingsStore,
+        globalStore,
     } = useContext(rootStore);
+
+    const { authenticated, requestProcessState } = authStore;
+    const { status } = globalStore;
 
     useEffect(() => {
         (async () => {
-            authStore.isAuthenticated();
-            settingsStore.getExclusions();
-            settingsStore.getVersion();
-            settingsStore.getUsername();
-            settingsStore.checkRateStatus();
+            await globalStore.init();
         })();
 
         const messageHandler = async (message) => {
@@ -87,7 +87,10 @@ const App = observer(() => {
         };
     }, []);
 
-    const { authenticated, requestProcessState } = authStore;
+    // show nothing while data is loading
+    if (status === REQUEST_STATUSES.PENDING) {
+        return null;
+    }
 
     return (
         <HashRouter hashType="noslash">
