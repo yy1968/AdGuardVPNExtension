@@ -35,7 +35,17 @@ const Checkbox = ({
                     checked={checked}
                     onChange={handleToggle}
                 />
-                <label htmlFor={id} className="checkbox__label" />
+                <label htmlFor={id} className="checkbox__label">
+                    {checked ? (
+                        <svg className="icon icon--button icon--checked">
+                            <use xlinkHref="#checked" />
+                        </svg>
+                    ) : (
+                        <svg className="icon icon--button icon--unchecked">
+                            <use xlinkHref="#unchecked" />
+                        </svg>
+                    )}
+                </label>
                 <input
                     type="text"
                     name="hostname"

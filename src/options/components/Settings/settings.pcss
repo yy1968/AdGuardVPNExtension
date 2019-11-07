@@ -57,7 +57,7 @@
     &__add {
         display: flex;
         align-items: center;
-        padding: 10px 12px;
+        padding: 10px 15px;
         font-size: 1.2rem;
         font-weight: 700;
         line-height: 1;
@@ -65,16 +65,9 @@
         &:focus {
             box-shadow: none;
         }
+    }
 
-        &:before {
-            content: "";
-            display: block;
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            background-image: url("../../../assets/images/plus.svg");
-            background-repeat: no-repeat;
-            background-position: center center;
-        }
+    &__add-icon {
+        margin-right: 12px;
     }
 }

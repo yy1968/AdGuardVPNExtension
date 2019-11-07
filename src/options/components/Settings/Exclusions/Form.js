@@ -35,6 +35,9 @@ const Form = observer(() => {
                 className="button button--icon button--medium settings__add"
                 onClick={toggleForm}
             >
+                <svg className="icon icon--button icon--checked settings__add-icon">
+                    <use xlinkHref="#plus" />
+                </svg>
                 {browser.i18n.getMessage('settings_exclusion_add')}
             </button>
 

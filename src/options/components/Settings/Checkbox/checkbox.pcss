@@ -15,34 +15,11 @@
 
     &__label {
         position: relative;
+        margin-right: 12px;
         font-size: 1.2rem;
         line-height: 1;
         cursor: pointer;
         user-select: none;
-
-        &:before {
-            content: "";
-            flex-shrink: 0;
-            display: block;
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
-            background-image: url("../../../../assets/images/rectangle.svg");
-            background-repeat: no-repeat;
-        }
-
-        &:after {
-            content: "";
-            position: absolute;
-            top: 6px;
-            left: 4px;
-            width: 12px;
-            height: 10px;
-            background-image: url("../../../../assets/images/check.svg");
-            background-repeat: no-repeat;
-            opacity: 0;
-            visibility: hidden;
-        }
     }
 
     &__edit {

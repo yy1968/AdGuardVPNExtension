@@ -45,7 +45,7 @@ const Icons = () => (
             <path d="M12.2 14.04l-2.768 5.626a.24.24 0 01-.215.134H7.68a.24.24 0 01-.212-.353l3.07-5.737c-1.3-.637-2.492-2.184-2.492-4.59 0-3.236 2.448-4.92 3.832-4.92h2.648a.24.24 0 01.24.24v15.12a.24.24 0 01-.24.24h-1.08a.24.24 0 01-.24-.24v-5.52H12.2zm-.254-8.52c-.716 0-2.22 1.212-2.22 3.54 0 2.328 1.352 3.54 2.22 3.54h1.26V5.52h-1.26z" id="Shape" fill="#EC1F23" />
         </symbol>
 
-        <symbol id="plus" viewBox="0 0 18 18" stroke="currentColor">
+        <symbol id="plus" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
             <path d="M4 12L20 12M12 4L12 20" />
         </symbol>
 
@@ -54,7 +54,16 @@ const Icons = () => (
         </symbol>
 
         <symbol id="check" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round">
-            <polyline fill="none" points="5 11.767 10.588 17 19 8" />
+            <polyline points="5 11.767 10.588 17 19 8" />
+        </symbol>
+
+        <symbol id="unchecked" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round">
+            <rect width="18.5" height="18.5" x=".75" y=".75" rx="3" transform="translate(2 2)" />
+        </symbol>
+
+        <symbol id="checked" viewBox="0 0 24 24" fill="none" strokeLinecap="round">
+            <rect width="18.5" height="18.5" x="2.75" y="2.75" stroke="currentColor" strokeWidth="1.5" rx="3" />
+            <polyline stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" points="0 2.93 3.991 7 10 0" transform="translate(7 9)" />
         </symbol>
     </svg>
 );
