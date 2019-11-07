@@ -68,8 +68,6 @@ const App = observer(() => {
         const messageHandler = async (message) => {
             const { type } = message;
 
-            console.log(type);
-
             switch (type) {
                 case MESSAGES_TYPES.EXCLUSION_UPDATED: {
                     settingsStore.getExclusions();

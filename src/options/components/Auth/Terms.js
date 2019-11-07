@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 
 import { EULA_URL, PRIVACY_URL } from '../../../background/config';
 
+// TODO translations
 const Terms = () => (
     <Fragment>
         <div className="auth__terms">

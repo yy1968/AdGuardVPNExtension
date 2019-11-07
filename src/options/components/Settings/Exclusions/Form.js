@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
+import browser from 'webextension-polyfill';
 
 import rootStore from '../../../stores';
 
@@ -34,7 +35,7 @@ const Form = observer(() => {
                 className="button button--icon button--medium settings__add"
                 onClick={toggleForm}
             >
-                Add an exclusion
+                {browser.i18n.getMessage('settings_exclusion_add')}
             </button>
 
             {isFormVisible && (

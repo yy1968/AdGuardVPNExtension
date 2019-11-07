@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import browser from 'webextension-polyfill';
 
 import Form from './Form';
 import List from './List';
@@ -7,11 +8,11 @@ const Exclusions = () => (
     <Fragment>
         <div className="settings__section">
             <div className="settings__title">
-                Exclusions:
+                {browser.i18n.getMessage('settings_exclusion_title')}
             </div>
             <div className="settings__group">
                 <div className="settings__subtitle">
-                    Connect through VPN all sites expect of:
+                    {browser.i18n.getMessage('settings_exclusion_expect')}
                 </div>
                 <Form />
                 <List />

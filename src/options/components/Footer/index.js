@@ -1,4 +1,5 @@
 import React from 'react';
+import browser from 'webextension-polyfill';
 
 import { WEBSITE_URL, EULA_URL, PRIVACY_URL } from '../../../background/config';
 import './footer.pcss';
@@ -18,13 +19,13 @@ const Footer = () => {
                         href={EULA_URL}
                         className="footer__link"
                     >
-                        EULA
+                        {browser.i18n.getMessage('eula')}
                     </a>
                     <a
                         href={PRIVACY_URL}
                         className="footer__link"
                     >
-                        Privacy policy
+                        {browser.i18n.getMessage('privacy_policy')}
                     </a>
                 </nav>
             </div>

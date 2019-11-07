@@ -106,5 +106,23 @@
     },
     "auth_register": {
         "message": "Register"
+    },
+    "eula": {
+        "message": "EULA"
+    },
+    "privacy_policy": {
+        "message": "Privacy Policy"
+    },
+    "settings_title": {
+        "message": "Settings"
+    },
+    "settings_exclusion_add": {
+        "message": "Add an exclusion"
+    },
+    "settings_exclusion_title": {
+        "message": "Exclusions:"
+    },
+    "settings_exclusion_expect": {
+        "message": "Connect through VPN all sites expect of:"
     }
 }

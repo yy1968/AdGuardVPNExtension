@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import browser from 'webextension-polyfill';
 
 import Rate from './Rate';
 import './sidebar.pcss';
@@ -12,13 +13,13 @@ const Sidebar = () => {
             </svg>
             <nav className="sidebar__nav">
                 <NavLink className="sidebar__link" exact activeClassName="sidebar__link--active" to="/">
-                    Settings
+                    {browser.i18n.getMessage('settings_title')}
                 </NavLink>
                 <NavLink className="sidebar__link" exact activeClassName="sidebar__link--active" to="/account">
-                    Account
+                    {browser.i18n.getMessage('account_title')}
                 </NavLink>
                 <NavLink className="sidebar__link" exact activeClassName="sidebar__link--active" to="/about">
-                    About
+                    {browser.i18n.getMessage('about_title')}
                 </NavLink>
             </nav>
             <div className="sidebar__rate">
