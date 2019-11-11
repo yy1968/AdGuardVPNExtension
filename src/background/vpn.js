@@ -107,7 +107,6 @@ const getVpnInfoRemotely = async () => {
 
     vpnCache.vpnInfo = vpnInfo;
     browserApi.runtime.sendMessage({ type: MESSAGES_TYPES.VPN_INFO_UPDATED, data: vpnInfo });
-    return vpnInfo;
 };
 
 const getVpnInfo = () => {

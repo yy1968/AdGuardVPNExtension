@@ -20,6 +20,10 @@ class AppStatus {
         return this.permissionsError;
     }
 
+    clearPermissionError() {
+        this.permissionsError = null;
+    }
+
     async canControlProxy() {
         const controlStatus = await proxy.canControlProxy();
         if (controlStatus.canControlProxy) {

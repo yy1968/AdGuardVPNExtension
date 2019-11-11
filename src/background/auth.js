@@ -14,6 +14,7 @@ import {
     AUTH_BASE_URL,
     AUTH_REDIRECT_URI,
 } from './config';
+import appStatus from './appStatus';
 
 class Auth {
     socialAuthState = null;

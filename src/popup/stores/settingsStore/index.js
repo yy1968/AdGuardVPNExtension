@@ -251,6 +251,11 @@ class SettingsStore {
             this.checkPermissionsState = REQUEST_STATUSES.DONE;
         });
     }
+
+    @action clearPermissionError() {
+        this.globalError = null;
+        adguard.appStatus.clearPermissionError();
+    }
 }
 
 export default SettingsStore;

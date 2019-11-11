@@ -32,6 +32,7 @@ global.adguard = {
     popupData,
     storage,
     permissionsChecker,
+    credentials,
     valid: false,
 };
 

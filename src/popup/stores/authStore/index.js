@@ -183,6 +183,7 @@ class AuthStore {
 
     @action deauthenticate = async () => {
         await adguard.auth.deauthenticate();
+        await adguard.credentials.persistVpnToken(null);
         await this.rootStore.settingsStore.setProxyState(false);
         runInAction(() => {
             this.setDefaults();

@@ -11,8 +11,7 @@ const getVpnToken = async (accessToken) => {
 
     const isValidTokenFound = vpnToken && vpnToken.license_status === VALID_VPN_TOKEN_STATUS;
 
-    console.log(adguard.valid);
-    if (!adguard.valid) {
+    if (!isValidTokenFound) {
         throw new CustomError(ERROR_STATUSES.INVALID_TOKEN_ERROR, 'received token is not valid');
     }
 
