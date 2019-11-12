@@ -1,4 +1,5 @@
 import ipaddr from 'ipaddr.js';
+import { getHostname } from '../lib/helpers';
 
 export const NON_ROUTABLE_NETS = [
     '0.0.0.0/8',
@@ -23,12 +24,29 @@ export const NON_ROUTABLE_NETS = [
 
 const parsedCIDRList = NON_ROUTABLE_NETS.map(net => ipaddr.parseCIDR(net));
 
-const isIpRoutable = (ip) => {
-    const addr = ipaddr.parse(ip);
+const isUrlRoutable = (url) => {
+    const hostname = getHostname(url);
+    if (!hostname) {
+        return true;
+    }
+
+    const LOCALHOST = 'localhost';
+
+    if (hostname === LOCALHOST) {
+        return false;
+    }
+
+    if (!ipaddr.isValid(hostname)) {
+        return true;
+    }
+
+    const addr = ipaddr.parse(hostname);
+
     if (addr.kind() === 'ipv6') {
         return true;
     }
+
     return !parsedCIDRList.some(parsedCIDR => addr.match(parsedCIDR));
 };
 
-export default { isIpRoutable };
+export default { isUrlRoutable };
