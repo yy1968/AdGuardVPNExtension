@@ -53,7 +53,6 @@ class VpnStore {
         await adguard.proxy.setCurrentEndpoint(toJS(selectedEndpoint));
         runInAction(() => {
             this.selectedEndpoint = selectedEndpoint;
-            // this.rootStore.uiStore.closeEndpointsSearch();
             this.rootStore.tooltipStore.setMapCoordinatesDefault();
         });
     };
