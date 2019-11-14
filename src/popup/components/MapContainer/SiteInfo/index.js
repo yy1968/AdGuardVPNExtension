@@ -6,8 +6,8 @@ import rootStore from '../../../stores';
 const SiteInfo = observer(() => {
     const { settingsStore } = useContext(rootStore);
 
-    const removeFromWhitelist = async () => {
-        await settingsStore.removeFromWhitelist();
+    const removeFromExclusions = async () => {
+        await settingsStore.removeFromExclusions();
     };
 
     if (!settingsStore.isRoutable) {
@@ -30,7 +30,7 @@ const SiteInfo = observer(() => {
                     <a
                         type="button"
                         className="button popup-info__link"
-                        onClick={removeFromWhitelist}
+                        onClick={removeFromExclusions}
                     >
                         add the site to exclusions
                     </a>
@@ -58,7 +58,7 @@ const SiteInfo = observer(() => {
                     <a
                         type="button"
                         className="button popup-info__link"
-                        onClick={removeFromWhitelist}
+                        onClick={removeFromExclusions}
                     >
                         remove it from exclusions
                     </a>

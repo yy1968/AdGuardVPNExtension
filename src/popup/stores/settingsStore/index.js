@@ -76,7 +76,7 @@ class SettingsStore {
 
     @action
     async getGlobalProxyEnabled() {
-        const { value } = adguard.settings.getSetting(SETTINGS_IDS.PROXY_ENABLED);
+        const value = adguard.settings.getSetting(SETTINGS_IDS.PROXY_ENABLED);
         runInAction(() => {
             this.proxyEnabled = value;
             this.toggleSwitcher(value);
@@ -157,9 +157,9 @@ class SettingsStore {
     };
 
     @action
-    removeFromWhitelist = async () => {
+    removeFromExclusions = async () => {
         try {
-            await adguard.exclusions.removeFromExclusions(this.currentTabHostname);
+            await adguard.exclusions.removeFromExclusionsByHostname(this.currentTabHostname);
             runInAction(() => {
                 this.isExcluded = false;
             });

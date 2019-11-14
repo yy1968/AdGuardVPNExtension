@@ -1,18 +1,20 @@
 import Exclusions from '../src/background/exclusions/exclusions';
+import { SETTINGS_IDS } from '../src/lib/constants';
+import { sleep } from '../src/lib/helpers';
 
 const proxy = {
     setBypassList: jest.fn(() => {
     }),
 };
 
-const storage = (() => {
-    const exclusionsStorage = {};
+const settingsService = (() => {
+    const settingsStorage = { [SETTINGS_IDS.EXCLUSIONS]: {} };
     return {
-        set: jest.fn((key, data) => {
-            exclusionsStorage[key] = data;
+        setSetting: jest.fn((key, data) => {
+            settingsStorage[key] = data;
         }),
-        get: jest.fn((key) => {
-            return exclusionsStorage[key];
+        getSetting: jest.fn((key) => {
+            return settingsStorage[key];
         }),
     };
 })();
@@ -24,7 +26,7 @@ const browser = {
     },
 };
 
-const exclusions = new Exclusions(browser, proxy, storage);
+const exclusions = new Exclusions(browser, proxy, settingsService);
 
 beforeAll(async (done) => {
     await exclusions.init();
@@ -38,25 +40,26 @@ describe('modules bound with exclusions work as expected', () => {
     });
 
     it('should be called once after initialization', async () => {
-        expect(proxy.setBypassList).toHaveBeenCalledTimes(1);
-        expect(storage.get).toHaveBeenCalledTimes(1);
-        expect(storage.set).toHaveBeenCalledTimes(1);
+        expect(proxy.setBypassList).toHaveBeenCalledTimes(0);
+        expect(settingsService.getSetting).toHaveBeenCalledTimes(1);
+        await sleep(110);
+        expect(settingsService.setSetting).toHaveBeenCalledTimes(0);
     });
 
     it('should be called once when adding to index', async () => {
         await exclusions.addToExclusions('http://example.org');
-        expect(proxy.setBypassList).toHaveBeenCalledTimes(2);
-        expect(storage.set).toHaveBeenCalledTimes(2);
-        expect(storage.get).toHaveBeenCalledTimes(1);
+        expect(proxy.setBypassList).toHaveBeenCalledTimes(1);
+        expect(settingsService.setSetting).toHaveBeenCalledTimes(1);
+        expect(settingsService.getSetting).toHaveBeenCalledTimes(1);
     });
 
     it('should be called once when removing from index', async () => {
         const exclusionsList = exclusions.getExclusions();
         const exclusion = exclusionsList[0];
         await exclusions.removeFromExclusions(exclusion.id);
-        expect(proxy.setBypassList).toHaveBeenCalledTimes(3);
-        expect(storage.set).toHaveBeenCalledTimes(3);
-        expect(storage.get).toHaveBeenCalledTimes(1);
+        expect(proxy.setBypassList).toHaveBeenCalledTimes(2);
+        expect(settingsService.setSetting).toHaveBeenCalledTimes(2);
+        expect(settingsService.getSetting).toHaveBeenCalledTimes(1);
     });
 });
 

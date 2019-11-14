@@ -1,5 +1,5 @@
 import { proxy } from './proxy';
-import settings from './settings';
+import settings from './settings/settings';
 import { MESSAGES_TYPES } from '../lib/constants';
 import browserApi from './browserApi';
 import pJson from '../../package.json';

@@ -1,4 +1,4 @@
-import settings from './settings';
+import settings from './settings/settings';
 import actions from './actions';
 import { vpnApi } from './api';
 import tabs from './tabs';
@@ -14,6 +14,7 @@ import popupData from './popupData';
 import credentials from './credentials';
 import permissionsUpdater from './permissionsUpdater';
 import ip from './ip';
+import log from '../lib/logger';
 
 global.adguard = {
     settings,
@@ -32,16 +33,11 @@ global.adguard = {
     credentials,
 };
 
-// init credentials
-credentials.init();
-
-// init messaging
-messaging.init();
-
-// TODO [maximtop] consider if it can be useful to have some method indicate
-//  that all modules are ready
-// init exclusions
-exclusions.init();
-
-// init tokens updater
-permissionsUpdater.init();
+(async () => {
+    await settings.init();
+    await credentials.init();
+    await exclusions.init();
+    messaging.init();
+    permissionsUpdater.init();
+    log.info('Extension modules are ready');
+})();

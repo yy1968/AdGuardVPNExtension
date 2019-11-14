@@ -1,42 +1,22 @@
 import nanoid from 'nanoid';
 import { getHostname } from '../../lib/helpers';
 import log from '../../lib/logger';
-import { MESSAGES_TYPES } from '../../lib/constants';
+import { MESSAGES_TYPES, SETTINGS_IDS } from '../../lib/constants';
 
 export default class Exclusions {
-    constructor(browser, proxy, storage) {
+    constructor(browser, proxy, settings) {
         this.browser = browser;
         this.proxy = proxy;
-        this.storage = storage;
+        this.settings = settings;
     }
-
-    SCHEME_VERSION = 1;
 
     static get EXCLUSIONS_KEY() {
         return 'exclusions.storage.key';
     }
 
     init = async () => {
-        let exclusionsFromStorage;
-        try {
-            exclusionsFromStorage = await this.storage.get(Exclusions.EXCLUSIONS_KEY);
-        } catch (e) {
-            log.error(e.message);
-            throw e;
-        }
-
-        if (!exclusionsFromStorage) {
-            this.exclusions = {};
-        } else if (exclusionsFromStorage && exclusionsFromStorage.version !== this.SCHEME_VERSION) {
-            log.warn(`expected scheme version ${this.SCHEME_VERSION} and got ${exclusionsFromStorage.version}`);
-            // here you can another scheme converters logic, for now we use the default
-            this.exclusions = {};
-        } else {
-            this.exclusions = exclusionsFromStorage.exclusions;
-        }
-
-        await this.handleExclusionsUpdate();
-        log.info('Exclusions are ready');
+        this.exclusions = this.settings.getSetting(SETTINGS_IDS.EXCLUSIONS) || {};
+        log.info('Exclusions list is ready');
     };
 
     handleExclusionsUpdate = async (exclusion) => {
@@ -50,10 +30,7 @@ export default class Exclusions {
             .filter(({ enabled }) => enabled)
             .map(({ hostname }) => hostname);
         await this.proxy.setBypassList(enabledExclusions);
-        await this.storage.set(Exclusions.EXCLUSIONS_KEY, {
-            version: this.SCHEME_VERSION,
-            exclusions: this.exclusions,
-        });
+        this.settings.setSetting(Exclusions.EXCLUSIONS_KEY, this.exclusions);
     };
 
     addToExclusions = async (url) => {
@@ -86,9 +63,15 @@ export default class Exclusions {
         if (!exclusion) {
             return;
         }
-
         delete this.exclusions[id];
+        await this.handleExclusionsUpdate(exclusion);
+    };
 
+    removeFromExclusionsByHostname = async (hostname) => {
+        const exclusion = Object.values(this.exclusions).find((val) => {
+            return val.hostname === hostname;
+        });
+        delete this.exclusions[exclusion.id];
         await this.handleExclusionsUpdate(exclusion);
     };
 

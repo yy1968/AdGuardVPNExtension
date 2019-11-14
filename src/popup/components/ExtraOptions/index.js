@@ -19,7 +19,7 @@ const ExtraOptions = observer(() => {
 
     const removeFromWhitelist = async () => {
         uiStore.closeOptionsModal();
-        await settingsStore.removeFromWhitelist();
+        await settingsStore.removeFromExclusions();
     };
 
     const signOut = async () => {

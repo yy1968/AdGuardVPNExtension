@@ -120,7 +120,7 @@ class SettingsStore {
 
     @action
     checkRateStatus = async () => {
-        const { value } = await adguard.settings.getSetting(SETTINGS_IDS.RATE_SHOW);
+        const value = await adguard.settings.getSetting(SETTINGS_IDS.RATE_SHOW);
         runInAction(() => {
             this.isRateVisible = value;
         });
@@ -172,7 +172,7 @@ class SettingsStore {
 
     @action
     async getGlobalProxyEnabled() {
-        const { value } = adguard.settings.getSetting(SETTINGS_IDS.PROXY_ENABLED);
+        const value = adguard.settings.getSetting(SETTINGS_IDS.PROXY_ENABLED);
         runInAction(() => {
             this.proxyEnabled = value;
             this.toggleSwitcher(value);
