@@ -54,9 +54,9 @@ export default class StatsStorage {
     async getStats(domain) {
         const key = this.getKey(domain);
         const {
-            total: { downloaded: tDown, uploaded: tUp },
+            total: { downloaded, uploaded },
         } = await this.storage.get(key) || this.EMPTY_STATS;
-        return { downloaded: tDown, uploaded: tUp };
+        return { downloaded, uploaded };
     }
 
     /**
