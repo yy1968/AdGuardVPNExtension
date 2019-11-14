@@ -24,6 +24,7 @@ export const EULA_URL = 'https://adguard.com/forward.html?action=eula&from=popup
 // Commercial
 export const BUY_LICENSE_URL = 'https://adguard.com/forward.html?action=buy_license&from=popup&app=vpn_extension';
 export const OTHER_PRODUCTS_URL = 'https://adguard.com/forward.html?action=other_products&from=popup&app=vpn_extension';
+export const POPUP_STORE_URL = 'https://adguard.com/forward.html?action=store&from=popup&app=vpn_extension';
 
 // Options page
 export const EDIT_ACCOUNT_URL = 'https://adguard.com/forward.html?action=account_settings&from=options_screen&app=vpn_extension';
