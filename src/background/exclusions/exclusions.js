@@ -26,7 +26,7 @@ export default class Exclusions {
             .filter(({ enabled }) => enabled)
             .map(({ hostname }) => hostname);
         await this.proxy.setBypassList(enabledExclusions);
-        this.settings.setSetting(SETTINGS_IDS.EXCLUSIONS, this.exclusions);
+        this.settings.setSetting(SETTINGS_IDS.EXCLUSIONS, this.exclusions, true);
     };
 
     addToExclusions = async (url) => {
@@ -50,7 +50,6 @@ export default class Exclusions {
             exclusion = { id, hostname, enabled: true };
             this.exclusions[id] = exclusion;
         }
-
         await this.handleExclusionsUpdate(exclusion);
     };
 

@@ -15,6 +15,7 @@ import credentials from './credentials';
 import permissionsUpdater from './permissionsUpdater';
 import ip from './ip';
 import log from '../lib/logger';
+import storage from './storage';
 
 global.adguard = {
     settings,
@@ -31,6 +32,7 @@ global.adguard = {
     ip,
     popupData,
     credentials,
+    storage,
 };
 
 (async () => {
