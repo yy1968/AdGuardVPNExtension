@@ -38,10 +38,12 @@ class SettingsService {
      */
     migrateSettings(oldSettings) {
         log.info(`Settings were converted from ${oldSettings.VERSION} to ${SCHEME_VERSION}`);
-        return {
+        const newSettings = {
             VERSION: SCHEME_VERSION,
             ...this.defaults,
         };
+        this.persist(newSettings);
+        return newSettings;
     }
 
     checkSchemeMatch(settings) {
@@ -53,8 +55,8 @@ class SettingsService {
         return this.migrateSettings(settings);
     }
 
-    persist = throttle(async () => {
-        await this.storage.set(this.SETTINGS_KEY, this.settings);
+    persist = throttle(async (settings = this.settings) => {
+        await this.storage.set(this.SETTINGS_KEY, settings);
     }, THROTTLE_TIMEOUT, { leading: false });
 
     setSetting(key, value) {
