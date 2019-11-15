@@ -72,6 +72,10 @@ const App = observer(() => {
                     settingsStore.getExclusions();
                     break;
                 }
+                case MESSAGES_TYPES.AUTHENTICATE_SOCIAL_SUCCESS: {
+                    authStore.setIsAuthenticated(true);
+                    break;
+                }
                 default: {
                     log.debug('there is no such message type: ', type);
                     break;
