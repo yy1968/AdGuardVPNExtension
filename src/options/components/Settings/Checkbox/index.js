@@ -14,8 +14,8 @@ const Checkbox = ({
     const [isChanged, setIsChanged] = useState(false);
 
     const handleChange = (e) => {
+        setIsChanged(hostname !== e.target.value);
         setHostname(e.target.value);
-        setIsChanged(label !== e.target.value);
     };
 
     const handleSubmit = (e) => {
