@@ -6,7 +6,6 @@ import React, {
 import { observer } from 'mobx-react';
 import Modal from 'react-modal';
 import browser from 'webextension-polyfill';
-import { toJS } from 'mobx';
 import { CSSTransition } from 'react-transition-group';
 
 import Header from '../Header';
@@ -104,8 +103,6 @@ const App = observer(() => {
     const { isOpenEndpointsSearch, isOpenOptionsModal } = uiStore;
 
     if (globalError) {
-        console.log('global error', toJS(globalError));
-        console.log({ checkPermissionsState });
         return (
             <Fragment>
                 {checkPermissionsState === REQUEST_STATUSES.PENDING
