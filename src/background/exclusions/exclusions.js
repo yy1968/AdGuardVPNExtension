@@ -1,5 +1,5 @@
 import nanoid from 'nanoid';
-import { getHostname } from '../../lib/helpers';
+import { getUrlProperties } from '../../lib/helpers';
 import log from '../../lib/logger';
 import { MESSAGES_TYPES } from '../../lib/constants';
 
@@ -30,7 +30,7 @@ export default class Exclusions {
     };
 
     addToExclusions = async (url) => {
-        const hostname = getHostname(url);
+        const { hostname } = getUrlProperties(url);
 
         if (!hostname) {
             return;
@@ -71,7 +71,7 @@ export default class Exclusions {
     };
 
     isExcluded = (url) => {
-        const hostname = getHostname(url);
+        const { hostname } = getUrlProperties(url);
         if (hostname) {
             const exclusion = Object.values(this.exclusions)
                 .find(exclusion => exclusion.hostname === hostname);
@@ -92,7 +92,7 @@ export default class Exclusions {
     };
 
     renameExclusion = async (id, newUrl) => {
-        const hostname = getHostname(newUrl);
+        const { hostname } = getUrlProperties(newUrl);
         if (!hostname) {
             return;
         }

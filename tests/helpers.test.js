@@ -1,6 +1,6 @@
 import {
     lazyGet,
-    getHostname,
+    getUrlProperties,
     getClosestEndpointByCoordinates,
     formatBytes,
 } from '../src/lib/helpers';
@@ -35,18 +35,18 @@ describe('lazyGet callback', () => {
     });
 });
 
-describe('getHostname', () => {
+describe('getUrlProperties', () => {
     it('should return hostname if invoked with URL HTTPS', () => {
-        expect(getHostname('https://adguard.com/ru/welcome.html'))
+        expect(getUrlProperties('https://adguard.com/ru/welcome.html').hostname)
             .toEqual('adguard.com');
     });
     it('should return hostname if invoked with URL HTTP', () => {
-        expect(getHostname('http://example.com'))
+        expect(getUrlProperties('http://example.com').hostname)
             .toEqual('example.com');
     });
     it('should return the argument if it is incorrect URL', () => {
-        expect(getHostname('/en-US/docs'))
-            .toEqual('/en-US/docs');
+        expect(getUrlProperties('chrome://version').hostname)
+            .toEqual('version');
     });
 });
 

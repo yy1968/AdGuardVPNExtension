@@ -7,7 +7,7 @@ import {
 
 import tabs from '../../../background/tabs';
 import log from '../../../lib/logger';
-import { getHostname, formatBytes } from '../../../lib/helpers';
+import { getUrlProperties, formatBytes } from '../../../lib/helpers';
 import { SETTINGS_IDS } from '../../../lib/constants';
 import { REQUEST_STATUSES } from '../consts';
 
@@ -33,6 +33,13 @@ class SettingsStore {
     @observable isRoutable = true;
 
     @observable globalError;
+
+    @observable canBeExcluded = true;
+
+    @action
+    prohibitExclusion = () => {
+        this.canBeExcluded = false;
+    };
 
     @action
     getProxyPing = () => {
@@ -186,7 +193,17 @@ class SettingsStore {
         try {
             const result = await tabs.getCurrent();
             runInAction(() => {
-                this.currentTabHostname = getHostname(result.url);
+                const { hostname, protocol } = getUrlProperties(result.url);
+                this.currentTabHostname = hostname;
+
+                switch (protocol) {
+                    case 'https:':
+                        break;
+                    case 'http:':
+                        break;
+                    default:
+                        this.prohibitExclusion();
+                }
             });
         } catch (e) {
             log.error(e);

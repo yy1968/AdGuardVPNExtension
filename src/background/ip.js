@@ -1,5 +1,5 @@
 import ipaddr from 'ipaddr.js';
-import { getHostname } from '../lib/helpers';
+import { getUrlProperties } from '../lib/helpers';
 
 export const NON_ROUTABLE_NETS = [
     '0.0.0.0/8',
@@ -25,7 +25,7 @@ export const NON_ROUTABLE_NETS = [
 const parsedCIDRList = NON_ROUTABLE_NETS.map(net => ipaddr.parseCIDR(net));
 
 const isUrlRoutable = (url) => {
-    const hostname = getHostname(url);
+    const { hostname } = getUrlProperties(url);
     if (!hostname) {
         return true;
     }

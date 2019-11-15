@@ -35,7 +35,7 @@ const ExtraOptions = observer(() => {
         await popupActions.openTab(OTHER_PRODUCTS_URL);
     };
 
-    const { isExcluded } = settingsStore;
+    const { isExcluded, canBeExcluded } = settingsStore;
     const renderWhitelistSetting = (isExcluded) => {
         if (isExcluded) {
             return (
@@ -67,7 +67,7 @@ const ExtraOptions = observer(() => {
             className="extra-options"
             overlayClassName="extra-options__overlay"
         >
-            {renderWhitelistSetting(isExcluded)}
+            {canBeExcluded && renderWhitelistSetting(isExcluded)}
             <button
                 type="button"
                 className="button button--inline extra-options__item"
