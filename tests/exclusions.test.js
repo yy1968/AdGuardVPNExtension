@@ -1,5 +1,4 @@
 import Exclusions from '../src/background/exclusions/exclusions';
-import { SETTINGS_IDS } from '../src/lib/constants';
 import { sleep } from '../src/lib/helpers';
 
 const proxy = {
@@ -7,14 +6,14 @@ const proxy = {
     }),
 };
 
-const settingsService = (() => {
-    const settingsStorage = { [SETTINGS_IDS.EXCLUSIONS]: {} };
+const settings = (() => {
+    let settingsStorage = {};
     return {
-        setSetting: jest.fn((key, data) => {
-            settingsStorage[key] = data;
+        setExclusions: jest.fn((data) => {
+            settingsStorage = data;
         }),
-        getSetting: jest.fn((key) => {
-            return settingsStorage[key];
+        getExclusions: jest.fn(() => {
+            return settingsStorage;
         }),
     };
 })();
@@ -26,7 +25,7 @@ const browser = {
     },
 };
 
-const exclusions = new Exclusions(browser, proxy, settingsService);
+const exclusions = new Exclusions(browser, proxy, settings);
 
 beforeAll(async (done) => {
     await exclusions.init();
@@ -41,16 +40,16 @@ describe('modules bound with exclusions work as expected', () => {
 
     it('should be called once after initialization', async () => {
         expect(proxy.setBypassList).toHaveBeenCalledTimes(0);
-        expect(settingsService.getSetting).toHaveBeenCalledTimes(1);
+        expect(settings.getExclusions).toHaveBeenCalledTimes(1);
         await sleep(110);
-        expect(settingsService.setSetting).toHaveBeenCalledTimes(0);
+        expect(settings.setExclusions).toHaveBeenCalledTimes(0);
     });
 
     it('should be called once when adding to index', async () => {
         await exclusions.addToExclusions('http://example.org');
         expect(proxy.setBypassList).toHaveBeenCalledTimes(1);
-        expect(settingsService.setSetting).toHaveBeenCalledTimes(1);
-        expect(settingsService.getSetting).toHaveBeenCalledTimes(1);
+        expect(settings.setExclusions).toHaveBeenCalledTimes(1);
+        expect(settings.getExclusions).toHaveBeenCalledTimes(1);
     });
 
     it('should be called once when removing from index', async () => {
@@ -58,8 +57,8 @@ describe('modules bound with exclusions work as expected', () => {
         const exclusion = exclusionsList[0];
         await exclusions.removeFromExclusions(exclusion.id);
         expect(proxy.setBypassList).toHaveBeenCalledTimes(2);
-        expect(settingsService.setSetting).toHaveBeenCalledTimes(2);
-        expect(settingsService.getSetting).toHaveBeenCalledTimes(1);
+        expect(settings.setExclusions).toHaveBeenCalledTimes(2);
+        expect(settings.getExclusions).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -81,6 +80,23 @@ describe('exclusions', () => {
     it('should return true if hostname is IN exclusions', async () => {
         await exclusions.addToExclusions('http://example.org');
         const exclusionsList = exclusions.getExclusions();
+        expect(exclusionsList.length).toEqual(1);
+        expect(exclusions.isExcluded('http://example.org')).toEqual(true);
+    });
+
+    it('should turn on if added exclusion is already in exclusions list', async () => {
+        await exclusions.addToExclusions('http://example.org');
+        let exclusionsList = exclusions.getExclusions();
+        expect(exclusionsList.length).toEqual(1);
+        expect(exclusions.isExcluded('http://example.org')).toEqual(true);
+
+        await exclusions.toggleExclusion(exclusionsList[0].id);
+        exclusionsList = exclusions.getExclusions();
+        expect(exclusionsList.length).toEqual(1);
+        expect(exclusions.isExcluded('http://example.org')).toEqual(false);
+
+        await exclusions.addToExclusions('http://example.org');
+        exclusionsList = exclusions.getExclusions();
         expect(exclusionsList.length).toEqual(1);
         expect(exclusions.isExcluded('http://example.org')).toEqual(true);
     });

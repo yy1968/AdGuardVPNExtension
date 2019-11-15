@@ -1,7 +1,7 @@
 import nanoid from 'nanoid';
 import { getHostname } from '../../lib/helpers';
 import log from '../../lib/logger';
-import { MESSAGES_TYPES, SETTINGS_IDS } from '../../lib/constants';
+import { MESSAGES_TYPES } from '../../lib/constants';
 
 export default class Exclusions {
     constructor(browser, proxy, settings) {
@@ -11,7 +11,7 @@ export default class Exclusions {
     }
 
     init = async () => {
-        this.exclusions = this.settings.getSetting(SETTINGS_IDS.EXCLUSIONS) || {};
+        this.exclusions = this.settings.getExclusions();
         log.info('Exclusions list is ready');
     };
 
@@ -26,7 +26,7 @@ export default class Exclusions {
             .filter(({ enabled }) => enabled)
             .map(({ hostname }) => hostname);
         await this.proxy.setBypassList(enabledExclusions);
-        this.settings.setSetting(SETTINGS_IDS.EXCLUSIONS, this.exclusions, true);
+        this.settings.setExclusions(this.exclusions);
     };
 
     addToExclusions = async (url) => {
@@ -43,7 +43,7 @@ export default class Exclusions {
 
         if (exclusion) {
             if (!exclusion.enabled) {
-                this.exclusions[exclusion.id] = true;
+                this.exclusions[exclusion.id] = { ...exclusion, enabled: true };
             }
         } else {
             const id = nanoid();

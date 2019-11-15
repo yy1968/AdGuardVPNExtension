@@ -30,16 +30,27 @@ class SettingsService {
         this.settings = this.checkSchemeMatch(settings);
     }
 
+    /**
+     * Currently this method doesn't contain logic of migration,
+     * because we never have changed the scheme yet
+     * @param oldSettings
+     * @returns {{VERSION: *}}
+     */
+    migrateSettings(oldSettings) {
+        log.info(`Settings were converted from ${oldSettings.VERSION} to ${SCHEME_VERSION}`);
+        return {
+            VERSION: SCHEME_VERSION,
+            ...this.defaults,
+        };
+    }
+
     checkSchemeMatch(settings) {
         const version = settings.VERSION;
         if (version === SCHEME_VERSION) {
             return settings;
         }
         log.warn(`Expected scheme version ${SCHEME_VERSION} and got ${version}`);
-        return {
-            VERSION: SCHEME_VERSION,
-            ...this.defaults,
-        };
+        return this.migrateSettings(settings);
     }
 
     persist = throttle(async () => {

@@ -94,6 +94,14 @@ const getSetting = (id) => {
     return settingsService.getSetting(id);
 };
 
+const getExclusions = () => {
+    return settingsService.getSetting(SETTINGS_IDS.EXCLUSIONS) || {};
+};
+
+const setExclusions = (exclusions) => {
+    settingsService.setSetting(SETTINGS_IDS.EXCLUSIONS, exclusions);
+};
+
 const settings = {
     init,
     getSetting,
@@ -103,6 +111,8 @@ const settings = {
     SETTINGS_IDS,
     settingsService,
     applySettings,
+    getExclusions,
+    setExclusions,
 };
 
 export default settings;
