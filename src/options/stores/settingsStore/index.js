@@ -6,7 +6,6 @@ import {
 
 import log from '../../../lib/logger';
 import { SETTINGS_IDS } from '../../../lib/constants';
-import { REQUEST_STATUSES } from '../../../popup/stores/consts';
 
 class SettingsStore {
     @observable exclusions;
