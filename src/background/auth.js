@@ -104,7 +104,8 @@ class Auth {
             type: MESSAGES_TYPES.AUTHENTICATE_SOCIAL_SUCCESS,
             data: true,
         });
-        await notifications.create({ message: 'Successfully authenticated' });
+
+        await notifications.create({ message: 'Successfully authenticated! Now you can open AdGuard VPN and switch on the tunnel.' });
     }
 
     async deauthenticate() {
