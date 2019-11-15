@@ -12,15 +12,14 @@ class AccountApi extends Api {
         return this.makeRequest(path, method, config);
     }
 
-    GET_ACCOUNT_INFO = { path: 'get_info', method: 'GET' };
+    GET_ACCOUNT_INFO = { path: 'account/info', method: 'GET' };
 
-    // TODO [maximtop] change when api for getting email will be ready
-    getAccountInfo() {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve('maxaimtop@gmail.com');
-            }, 500);
-        });
+    getAccountInfo(accessToken) {
+        const { path, method } = this.GET_ACCOUNT_INFO;
+        const config = {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        };
+        return this.makeRequest(path, method, config);
     }
 }
 

@@ -157,7 +157,8 @@ class Credentials {
     }
 
     async fetchUsername() {
-        return accountProvider.getAccountInfo();
+        const accessToken = await auth.getAccessToken();
+        return accountProvider.getAccountInfo(accessToken);
     }
 
     async getUsername() {
