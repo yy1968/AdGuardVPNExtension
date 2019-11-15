@@ -112,7 +112,8 @@ const App = observer(() => {
                 && <Preloader isOpen={checkPermissionsState === REQUEST_STATUSES.PENDING} />
                 }
                 {isOpenOptionsModal && <ExtraOptions />}
-                <Header authenticated={authenticated} />
+                <Header authenticated={authenticated} globalError={globalError} />
+                <Icons />
                 <GlobalError />
             </Fragment>
         );
