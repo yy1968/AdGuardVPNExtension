@@ -54,7 +54,7 @@ class SettingsStore {
     }
 
     @action
-    setCanControlProxy = (canControlProxy) => {
+    setCanControlProxy = ({ canControlProxy }) => {
         this.canControlProxy = canControlProxy;
     };
 
@@ -223,7 +223,7 @@ class SettingsStore {
     @action
     setGlobalError(data) {
         this.globalError = data;
-    };
+    }
 
     @computed
     get proxyIsEnabling() {
