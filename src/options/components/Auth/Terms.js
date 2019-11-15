@@ -9,6 +9,8 @@ const Terms = () => (
             By continuing you accept the&nbsp;
             <div>
                 <a
+                    target="_blank"
+                    rel="noopener noreferrer"
                     href={PRIVACY_URL}
                     type="button"
                     className="auth__term"
@@ -17,6 +19,8 @@ const Terms = () => (
                 </a>
                 &nbsp;and&nbsp;
                 <a
+                    target="_blank"
+                    rel="noopener noreferrer"
                     href={EULA_URL}
                     type="button"
                     className="auth__term"

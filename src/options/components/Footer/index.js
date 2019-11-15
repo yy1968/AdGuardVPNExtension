@@ -16,12 +16,17 @@ const Footer = () => {
                 </a>
                 <nav className="footer__nav">
                     <a
+                        target="_blank"
+                        rel="noopener noreferrer"
                         href={EULA_URL}
                         className="footer__link"
                     >
                         {browser.i18n.getMessage('eula')}
                     </a>
                     <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        ref
                         href={PRIVACY_URL}
                         className="footer__link"
                     >
