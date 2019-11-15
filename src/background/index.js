@@ -37,7 +37,8 @@ global.adguard = {
     await settings.init();
     await credentials.init();
     await exclusions.init();
+    await settings.applySettings(); // we have to apply settings when credentials are ready
     messaging.init();
     permissionsUpdater.init();
-    log.info('Extension modules are ready');
+    log.info('Extension loaded all necessary modules');
 })();

@@ -24,6 +24,7 @@ class SettingsService {
                 VERSION: SCHEME_VERSION,
                 ...this.defaults,
             };
+            this.persist();
             return;
         }
         this.settings = this.checkSchemeMatch(settings);

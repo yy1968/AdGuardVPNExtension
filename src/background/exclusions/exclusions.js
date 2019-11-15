@@ -10,10 +10,6 @@ export default class Exclusions {
         this.settings = settings;
     }
 
-    static get EXCLUSIONS_KEY() {
-        return 'exclusions.storage.key';
-    }
-
     init = async () => {
         this.exclusions = this.settings.getSetting(SETTINGS_IDS.EXCLUSIONS) || {};
         log.info('Exclusions list is ready');
@@ -30,7 +26,7 @@ export default class Exclusions {
             .filter(({ enabled }) => enabled)
             .map(({ hostname }) => hostname);
         await this.proxy.setBypassList(enabledExclusions);
-        this.settings.setSetting(Exclusions.EXCLUSIONS_KEY, this.exclusions);
+        this.settings.setSetting(SETTINGS_IDS.EXCLUSIONS, this.exclusions);
     };
 
     addToExclusions = async (url) => {

@@ -80,11 +80,17 @@ const isProxyEnabled = () => {
     return setting === true;
 };
 
-const init = async () => {
-    return settingsService.init();
+const applySettings = async () => {
+    await proxyEnabledHandler(isProxyEnabled());
+    log.info('Settings were applied');
 };
 
-const getSetting = async (id) => {
+const init = async () => {
+    await settingsService.init();
+    log.info('Settings module is ready');
+};
+
+const getSetting = (id) => {
     return settingsService.getSetting(id);
 };
 
@@ -96,6 +102,7 @@ const settings = {
     isProxyEnabled,
     SETTINGS_IDS,
     settingsService,
+    applySettings,
 };
 
 export default settings;
