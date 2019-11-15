@@ -192,7 +192,7 @@ class AuthStore {
 
     @action deauthenticate = async () => {
         await adguard.auth.deauthenticate();
-        await this.rootStore.settingsStore.setProxyState(false);
+        await this.rootStore.settingsStore.disableProxy();
         runInAction(() => {
             this.setDefaults();
         });
@@ -200,7 +200,6 @@ class AuthStore {
 
     @action openSocialAuth = async (social) => {
         await adguard.auth.startSocialAuth(social);
-        await adguard.tabs.closePopup();
     };
 
     @action switchStep = (step) => {

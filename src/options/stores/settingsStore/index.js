@@ -6,6 +6,7 @@ import {
 
 import log from '../../../lib/logger';
 import { SETTINGS_IDS } from '../../../lib/constants';
+import { REQUEST_STATUSES } from '../../../popup/stores/consts';
 
 class SettingsStore {
     @observable exclusions;
@@ -108,25 +109,8 @@ class SettingsStore {
     };
 
     @action
-    setProxyState = async (value) => {
-        let changed;
-        const switched = this.toggleSwitcher(value);
-        try {
-            if (value) {
-                changed = await this.enableProxy();
-            } else {
-                changed = await this.disableProxy();
-            }
-        } catch (e) {
-            log.error(e.message);
-            if (switched) {
-                this.toggleSwitcher(!value);
-            }
-            return;
-        }
-        if (!changed && switched) {
-            this.toggleSwitcher(!value);
-        }
+    disableProxy = async () => {
+        await adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, false);
     };
 }
 

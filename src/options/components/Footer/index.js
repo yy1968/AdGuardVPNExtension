@@ -26,7 +26,6 @@ const Footer = () => {
                     <a
                         target="_blank"
                         rel="noopener noreferrer"
-                        ref
                         href={PRIVACY_URL}
                         className="footer__link"
                     >
