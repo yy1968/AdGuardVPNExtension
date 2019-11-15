@@ -179,11 +179,24 @@ class Credentials {
         return this.appId;
     }
 
+    async fetchUsername() {
+        const accessToken = await auth.getAccessToken();
+        return accountProvider.getAccountInfo(accessToken);
+    }
+
+    async getUsername() {
+        if (this.currentUsername) {
+            return this.currentUsername;
+        }
+        return this.fetchUsername();
+    }
+
     async init() {
         try {
             this.appId = await this.gainAppId();
             this.vpnToken = await this.gainVpnToken(true);
             this.vpnCredentials = await this.getVpnCredentialsRemote();
+            this.currentUsername = await this.fetchUsername();
         } catch (e) {
             log.debug('Unable to init credential, reason:', e.message);
         }
