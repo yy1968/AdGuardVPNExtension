@@ -114,11 +114,6 @@ class VpnStore {
     };
 
     @computed
-    get vpnFailurePage() {
-        return this.vpnInfo.vpnFailurePage;
-    }
-
-    @computed
     get bandwidthFreeMbits() {
         return this.vpnInfo.bandwidthFreeMbits;
     }

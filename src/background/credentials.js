@@ -5,8 +5,6 @@ import auth from './auth';
 import storage from './storage';
 import log from '../lib/logger';
 import vpnProvider from './providers/vpnProvider';
-import { ERROR_STATUSES, MESSAGES_TYPES } from '../lib/constants';
-import browserApi from './browserApi';
 import appStatus from './appStatus';
 
 class Credentials {
@@ -30,31 +28,28 @@ class Credentials {
 
     async getVpnTokenRemote() {
         const accessToken = await auth.getAccessToken();
-        let vpnToken;
+
+        let vpnToken = null;
+
         try {
             vpnToken = await accountProvider.getVpnToken(accessToken);
         } catch (e) {
             if (e.status === 401) {
-                log.debug('access token expired');
+                log.debug('Access token expired');
                 // deauthenticate user
                 await auth.deauthenticate();
+                // clear vpnToken
                 this.persistVpnToken(null);
-                throw e;
+                return null;
+            } if (!e.status) {
+                log.debug('Network error occurred', e.message);
+                return null;
             }
-
-            if (e.status === ERROR_STATUSES.INVALID_TOKEN_ERROR) {
-                this.persistVpnToken(null);
-                appStatus.setPermissionsError(e);
-            }
-
             log.debug(e.message);
-            browserApi.runtime.sendMessage({
-                type: MESSAGES_TYPES.VPN_TOKEN_NOT_FOUND,
-                data: { message: e.message },
-            });
-            throw e;
+            return null;
         }
 
+        // save vpnToken in memory
         this.persistVpnToken(vpnToken);
         return vpnToken;
     }
@@ -68,9 +63,6 @@ class Credentials {
             if (!vpnToken) {
                 vpnToken = await this.getVpnTokenLocal();
             }
-            if (!vpnToken) {
-                throw new Error('was unable to gain vpn token');
-            }
             return vpnToken;
         }
 
@@ -82,11 +74,28 @@ class Credentials {
         return vpnToken;
     }
 
+    isValid(vpnToken) {
+        const VALID_VPN_TOKEN_STATUS = 'VALID';
+        return !!(vpnToken && vpnToken.licenseStatus === VALID_VPN_TOKEN_STATUS);
+    }
+
+    async gainValidVpnToken(forceRemote) {
+        const vpnToken = await this.gainVpnToken(forceRemote);
+
+        if (!this.isValid(vpnToken)) {
+            const error = Error(`Received token is not valid. It equals: ${JSON.stringify(vpnToken)}`);
+            appStatus.setPermissionsError(error);
+            throw error;
+        }
+
+        return vpnToken;
+    }
+
     async getVpnCredentialsRemote() {
         const appId = await this.getAppId();
         let credentials;
         try {
-            const vpnToken = await this.gainVpnToken();
+            const vpnToken = await this.gainValidVpnToken();
             credentials = await vpnProvider.getVpnCredentials(appId, vpnToken.token);
         } catch (e) {
             log.error(e.message);
@@ -144,10 +153,8 @@ class Credentials {
     }
 
     async getAccessPrefix() {
-        const vpnToken = await this.gainVpnToken();
-        const { token } = vpnToken;
-        const vpnCredentials = await this.gainVpnCredentials();
-        const { result: { credentials } } = vpnCredentials;
+        const { token } = await this.gainValidVpnToken();
+        const { result: { credentials } } = await this.gainVpnCredentials();
         const appId = this.getAppId();
         // format: md5(<app_id>:<token>:<creds>)
         return md5(`${appId}:${token}:${credentials}`).toString();

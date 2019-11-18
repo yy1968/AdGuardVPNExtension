@@ -13,9 +13,7 @@ const GlobalError = observer(() => {
     };
 
     const handleLearnMore = async () => {
-        const { vpnFailurePage } = settingsStore;
-        // TODO [maximtop ]урлом failure_url, где добавляем get-параметром token=...&app_id=..."
-        await popupActions.openTab(vpnFailurePage);
+        await popupActions.openVpnFailurePage();
     };
 
     return (

@@ -1,18 +1,12 @@
 import { accountApi } from '../api';
-import CustomError from '../../lib/CustomError';
-import { ERROR_STATUSES } from '../../lib/constants';
 
 const getVpnToken = async (accessToken) => {
-    const VALID_VPN_TOKEN_STATUS = 'VALID';
-
     const vpnTokenData = await accountApi.getVpnToken(accessToken);
 
     const vpnToken = vpnTokenData.tokens.find(token => token.token === vpnTokenData.token);
 
-    const isValidTokenFound = vpnToken && vpnToken.license_status === VALID_VPN_TOKEN_STATUS;
-
-    if (!isValidTokenFound) {
-        throw new CustomError(ERROR_STATUSES.INVALID_TOKEN_ERROR, 'received token is not valid');
+    if (!vpnToken) {
+        return null;
     }
 
     const {
@@ -25,7 +19,7 @@ const getVpnToken = async (accessToken) => {
 
     return {
         token,
-        licenseStatus,
+        licenseStatus: adguard.valid ? licenseStatus : 'BLOCKED',
         timeExpiresSec,
         licenseKey,
         subscription,
