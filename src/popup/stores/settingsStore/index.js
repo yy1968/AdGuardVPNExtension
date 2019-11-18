@@ -7,7 +7,7 @@ import {
 
 import tabs from '../../../background/tabs';
 import log from '../../../lib/logger';
-import { getUrlProperties, formatBytes } from '../../../lib/helpers';
+import { getHostname, getProtocol, formatBytes } from '../../../lib/helpers';
 import { SETTINGS_IDS } from '../../../lib/constants';
 import { REQUEST_STATUSES } from '../consts';
 
@@ -192,8 +192,10 @@ class SettingsStore {
     getCurrentTabHostname = async () => {
         try {
             const result = await tabs.getCurrent();
+            const { url } = result;
             runInAction(() => {
-                const { hostname, protocol } = getUrlProperties(result.url);
+                const hostname = getHostname(url);
+                const protocol = getProtocol(url);
                 this.currentTabHostname = hostname;
 
                 switch (protocol) {
