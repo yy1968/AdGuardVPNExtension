@@ -226,7 +226,7 @@ class SettingsStore {
 
     @computed
     get displayNonRoutable() {
-        return !(this.isExcluded || this.isRoutable);
+        return !this.isRoutable && !this.isExcluded;
     }
 }
 
