@@ -25,13 +25,7 @@ class globalStore {
         const currentTab = await tabs.getCurrent();
 
         try {
-            let popupData;
-
-            if (retryNum > 1) {
-                popupData = await adguard.popupData.getPopupDataRetry(currentTab.url, retryNum);
-            } else {
-                popupData = await adguard.popupData.getPopupData(currentTab.url);
-            }
+            const popupData = await adguard.popupData.getPopupDataRetry(currentTab.url, retryNum);
 
             const {
                 vpnInfo,
