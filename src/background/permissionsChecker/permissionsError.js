@@ -7,7 +7,13 @@ class PermissionsError {
     }
 
     setError = (error) => {
+        if (this.error !== error) {
+            this.notifyOnUpdate(error);
+        }
         this.error = error;
+    };
+
+    notifyOnUpdate = (error) => {
         browserApi.runtime.sendMessage({
             type: MESSAGES_TYPES.PERMISSIONS_ERROR_UPDATE,
             data: error,
@@ -19,6 +25,9 @@ class PermissionsError {
     };
 
     clearError = () => {
+        if (this.error !== null) {
+            this.notifyOnUpdate(null);
+        }
         this.error = null;
     };
 }
