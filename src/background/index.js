@@ -10,9 +10,10 @@ import appStatus from './appStatus';
 import authCache from './authentication/authCache';
 import messaging from './messaging';
 import vpn from './vpn';
-import popupData from './popupData';
 import credentials from './credentials';
-import permissionsChecker from './permissionsChecker';
+import permissionsChecker from './permissionsChecker/permissionsChecker';
+import permissionsError from './permissionsChecker/permissionsError';
+import popupData from './popupData';
 import ip from './ip';
 import log from '../lib/logger';
 import storage from './storage';
@@ -33,8 +34,8 @@ global.adguard = {
     popupData,
     storage,
     permissionsChecker,
+    permissionsError,
     credentials,
-    valid: false,
 };
 
 (async () => {

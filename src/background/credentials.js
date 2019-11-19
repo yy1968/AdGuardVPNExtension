@@ -5,8 +5,8 @@ import auth from './auth';
 import storage from './storage';
 import log from '../lib/logger';
 import vpnProvider from './providers/vpnProvider';
-import appStatus from './appStatus';
 import { ERROR_STATUSES } from '../lib/constants';
+import permissionsError from './permissionsChecker/permissionsError';
 
 class Credentials {
     VPN_TOKEN_KEY = 'credentials.token';
@@ -88,7 +88,7 @@ class Credentials {
 
         if (!this.isValid(vpnToken)) {
             const error = Error(`Received token is not valid. It equals: ${JSON.stringify(vpnToken)}`);
-            appStatus.setPermissionsError(error);
+            permissionsError.setError(error);
             throw error;
         }
 

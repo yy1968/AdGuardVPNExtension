@@ -246,7 +246,7 @@ class SettingsStore {
 
     @action clearPermissionError() {
         this.globalError = null;
-        adguard.appStatus.clearPermissionError();
+        adguard.permissionsError.clearError();
     }
 }
 

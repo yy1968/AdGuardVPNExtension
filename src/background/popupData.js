@@ -1,8 +1,8 @@
 import vpn from './vpn';
-import appStatus from './appStatus';
 import log from '../lib/logger';
 import { SETTINGS_IDS } from '../lib/constants';
 import ip from './ip';
+import permissionsError from './permissionsChecker/permissionsError';
 
 const getPopupData = async (url) => {
     const isAuthenticated = await adguard.auth.isAuthenticated();
@@ -12,7 +12,7 @@ const getPopupData = async (url) => {
         };
     }
     const isRoutable = ip.isUrlRoutable(url);
-    const permissionsError = appStatus.getPermissionsError();
+    const error = permissionsError.getError();
     const vpnInfo = vpn.getVpnInfo();
     const endpoints = vpn.getEndpoints();
     const selectedEndpoint = await vpn.getSelectedEndpoint();
@@ -20,7 +20,7 @@ const getPopupData = async (url) => {
     const isProxyEnabled = adguard.settings.getSetting(SETTINGS_IDS.PROXY_ENABLED);
 
     return {
-        permissionsError,
+        permissionsError: error,
         vpnInfo,
         endpoints,
         selectedEndpoint,
@@ -57,4 +57,4 @@ const getPopupDataRetry = async (url, retryNum = 1, retryDelay = 100) => {
     return data;
 };
 
-export default { getPopupData, getPopupDataRetry };
+export default { getPopupDataRetry };

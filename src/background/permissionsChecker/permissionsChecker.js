@@ -1,13 +1,13 @@
-import credentials from './credentials';
-import appStatus from './appStatus';
-import log from '../lib/logger';
-import { ERROR_STATUSES } from '../lib/constants';
+import credentials from '../credentials';
+import log from '../../lib/logger';
+import { ERROR_STATUSES } from '../../lib/constants';
+import permissionsError from './permissionsError';
 
 const checkPermissions = async () => {
     await credentials.getVpnTokenRemote();
     await credentials.gainVpnCredentials(true);
     // if no error, clear permissionError
-    appStatus.clearPermissionError();
+    permissionsError.clearError();
     log.info('Permissions were updated successfully');
 };
 
@@ -17,7 +17,7 @@ const updatePermissionsErrorHandler = (error) => {
     if (error.status === ERROR_STATUSES.NETWORK_ERROR) {
         return;
     }
-    appStatus.setPermissionsError(error);
+    permissionsError.setError(error);
 };
 
 const scheduler = (periodicFunction, errorHandler) => {
