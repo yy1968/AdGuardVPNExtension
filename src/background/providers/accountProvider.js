@@ -3,6 +3,10 @@ import { accountApi } from '../api';
 const getVpnToken = async (accessToken) => {
     const vpnTokenData = await accountApi.getVpnToken(accessToken);
 
+    if (!vpnTokenData || !vpnTokenData.tokens || !vpnTokenData.token) {
+        return null;
+    }
+
     const vpnToken = vpnTokenData.tokens.find(token => token.token === vpnTokenData.token);
 
     if (!vpnToken) {
@@ -19,7 +23,7 @@ const getVpnToken = async (accessToken) => {
 
     return {
         token,
-        licenseStatus: adguard.valid ? licenseStatus : 'BLOCKED',
+        licenseStatus,
         timeExpiresSec,
         licenseKey,
         subscription,

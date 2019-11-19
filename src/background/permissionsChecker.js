@@ -7,7 +7,7 @@ const checkPermissions = async () => {
     await credentials.getVpnTokenRemote();
     await credentials.gainVpnCredentials(true);
     // if no error, clear permissionError
-    appStatus.setPermissionsError(null);
+    appStatus.clearPermissionError();
     log.info('Permissions were updated successfully');
 };
 

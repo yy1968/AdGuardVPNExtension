@@ -6,6 +6,7 @@ import storage from './storage';
 import log from '../lib/logger';
 import vpnProvider from './providers/vpnProvider';
 import appStatus from './appStatus';
+import { ERROR_STATUSES } from '../lib/constants';
 
 class Credentials {
     VPN_TOKEN_KEY = 'credentials.token';
@@ -41,10 +42,13 @@ class Credentials {
                 // clear vpnToken
                 this.persistVpnToken(null);
                 return null;
-            } if (!e.status) {
+            }
+
+            if (e.status === ERROR_STATUSES.NETWORK_ERROR) {
                 log.debug('Network error occurred', e.message);
                 return null;
             }
+
             log.debug(e.message);
             return null;
         }
