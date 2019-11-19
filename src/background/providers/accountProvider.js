@@ -3,11 +3,16 @@ import { accountApi } from '../api';
 const getVpnToken = async (accessToken) => {
     const vpnTokenData = await accountApi.getVpnToken(accessToken);
 
-    if (!vpnTokenData || !vpnTokenData.tokens || !vpnTokenData.token) {
+    if (!vpnTokenData || !vpnTokenData.tokens) {
         return null;
     }
 
-    const vpnToken = vpnTokenData.tokens.find(token => token.token === vpnTokenData.token);
+    const vpnToken = vpnTokenData.tokens.find((token) => {
+        if (vpnTokenData.token) {
+            return token.token === vpnTokenData.token;
+        }
+        return token.token;
+    });
 
     if (!vpnToken) {
         return null;
