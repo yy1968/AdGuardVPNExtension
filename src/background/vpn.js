@@ -182,7 +182,9 @@ const getSelectedEndpoint = async () => {
 const getVpnFailurePage = async () => {
     await credentials.gainVpnToken();
     const vpnToken = await credentials.gainVpnToken();
-    const token = vpnToken.token || '';
+
+    // undefined values will be omitted in the querystring
+    const token = (vpnToken && vpnToken.token) || undefined;
 
     let { vpnInfo } = vpnCache;
 
