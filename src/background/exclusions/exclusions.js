@@ -12,6 +12,7 @@ export default class Exclusions {
 
     init = async () => {
         this.exclusions = this.settings.getExclusions();
+        await this.handleExclusionsUpdate();
         log.info('Exclusions list is ready');
     };
 

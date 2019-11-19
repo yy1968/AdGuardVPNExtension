@@ -145,7 +145,7 @@ class SettingsStore {
     };
 
     @action
-    addToWhitelist = async () => {
+    addToExclusions = async () => {
         try {
             await adguard.exclusions.addToExclusions(this.currentTabHostname);
             runInAction(() => {
@@ -222,6 +222,11 @@ class SettingsStore {
     @computed
     get proxyIsEnabling() {
         return this.proxyEnablingStatus === REQUEST_STATUSES.PENDING;
+    }
+
+    @computed
+    get displayNonRoutable() {
+        return !(this.isExcluded || this.isRoutable);
     }
 }
 
