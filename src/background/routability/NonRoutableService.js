@@ -23,7 +23,7 @@ class NonRoutableService {
 
     async init() {
         this.nonRoutableList = (await this.storage.get(this.NON_ROUTABLE_KEY)) || [];
-        notifier.addListener((payload) => {
+        notifier.addSpecifiedListener(notifier.types.ADD_NON_ROUTABLE_DOMAIN, (payload) => {
             this.addDomainHandler(payload);
         });
         log.info('NonRoutable module was initiated successfully');
