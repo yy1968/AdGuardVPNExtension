@@ -11,7 +11,7 @@ class WebsocketApi {
         maxRetries: Infinity,
         maxEnqueuedMessages: Infinity,
         startClosed: false,
-        debug: true,
+        debug: false,
     };
 
     constructor(url) {
