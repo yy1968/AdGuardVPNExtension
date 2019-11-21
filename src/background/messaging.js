@@ -1,11 +1,6 @@
 import browser from 'webextension-polyfill';
 import { MESSAGES_TYPES } from '../lib/constants';
 import auth from './auth';
-import notifier from '../lib/notifier';
-import { proxy } from './proxy';
-import connectivity from './connectivity/connectivity';
-import log from '../lib/logger';
-import credentials from './credentials';
 
 
 // message handler used for message exchange with content pages only
@@ -26,19 +21,8 @@ const messagesHandler = (request, sender, sendResponse) => {
     return true;
 };
 
-// moved to the messaging module because it is too small to move it into separate one,
-// also it cant be placed in credentials because creates cycle dependency
-const updateCredentials = async () => {
-    const accessPrefix = await credentials.getAccessPrefix();
-    const { host, domainName } = await proxy.setAccessPrefix(accessPrefix);
-    const vpnToken = await credentials.gainValidVpnToken();
-    await connectivity.setCredentials(host, domainName, vpnToken.token);
-    log.info('VPN credentials updated');
-};
-
 const init = () => {
     browser.runtime.onMessage.addListener(messagesHandler);
-    notifier.addSpecifiedListener(notifier.types.CREDENTIALS_UPDATED, updateCredentials);
 };
 
 export default {

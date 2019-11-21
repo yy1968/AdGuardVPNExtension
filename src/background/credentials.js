@@ -9,6 +9,7 @@ import vpnProvider from './providers/vpnProvider';
 import { ERROR_STATUSES } from '../lib/constants';
 import permissionsError from './permissionsChecker/permissionsError';
 import notifier from '../lib/notifier';
+import { proxy } from './proxy';
 
 class Credentials {
     VPN_TOKEN_KEY = 'credentials.token';
@@ -153,6 +154,7 @@ class Credentials {
             if (!isEqual(vpnCredentials, this.vpnCredentials)) {
                 this.vpnCredentials = vpnCredentials;
                 await storage.set(this.VPN_CREDENTIALS_KEY, vpnCredentials);
+                await this.updateProxyCredentials();
                 notifier.notifyListeners(notifier.types.CREDENTIALS_UPDATED);
                 log.info('Got new credentials');
             }
@@ -162,6 +164,11 @@ class Credentials {
 
         throw new Error('Unable to get vpn credentials');
     }
+
+    updateProxyCredentials = async () => {
+        const accessPrefix = await this.getAccessPrefix();
+        await proxy.setAccessPrefix(accessPrefix);
+    };
 
     async getAccessPrefix() {
         const { token } = await this.gainValidVpnToken();
