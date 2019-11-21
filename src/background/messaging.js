@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-import debounce from 'lodash/debounce';
 import { MESSAGES_TYPES } from '../lib/constants';
 import auth from './auth';
 import notifier from '../lib/notifier';
@@ -27,13 +26,15 @@ const messagesHandler = (request, sender, sendResponse) => {
     return true;
 };
 
-const updateCredentials = debounce(async () => {
+// moved to the messaging module because it is too small to move it into separate one,
+// also it cant be placed in credentials because creates cycle dependency
+const updateCredentials = async () => {
     const accessPrefix = await credentials.getAccessPrefix();
     const { host, domainName } = await proxy.setAccessPrefix(accessPrefix);
     const vpnToken = await credentials.gainValidVpnToken();
     await connectivity.setCredentials(host, domainName, vpnToken.token);
     log.info('VPN credentials updated');
-}, 100);
+};
 
 const init = () => {
     browser.runtime.onMessage.addListener(messagesHandler);
