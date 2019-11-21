@@ -41,10 +41,6 @@ class Connectivity {
             return;
         }
 
-        await this.setCredentials(host, domainName, vpnToken.token);
-    };
-
-    async setCredentials(host, domainName, vpnToken) {
         // do not set if credentials are the same
         if (host === this.host
             && domainName === this.domainName
@@ -52,6 +48,10 @@ class Connectivity {
             return;
         }
 
+        await this.setCredentials(host, domainName, vpnToken.token);
+    };
+
+    async setCredentials(host, domainName, vpnToken) {
         this.vpnToken = vpnToken;
         this.domainName = domainName;
         this.host = host;
@@ -67,7 +67,7 @@ class Connectivity {
         }
 
         this.state = CONNECTIVITY_STATE.WORKING;
-        this.start();
+        await this.start();
     }
 
     start = async () => {
