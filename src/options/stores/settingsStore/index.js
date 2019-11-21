@@ -5,7 +5,7 @@ import {
 } from 'mobx';
 
 import log from '../../../lib/logger';
-import { SETTINGS_IDS, internalPages } from '../../../lib/constants';
+import { SETTINGS_IDS } from '../../../lib/constants';
 
 class SettingsStore {
     @observable exclusions;
@@ -46,10 +46,6 @@ class SettingsStore {
 
     @action
     renameExclusion = async (id, name) => {
-        if (name in internalPages) {
-            this.removeFromExclusions(id);
-            return;
-        }
         try {
             await adguard.exclusions.renameExclusion(id, name);
         } catch (e) {
@@ -59,14 +55,8 @@ class SettingsStore {
 
     @action
     addToExclusions = async () => {
-        const name = this.exclusionsInput;
-
-        if (name in internalPages) {
-            this.removeFromExclusions(name);
-            return;
-        }
         try {
-            await adguard.exclusions.addToExclusions(name);
+            await adguard.exclusions.addToExclusions(this.exclusionsInput);
             runInAction(() => {
                 this.isFormVisible = false;
                 this.exclusionsInput = '';
@@ -82,8 +72,13 @@ class SettingsStore {
     };
 
     @action
-    toggleExclusionsForm = () => {
-        this.isFormVisible = !this.isFormVisible;
+    openExclusionsForm = () => {
+        this.isFormVisible = true;
+    };
+
+    @action
+    closeExclusionsForm = () => {
+        this.isFormVisible = false;
         this.exclusionsInput = '';
     };
 

@@ -3729,6 +3729,11 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
+geolib@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/geolib/-/geolib-3.1.0.tgz#c2b5124105f2cc37f097700f8ec63e65c7061920"
+  integrity sha512-46P2RFHUskJGVi8jE389tK2CPmpnpU+7bRr3hQks7ojU7dEqtqKbih+yB1nBXTTpUUt47VPen16oMV3P6IRQyg==
+
 get-caller-file@^2.0.1:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
@@ -7010,6 +7015,11 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
+
+reconnecting-websocket@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/reconnecting-websocket/-/reconnecting-websocket-4.2.0.tgz#2395f84b5d0acee439ff5df34c3fd0853d11be7c"
+  integrity sha512-HMD8A0sv40xhkHf/T4qxktyOvHx7K3d2A9i1QG2wRIYdMecxQJMhTIBH4aQ8KfQLfQW4UOqNSfxTgv0C+MbPIA==
 
 regenerate-unicode-properties@^8.0.2:
   version "8.1.0"
