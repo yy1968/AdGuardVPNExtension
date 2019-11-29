@@ -50,7 +50,7 @@ const scheduleCheck = () => {
  */
 const handleConnectionChange = () => {
     window.addEventListener('online', async () => {
-        log.info('Browser connections is online...');
+        log.info('Browser switched to online mode');
         throttledCheckPermissions();
     });
 };
