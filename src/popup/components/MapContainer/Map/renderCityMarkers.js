@@ -42,6 +42,7 @@ const renderCityMarkers = (endpoints, selectedEndpoint, globalProxyEnabled, onMa
                     textAnchor="middle"
                     y="25px"
                     style={{
+                        fontSize: '12px',
                         fontFamily: 'Akkurat, sans-serif',
                         fontWeight: '700',
                         fill: globalProxyEnabled ? COLORS.ENABLED_TEXT : COLORS.DISABLED_TEXT,
