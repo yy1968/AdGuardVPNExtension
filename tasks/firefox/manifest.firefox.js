@@ -28,5 +28,6 @@ module.exports = {
         'notifications',
         'activeTab',
         '<all_urls>',
+        'management',
     ],
 };
