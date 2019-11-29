@@ -1,9 +1,9 @@
 {
     "name": {
-        "message": "AdGuard VPN — Privacy & Security"
+        "message": "AdGuard VPN — Privacy, Security & Open Internet"
     },
     "description": {
-        "message": "Makes the Internet open and your data safe. Topnotch VPN from the creators of famous ad blocker."
+        "message": "AdGuard VPN — the best free solution for your online security from the creators of famous ad blocker. Encrypt your connection, hide your IP address and websites you visit from anyone (including your Internet provider) and ensure anonymous browsing on the web. Conceal your location and unblock geographically restricted websites or content with no limitations on traffic."
     },
     "short_name": {
         "message": "AdGuard VPN"
@@ -123,7 +123,7 @@
         "message": "Exclusions:"
     },
     "settings_exclusion_expect": {
-        "message": "Connect through VPN all sites expect of:"
+        "message": "Connect through VPN all sites expect of"
     },
     "global_error_title": {
         "message": "Error occurred"
