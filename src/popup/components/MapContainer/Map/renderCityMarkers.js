@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { Markers, Marker } from 'react-simple-maps';
+import classnames from 'classnames';
+
 import SignalsAnimation from './SignalsAnimation';
 import COLORS from './colors';
 
@@ -37,16 +39,15 @@ const renderCityMarkers = (endpoints, selectedEndpoint, globalProxyEnabled, onMa
             return '';
         }
         if (isSelectedEndpointMarker(marker, selectedEndpoint)) {
+            const markerClassNames = classnames({
+                'map__marker': true,
+                'map__marker--enabled': globalProxyEnabled,
+            });
+
             return (
                 <text
-                    textAnchor="middle"
                     y="25px"
-                    style={{
-                        fontSize: '12px',
-                        fontFamily: 'Akkurat, sans-serif',
-                        fontWeight: '700',
-                        fill: globalProxyEnabled ? COLORS.ENABLED_TEXT : COLORS.DISABLED_TEXT,
-                    }}
+                    className={markerClassNames}
                 >
                     {selectedEndpoint.cityName}
                 </text>
