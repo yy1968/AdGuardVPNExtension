@@ -1,4 +1,8 @@
-import proxyApi from './proxyApiWrapper';
+// !IMPORTANT!
+// export './abstractProxyApi' is replaced during webpack compilation
+// with NormalModuleReplacementPlugin to proper browser implementation
+// from './firefox/proxyApi' or ./chrome/proxyApi
+import proxyApi from './abstractProxyApi';
 
 import log from '../../lib/logger';
 import storage from '../storage';

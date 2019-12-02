@@ -68,10 +68,14 @@ const config = {
         ],
     },
     plugins: [
-        new webpack.NormalModuleReplacementPlugin(/\.\/chrome\/proxyApi/, ((resource) => {
+        new webpack.NormalModuleReplacementPlugin(/\.\/abstractProxyApi/, ((resource) => {
             if (process.env.BROWSER === 'firefox') {
                 // eslint-disable-next-line no-param-reassign
-                resource.request = resource.request.replace(/\.\/chrome\/proxyApi/, './firefox/proxyApi');
+                resource.request = resource.request.replace(/\.\/abstractProxyApi/, './firefox/proxyApi');
+            }
+            if (process.env.BROWSER === 'chrome') {
+                // eslint-disable-next-line no-param-reassign
+                resource.request = resource.request.replace(/\.\/abstractProxyApi/, './chrome/proxyApi');
             }
         })),
         new CleanWebpackPlugin(cleanOptions),
