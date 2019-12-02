@@ -1,3 +1,7 @@
+const errorFunction = () => {
+    throw new Error('Seems like webpack didn\'t inject proper proxy api');
+};
+
 /**
  * This module used only to show api interface
  * export './abstractProxyApi' is replaced during webpack compilation
@@ -6,11 +10,11 @@
  */
 const abstractProxyApi = (() => {
     return {
-        proxyGet: () => {},
-        proxySet: () => {},
+        proxyGet: errorFunction,
+        proxySet: errorFunction,
         onProxyError: {
-            addListener: () => {},
-            removeListener: () => {},
+            addListener: errorFunction,
+            removeListener: errorFunction,
         },
     };
 })();
