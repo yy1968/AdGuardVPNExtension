@@ -1,7 +1,4 @@
-// !IMPORTANT!
-// For Firefox export './chrome/proxyApi' is replaced by webpack
-// with NormalModuleReplacementPlugin to './firefox/proxyApi'
-import proxyApi from './chrome/proxyApi';
+import proxyApi from './proxyApiWrapper';
 
 import log from '../../lib/logger';
 import storage from '../storage';
