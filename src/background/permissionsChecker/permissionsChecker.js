@@ -34,6 +34,7 @@ let intervalId = null;
 
 const startChecker = () => {
     log.info('Permissions interval checker started');
+
     const TIME_CHECK_INTERVAL_MS = 5 * 1000; // 5 sec
     const RUN_INTERVAL_MS = 10 * 60 * 1000; // 30 minutes
 
@@ -71,17 +72,25 @@ const handleConnectionChange = () => {
     });
 };
 
+const handleUserAuthentication = () => {
+    permissionsError.clearError();
+    startChecker();
+};
+
+const handleUserDeauthentication = () => {
+    permissionsError.clearError();
+    stopChecker();
+};
+
 const init = () => {
-    notifier.addSpecifiedListener(notifier.types.USER_AUTHENTICATED, startChecker);
-    notifier.addSpecifiedListener(notifier.types.USER_DEAUTHENTICATED, stopChecker);
+    notifier.addSpecifiedListener(notifier.types.USER_AUTHENTICATED, handleUserAuthentication);
+    notifier.addSpecifiedListener(notifier.types.USER_DEAUTHENTICATED, handleUserDeauthentication);
     handleConnectionChange();
     log.info('Permissions checker module initiated');
 };
 
 const permissionsChecker = {
     init,
-    startChecker,
-    stopChecker,
     checkPermissions,
 };
 
