@@ -36,7 +36,7 @@ const startChecker = () => {
     log.info('Permissions interval checker started');
 
     const TIME_CHECK_INTERVAL_MS = 5 * 1000; // 5 sec
-    const RUN_INTERVAL_MS = 10 * 60 * 1000; // 30 minutes
+    const RUN_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes
 
     let prevCheck = Date.now();
 
