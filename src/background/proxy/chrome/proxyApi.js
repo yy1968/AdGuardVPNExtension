@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill';
 import { CONNECTION_MODES } from '../proxyConsts';
+import pacGenerator from '../../../lib/pacGenerator';
 
 const proxyGet = (config = {}) => new Promise((resolve) => {
     browser.proxy.settings.get(config, (details) => {
@@ -51,29 +52,25 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  */
 const toChromeConfig = (proxyConfig) => {
     const {
-        mode, bypassList, host, port, scheme,
+        mode, bypassList, host, port, inverted,
     } = proxyConfig;
+
+    let pacScript;
     if (mode === CONNECTION_MODES.SYSTEM) {
-        return {
-            scope: 'regular',
-            value: {
-                mode,
-            },
-        };
+        pacScript = pacGenerator.generate();
+    } else {
+        const proxyAddress = `${host}:${port}`;
+        pacScript = pacGenerator.generate(proxyAddress, bypassList, inverted);
     }
+
     return {
-        scope: 'regular',
         value: {
-            mode,
-            rules: {
-                bypassList,
-                singleProxy: {
-                    host,
-                    port,
-                    scheme,
-                },
+            mode: 'pac_script',
+            pacScript: {
+                data: pacScript,
             },
         },
+        scope: 'regular',
     };
 };
 
