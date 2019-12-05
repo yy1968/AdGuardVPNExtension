@@ -151,5 +151,23 @@
     },
     "control_error_disable": {
         "message": "disable"
+    },
+    "popup_settings_enable_vpn": {
+        "message": "Enable VPN on this site"
+    },
+    "popup_settings_disable_vpn": {
+        "message": "Disable VPN on this site"
+    },
+    "popup_settings_other_products": {
+        "message": "Other products"
+    },
+    "popup_settings_rate_us": {
+        "message": "Rate us"
+    },
+    "popup_settings_open_settings": {
+        "message": "Settings"
+    },
+    "popup_settings_sign_out": {
+        "message": "Sign out"
     }
 }

@@ -46,6 +46,10 @@ const SiteInfo = observer(() => {
     }
 
     if (settingsStore.isExcluded) {
+        const buttonText = settingsStore.areExclusionsInverted()
+            ? 'remove it from the VPN whitelist'
+            : 'remove it from the VPN blacklist';
+
         return (
             <Modal
                 isOpen
@@ -64,7 +68,7 @@ const SiteInfo = observer(() => {
                         className="button popup-info__link"
                         onClick={removeFromExclusions}
                     >
-                        remove it from exclusions
+                        {buttonText}
                     </a>
                 </div>
             </Modal>
