@@ -25,7 +25,7 @@ let settingsService;
 
 describe('init', () => {
     const expectedSettings = {
-        VERSION: '1',
+        VERSION: '2.0.0',
         enabled: true,
         showPromo: true,
     };
@@ -49,13 +49,13 @@ describe('init', () => {
         storage.set(settingsService.SETTINGS_KEY, expectedSettings);
         await settingsService.init();
         const settings = settingsService.getSettings();
-        expect(settings.VERSION).toBe('1');
+        expect(settings.VERSION).toBe(expectedSettings.VERSION);
         expect(settings.enabled).toBe(expectedSettings.enabled);
         expect(settings.showPromo).toBe(expectedSettings.showPromo);
     });
 
     it('inits correctly if versions do not match', async () => {
-        const unmatchedVersion = '2';
+        const unmatchedVersion = '3.0.0';
         storage.set(settingsService.SETTINGS_KEY, {
             ...expectedSettings,
             VERSION: unmatchedVersion,
