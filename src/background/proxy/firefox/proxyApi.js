@@ -2,6 +2,7 @@ import browser from 'webextension-polyfill';
 import { getHostname } from '../../../lib/helpers';
 import { CONNECTION_MODES, CONNECTION_TYPE_FIREFOX } from '../proxyConsts';
 
+// TODO [maximtop] handle inverted exclusions
 /**
  * @typedef proxyConfig
  * @type {Object}
@@ -16,6 +17,7 @@ import { CONNECTION_MODES, CONNECTION_TYPE_FIREFOX } from '../proxyConsts';
  *            host: 'feabca59e815de4faab448d75a628118.do-de-fra1-01.adguard.io',
  *            port: 443,
  *            scheme: 'https',
+ *            inverted: false,
  *        };
  */
 

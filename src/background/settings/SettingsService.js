@@ -1,7 +1,9 @@
 import throttle from 'lodash/throttle';
+import semver from 'semver';
 import log from '../../lib/logger';
+import { SETTINGS_IDS } from '../../lib/constants';
 
-const SCHEME_VERSION = '1';
+const SCHEME_VERSION = '2.0.0';
 const THROTTLE_TIMEOUT = 100;
 
 class SettingsService {
@@ -30,19 +32,40 @@ class SettingsService {
         this.settings = this.checkSchemeMatch(settings);
     }
 
+    migrateFrom1to2 = (oldSettings) => {
+        const exclusions = oldSettings[SETTINGS_IDS.EXCLUSIONS];
+
+        const newExclusions = {
+            inverted: false,
+            blacklist: exclusions,
+            whitelist: {},
+        };
+
+        return {
+            ...oldSettings,
+            [SETTINGS_IDS.EXCLUSIONS]: newExclusions,
+        };
+    };
+
     /**
      * Currently this method doesn't contain logic of migration,
      * because we never have changed the scheme yet
      * @param oldSettings
      * @returns {{VERSION: *}}
      */
-    // TODO [maximtop] migrate scheme
     migrateSettings(oldSettings) {
         log.info(`Settings were converted from ${oldSettings.VERSION} to ${SCHEME_VERSION}`);
-        const newSettings = {
-            VERSION: SCHEME_VERSION,
-            ...this.defaults,
-        };
+        let newSettings;
+
+        if (semver.gt(SCHEME_VERSION, semver.coerce(oldSettings.VERSION))) {
+            newSettings = this.migrateFrom1to2(oldSettings);
+        } else {
+            newSettings = {
+                VERSION: SCHEME_VERSION,
+                ...this.defaults,
+            };
+        }
+
         this.persist(newSettings);
         return newSettings;
     }
