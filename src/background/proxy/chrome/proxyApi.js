@@ -22,6 +22,7 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  *            host: 'feabca59e815de4faab448d75a628118.do-de-fra1-01.adguard.io',
  *            port: 443,
  *            scheme: 'https',
+ *            inverted: false,
  *        };
  */
 
@@ -30,19 +31,14 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  * @type {Object}
  *
  * e.g.     const chromeConfig = {
- *               scope: 'regular',
  *               value: {
- *                   mode: 'fixed_servers',
- *                   rules: {
- *                       bypassList: ['0.0.0.0/8', '10.0.0.0/8'],
- *                       singleProxy: {
- *                           host: 'feabca59e815de4faab448d75a628118.do-de-fra1-01.adguard.io',
- *                           port: 443,
- *                           scheme: 'https',
- *                       },
- *                   },
+ *                   mode: "pac_script",
+ *                   pacScript: {
+ *                       data: "function FindProxyForURL() {return 'DIRECT';}"
+ *                   }
  *               },
- *           };
+ *               scope: "regular"
+ *           }
  */
 
 /**

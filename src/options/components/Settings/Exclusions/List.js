@@ -4,22 +4,21 @@ import { observer } from 'mobx-react';
 import rootStore from '../../../stores';
 import Checkbox from '../Checkbox';
 
-const Exclusions = observer(() => {
+const List = observer(({ exclusionsType }) => {
     const { settingsStore } = useContext(rootStore);
-    const {
-        exclusions,
-    } = settingsStore;
+
+    const exclusions = settingsStore.exclusionsByType(exclusionsType);
 
     const handleRemove = id => async () => {
-        await settingsStore.removeFromExclusions(id);
+        await settingsStore.removeFromExclusions(exclusionsType, id);
     };
 
     const handleToggle = id => async () => {
-        await settingsStore.toggleExclusion(id);
+        await settingsStore.toggleExclusion(exclusionsType, id);
     };
 
     const handleRename = id => async (name) => {
-        await settingsStore.renameExclusion(id, name);
+        await settingsStore.renameExclusion(exclusionsType, id, name);
     };
 
     return (
@@ -40,4 +39,4 @@ const Exclusions = observer(() => {
     );
 });
 
-export default Exclusions;
+export default List;

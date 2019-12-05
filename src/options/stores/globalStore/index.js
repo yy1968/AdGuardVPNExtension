@@ -20,6 +20,8 @@ class globalStore {
 
         this.setInitStatus(REQUEST_STATUSES.PENDING);
 
+        settingsStore.getExclusions();
+
         try {
             await authStore.isAuthenticated();
             settingsStore.getExclusions();

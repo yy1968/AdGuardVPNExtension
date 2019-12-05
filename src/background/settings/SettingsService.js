@@ -36,6 +36,7 @@ class SettingsService {
      * @param oldSettings
      * @returns {{VERSION: *}}
      */
+    // TODO [maximtop] migrate scheme
     migrateSettings(oldSettings) {
         log.info(`Settings were converted from ${oldSettings.VERSION} to ${SCHEME_VERSION}`);
         const newSettings = {

@@ -5,34 +5,37 @@ import browser from 'webextension-polyfill';
 import useOutsideClick from '../../helpers/useOutsideClick';
 import rootStore from '../../../stores';
 
-const Form = observer(() => {
+const Form = observer(({ exclusionsType }) => {
     const ref = useRef();
     const { settingsStore } = useContext(rootStore);
     const {
-        isFormVisible,
-        exclusionsInput,
+        areFormsVisible,
+        exclusionsInputs,
         addToExclusions,
         onExclusionsInputChange,
         openExclusionsForm,
         closeExclusionsForm,
     } = settingsStore;
 
+    const isFormVisible = areFormsVisible[exclusionsType];
+    const exclusionInput = exclusionsInputs[exclusionsType];
+
     const submitHandler = async (e) => {
         e.preventDefault();
-        await addToExclusions();
+        await addToExclusions(exclusionsType);
     };
 
     const inputChangeHandler = (e) => {
         const { target: { value } } = e;
-        onExclusionsInputChange(value);
+        onExclusionsInputChange(exclusionsType, value);
     };
 
     const openForm = () => {
-        openExclusionsForm();
+        openExclusionsForm(exclusionsType);
     };
 
     useOutsideClick(ref, () => {
-        closeExclusionsForm();
+        closeExclusionsForm(exclusionsType);
     });
 
     return (
@@ -57,14 +60,14 @@ const Form = observer(() => {
                         type="text"
                         className="form__input form__input--transparent"
                         onChange={inputChangeHandler}
-                        value={exclusionsInput}
+                        value={exclusionInput}
                         // eslint-disable-next-line jsx-a11y/no-autofocus
                         autoFocus
                     />
                     <button
                         type="submit"
                         className="button button--icon form__submit form__submit--icon"
-                        disabled={!exclusionsInput}
+                        disabled={!exclusionInput}
                     >
                         <svg className="icon icon--button icon--check">
                             <use xlinkHref="#check" />
