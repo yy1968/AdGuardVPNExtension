@@ -2,7 +2,6 @@ import browser from 'webextension-polyfill';
 import { getHostname } from '../../../lib/helpers';
 import { CONNECTION_MODES, CONNECTION_TYPE_FIREFOX } from '../proxyConsts';
 
-// TODO [maximtop] handle inverted exclusions
 /**
  * @typedef proxyConfig
  * @type {Object}
@@ -42,7 +41,7 @@ import { CONNECTION_MODES, CONNECTION_TYPE_FIREFOX } from '../proxyConsts';
  */
 const toFirefoxConfig = (proxyConfig) => {
     const {
-        mode, bypassList, host, port, scheme,
+        mode, bypassList, host, port, scheme, inverted,
     } = proxyConfig;
     if (mode === CONNECTION_MODES.SYSTEM) {
         return {
@@ -52,6 +51,7 @@ const toFirefoxConfig = (proxyConfig) => {
         };
     }
     return {
+        inverted,
         bypassList,
         proxyConfig: {
             type: scheme,
@@ -76,9 +76,14 @@ const isBypassed = (url) => {
 
 
 const proxyHandler = (details) => {
-    if (isBypassed(details.url)) {
+    let shouldBypass = isBypassed(details.url);
+
+    shouldBypass = config.inverted ? !shouldBypass : shouldBypass;
+
+    if (shouldBypass) {
         return directConfig;
     }
+
     return config.proxyConfig;
 };
 
