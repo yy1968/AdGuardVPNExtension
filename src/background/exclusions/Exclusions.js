@@ -1,4 +1,3 @@
-import EXCLUSIONS_TYPES from './exclusionsTypes';
 import ExclusionsHandler from './ExclusionsHandler';
 import log from '../../lib/logger';
 import { MESSAGES_TYPES } from '../../lib/constants';
@@ -18,21 +17,21 @@ class Exclusions {
     init = async () => {
         this.exclusions = this.settings.getExclusions() || {};
 
-        const whitelist = this.exclusions?.[EXCLUSIONS_TYPES.WHITELIST] ?? {};
-        const blacklist = this.exclusions?.[EXCLUSIONS_TYPES.BLACKLIST] ?? {};
+        const whitelist = this.exclusions?.[this.TYPES.WHITELIST] ?? {};
+        const blacklist = this.exclusions?.[this.TYPES.BLACKLIST] ?? {};
 
         this.__inverted = this.exclusions?.inverted ?? 'false';
 
         this.__whitelistHandler = new ExclusionsHandler(
             this.handleExclusionsUpdate,
             whitelist,
-            EXCLUSIONS_TYPES.WHITELIST
+            this.TYPES.WHITELIST
         );
 
         this.__blacklistHandler = new ExclusionsHandler(
             this.handleExclusionsUpdate,
             blacklist,
-            EXCLUSIONS_TYPES.BLACKLIST
+            this.TYPES.BLACKLIST
         );
 
         this.__currentHandler = this.__inverted ? this.__whitelistHandler : this.__blacklistHandler;
@@ -66,12 +65,12 @@ class Exclusions {
 
     async setCurrentHandler(type) {
         switch (type) {
-            case EXCLUSIONS_TYPES.WHITELIST: {
+            case this.TYPES.WHITELIST: {
                 this.__currentHandler = this.__whitelistHandler;
                 this.__inverted = true;
                 break;
             }
-            case EXCLUSIONS_TYPES.BLACKLIST: {
+            case this.TYPES.BLACKLIST: {
                 this.__currentHandler = this.__blacklistHandler;
                 this.__inverted = false;
                 break;
