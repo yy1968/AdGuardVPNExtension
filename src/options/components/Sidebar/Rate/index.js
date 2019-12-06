@@ -40,8 +40,6 @@ const Rate = observer(() => {
                                     id={`rating-${star}`}
                                     className="rate__input"
                                 />
-                                {/* eslint-disable-next-line max-len */}
-                                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
                                 <label
                                     htmlFor={`rating-${star}`}
                                     className="rate__star"

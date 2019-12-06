@@ -29,8 +29,6 @@ const SiteInfo = observer(() => {
                 <div className="popup-info__desc">
                     You can
                     &nbsp;
-                    {/* eslint-disable-next-line max-len */}
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                     <a
                         type="button"
                         className="button popup-info__link"
@@ -61,8 +59,6 @@ const SiteInfo = observer(() => {
                 <div className="popup-info__status popup-info__status--succeed">added to exclusions</div>
                 <div className="popup-info__desc">
                     You can &nbsp;
-                    {/* eslint-disable-next-line max-len */}
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                     <a
                         type="button"
                         className="button popup-info__link"
