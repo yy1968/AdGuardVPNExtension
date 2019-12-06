@@ -18,23 +18,32 @@ const Exclusions = observer(() => {
         await toggleInverted(type);
     };
 
-    const messages = {
+    const titles = {
         [adguard.exclusions.TYPES.WHITELIST]: browser.i18n.getMessage('settings_exclusion_whitelist'),
         [adguard.exclusions.TYPES.BLACKLIST]: browser.i18n.getMessage('settings_exclusion_blacklist'),
     };
 
     const renderExclusions = (exclusionsType) => {
-        const checked = exclusionsType === currentExclusionsType;
+        const enabled = exclusionsType === currentExclusionsType;
+
+        const getIconHref = (enabled) => {
+            if (enabled) {
+                return 'bullet_on';
+            }
+            return 'bullet_off';
+        };
 
         return (
-            <label className="settings__group">
-                <div className="settings__subtitle">
-                    <input type="radio" checked={checked} name="exclusions" onChange={onChange(exclusionsType)} />
-                    {messages[exclusionsType]}
+            <div className="settings__group">
+                <div className="settings__subtitle" onClick={onChange(exclusionsType)}>
+                    <svg className="settings__group-ico">
+                        <use xlinkHref={`#${getIconHref(enabled)}`} />
+                    </svg>
+                    {titles[exclusionsType]}
                 </div>
-                <Form exclusionsType={exclusionsType} />
-                <List exclusionsType={exclusionsType} />
-            </label>
+                <Form exclusionsType={exclusionsType} enabled={enabled} />
+                <List exclusionsType={exclusionsType} enabled={enabled} />
+            </div>
         );
     };
 

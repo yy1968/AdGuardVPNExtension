@@ -1,11 +1,12 @@
 import React, { useContext, useRef } from 'react';
 import { observer } from 'mobx-react';
 import browser from 'webextension-polyfill';
+import classnames from 'classnames';
 
 import useOutsideClick from '../../helpers/useOutsideClick';
 import rootStore from '../../../stores';
 
-const Form = observer(({ exclusionsType }) => {
+const Form = observer(({ exclusionsType, enabled }) => {
     const ref = useRef();
     const { settingsStore } = useContext(rootStore);
     const {
@@ -38,8 +39,10 @@ const Form = observer(({ exclusionsType }) => {
         closeExclusionsForm(exclusionsType);
     });
 
+    const formClassName = classnames('settings__form', { 'settings__form--disabled': !enabled });
+
     return (
-        <div className="settings__form" ref={ref}>
+        <div className={formClassName} ref={ref}>
             <button
                 type="button"
                 className="button button--icon button--medium settings__add"
