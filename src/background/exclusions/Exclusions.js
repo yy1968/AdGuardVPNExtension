@@ -20,21 +20,21 @@ class Exclusions {
         const whitelist = this.exclusions?.[this.TYPES.WHITELIST] ?? {};
         const blacklist = this.exclusions?.[this.TYPES.BLACKLIST] ?? {};
 
-        this.__inverted = this.exclusions?.inverted ?? 'false';
+        this.inverted = this.exclusions?.inverted ?? 'false';
 
-        this.__whitelistHandler = new ExclusionsHandler(
+        this.whitelistHandler = new ExclusionsHandler(
             this.handleExclusionsUpdate,
             whitelist,
             this.TYPES.WHITELIST
         );
 
-        this.__blacklistHandler = new ExclusionsHandler(
+        this.blacklistHandler = new ExclusionsHandler(
             this.handleExclusionsUpdate,
             blacklist,
             this.TYPES.BLACKLIST
         );
 
-        this.__currentHandler = this.__inverted ? this.__whitelistHandler : this.__blacklistHandler;
+        this.currentHandler = this.inverted ? this.whitelistHandler : this.blacklistHandler;
         // update bypass list in proxy on init
         await this.handleExclusionsUpdate();
         log.info('ExclusionsHandler list is ready');
@@ -52,10 +52,10 @@ class Exclusions {
             .filter(({ enabled }) => enabled)
             .map(({ hostname }) => hostname);
 
-        await this.proxy.setBypassList(enabledExclusions, this.__inverted);
+        await this.proxy.setBypassList(enabledExclusions, this.inverted);
 
         const exclusions = {
-            inverted: this.__inverted,
+            inverted: this.inverted,
             [this.TYPES.WHITELIST]: this.whitelist.exclusions,
             [this.TYPES.BLACKLIST]: this.blacklist.exclusions,
         };
@@ -66,13 +66,13 @@ class Exclusions {
     async setCurrentHandler(type) {
         switch (type) {
             case this.TYPES.WHITELIST: {
-                this.__currentHandler = this.__whitelistHandler;
-                this.__inverted = true;
+                this.currentHandler = this.whitelistHandler;
+                this.inverted = true;
                 break;
             }
             case this.TYPES.BLACKLIST: {
-                this.__currentHandler = this.__blacklistHandler;
-                this.__inverted = false;
+                this.currentHandler = this.blacklistHandler;
+                this.inverted = false;
                 break;
             }
             default:
@@ -95,19 +95,19 @@ class Exclusions {
     }
 
     get whitelist() {
-        return this.__whitelistHandler;
+        return this.whitelistHandler;
     }
 
     get blacklist() {
-        return this.__blacklistHandler;
+        return this.blacklistHandler;
     }
 
     get current() {
-        return this.__currentHandler;
+        return this.currentHandler;
     }
 
     isInverted() {
-        return this.__inverted;
+        return this.inverted;
     }
 }
 

@@ -4,19 +4,19 @@ import { getHostname } from '../../lib/helpers';
 export default class ExclusionsHandler {
     constructor(updateHandler, exclusions, type) {
         this.updateHandler = updateHandler;
-        this.__exclusions = exclusions;
-        this.__type = type;
+        this._exclusions = exclusions;
+        this._type = type;
     }
 
     get type() {
-        return this.__type;
+        return this._type;
     }
 
     handleExclusionsUpdate = (exclusion) => {
         if (exclusion) {
-            this.updateHandler(this.__type, this.__exclusions, exclusion);
+            this.updateHandler(this._type, this._exclusions, exclusion);
         } else {
-            this.updateHandler(this.__type, this.__exclusions);
+            this.updateHandler(this._type, this._exclusions);
         }
     };
 
@@ -28,40 +28,40 @@ export default class ExclusionsHandler {
         }
 
         // check if exclusion existed
-        let exclusion = Object.values(this.__exclusions).find((exclusion) => {
+        let exclusion = Object.values(this._exclusions).find((exclusion) => {
             return exclusion.hostname === hostname;
         });
 
         // if it was disabled, enable, otherwise add the new one
         if (exclusion) {
             if (!exclusion.enabled) {
-                this.__exclusions[exclusion.id] = { ...exclusion, enabled: true };
+                this._exclusions[exclusion.id] = { ...exclusion, enabled: true };
             }
         } else {
             const id = nanoid();
             exclusion = { id, hostname, enabled: true };
-            this.__exclusions[id] = exclusion;
+            this._exclusions[id] = exclusion;
         }
 
         await this.handleExclusionsUpdate(exclusion);
     };
 
     removeFromExclusions = async (id) => {
-        const exclusion = this.__exclusions[id];
+        const exclusion = this._exclusions[id];
         if (!exclusion) {
             return;
         }
-        delete this.__exclusions[id];
+        delete this._exclusions[id];
 
         await this.handleExclusionsUpdate(exclusion);
     };
 
     removeFromExclusionsByHostname = async (hostname) => {
-        const exclusion = Object.values(this.__exclusions).find((val) => {
+        const exclusion = Object.values(this._exclusions).find((val) => {
             return val.hostname === hostname;
         });
 
-        delete this.__exclusions[exclusion.id];
+        delete this._exclusions[exclusion.id];
 
         await this.handleExclusionsUpdate(exclusion);
     };
@@ -69,7 +69,7 @@ export default class ExclusionsHandler {
     isExcluded = (url) => {
         const hostname = getHostname(url);
         if (hostname) {
-            const exclusion = Object.values(this.__exclusions)
+            const exclusion = Object.values(this._exclusions)
                 .find(exclusion => exclusion.hostname === hostname);
             return !!(exclusion && exclusion.enabled);
         }
@@ -77,13 +77,13 @@ export default class ExclusionsHandler {
     };
 
     toggleExclusion = async (id) => {
-        let exclusion = this.__exclusions[id];
+        let exclusion = this._exclusions[id];
         if (!exclusion) {
             return;
         }
 
         exclusion = { ...exclusion, enabled: !exclusion.enabled };
-        this.__exclusions[id] = exclusion;
+        this._exclusions[id] = exclusion;
         await this.handleExclusionsUpdate(exclusion);
     };
 
@@ -92,24 +92,24 @@ export default class ExclusionsHandler {
         if (!hostname) {
             return;
         }
-        const exclusion = this.__exclusions[id];
+        const exclusion = this._exclusions[id];
         if (!exclusion) {
             return;
         }
-        this.__exclusions[id] = { ...exclusion, hostname };
+        this._exclusions[id] = { ...exclusion, hostname };
         await this.handleExclusionsUpdate();
     };
 
     clearExclusions = async () => {
-        this.__exclusions = {};
+        this._exclusions = {};
         await this.handleExclusionsUpdate();
     };
 
     get exclusions() {
-        return this.__exclusions;
+        return this._exclusions;
     }
 
     getExclusionsList = () => {
-        return Object.values(this.__exclusions);
+        return Object.values(this._exclusions);
     };
 }

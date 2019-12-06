@@ -1,9 +1,8 @@
 import throttle from 'lodash/throttle';
-import semver from 'semver';
 import log from '../../lib/logger';
 import { SETTINGS_IDS } from '../../lib/constants';
 
-const SCHEME_VERSION = '2.0.0';
+const SCHEME_VERSION = '2';
 const THROTTLE_TIMEOUT = 100;
 
 class SettingsService {
@@ -43,9 +42,19 @@ class SettingsService {
 
         return {
             ...oldSettings,
+            VERSION: '2',
             [SETTINGS_IDS.EXCLUSIONS]: newExclusions,
         };
     };
+
+    migrationFunctions = [this.migrateFrom1to2];
+
+    applyMigrations(newVersion, oldVersion, oldSettings) {
+        const migrationsToApply = this.migrationFunctions.slice(oldVersion - 1, newVersion - 1);
+        return migrationsToApply.reduce((acc, migration) => {
+            return migration(acc);
+        }, oldSettings);
+    }
 
     /**
      * Currently this method doesn't contain logic of migration,
@@ -57,8 +66,10 @@ class SettingsService {
         log.info(`Settings were converted from ${oldSettings.VERSION} to ${SCHEME_VERSION}`);
         let newSettings;
 
-        if (semver.gt(SCHEME_VERSION, semver.coerce(oldSettings.VERSION))) {
-            newSettings = this.migrateFrom1to2(oldSettings);
+        const newVersionInt = Number.parseInt(SCHEME_VERSION, 10);
+        const oldVersionInt = Number.parseInt(oldSettings.VERSION, 10);
+        if (newVersionInt > oldVersionInt) {
+            newSettings = this.applyMigrations(newVersionInt, oldVersionInt, oldSettings);
         } else {
             newSettings = {
                 VERSION: SCHEME_VERSION,
