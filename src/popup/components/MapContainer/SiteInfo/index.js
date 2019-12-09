@@ -62,7 +62,7 @@ const SiteInfo = observer(() => {
                         className="button popup-info__link"
                         onClick={addToExclusions}
                     >
-                        add it to the VPN whitelist
+                        enable VPN on this website
                     </a>
                 </div>
             </Modal>
@@ -86,7 +86,7 @@ const SiteInfo = observer(() => {
                         className="button popup-info__link"
                         onClick={removeFromExclusions}
                     >
-                        remove it from the VPN blacklist
+                        enable VPN on this website
                     </a>
                 </div>
             </Modal>

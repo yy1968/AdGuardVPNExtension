@@ -123,10 +123,10 @@
         "message": "Exclusions"
     },
     "settings_exclusion_blacklist": {
-        "message": "Blacklist. VPN doesn't work on sites from this list:"
+        "message": "Regular mode. AdGuard VPN does not work on the websites from this list:"
     },
     "settings_exclusion_whitelist": {
-        "message": "Whitelist. VPN works only on sites from this list:"
+        "message": "Selective mode. AdGuard VPN works only on the websites from this list:"
     },
     "global_error_title": {
         "message": "Error occurred"
