@@ -6,6 +6,8 @@ import rootStore from '../../../stores';
 const SiteInfo = observer(() => {
     const { settingsStore } = useContext(rootStore);
 
+    const { canBeExcluded } = settingsStore;
+
     const addToExclusions = async () => {
         await settingsStore.addToExclusions();
     };
@@ -43,11 +45,31 @@ const SiteInfo = observer(() => {
         );
     }
 
-    if (settingsStore.isExcluded) {
-        const buttonText = settingsStore.areExclusionsInverted()
-            ? 'remove it from the VPN whitelist'
-            : 'remove it from the VPN blacklist';
+    if (!settingsStore.isExcluded && settingsStore.areExclusionsInverted() && canBeExcluded) {
+        return (
+            <Modal
+                isOpen
+                shouldCloseOnOverlayClick
+                className="popup-info__in"
+                overlayClassName="popup-info"
+            >
+                <div className="popup-info__title popup-info__title--domain">{settingsStore.currentTabHostname}</div>
+                <div className="popup-info__status popup-info__status--warning">VPN disabled on this site</div>
+                <div className="popup-info__desc">
+                    You can &nbsp;
+                    <a
+                        type="button"
+                        className="button popup-info__link"
+                        onClick={addToExclusions}
+                    >
+                        add it to the VPN whitelist
+                    </a>
+                </div>
+            </Modal>
+        );
+    }
 
+    if (settingsStore.isExcluded && !settingsStore.areExclusionsInverted()) {
         return (
             <Modal
                 isOpen
@@ -64,7 +86,7 @@ const SiteInfo = observer(() => {
                         className="button popup-info__link"
                         onClick={removeFromExclusions}
                     >
-                        {buttonText}
+                        remove it from the VPN blacklist
                     </a>
                 </div>
             </Modal>
