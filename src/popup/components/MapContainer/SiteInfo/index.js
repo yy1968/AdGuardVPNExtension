@@ -54,7 +54,7 @@ const SiteInfo = observer(() => {
                 overlayClassName="popup-info"
             >
                 <div className="popup-info__title popup-info__title--domain">{settingsStore.currentTabHostname}</div>
-                <div className="popup-info__status popup-info__status--warning">VPN disabled on this site</div>
+                <div className="popup-info__status popup-info__status--warning">VPN is disabled on this site</div>
                 <div className="popup-info__desc">
                     You can &nbsp;
                     <a
