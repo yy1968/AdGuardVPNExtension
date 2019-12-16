@@ -21,7 +21,7 @@ class Exclusions {
         const whitelist = this.exclusions?.[this.TYPES.WHITELIST] ?? {};
         const blacklist = this.exclusions?.[this.TYPES.BLACKLIST] ?? {};
 
-        this.inverted = this.exclusions?.inverted ?? 'false';
+        this.inverted = this.exclusions?.inverted ?? false;
 
         this.whitelistHandler = new ExclusionsHandler(
             this.handleExclusionsUpdate,
