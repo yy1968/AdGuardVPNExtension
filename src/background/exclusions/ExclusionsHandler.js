@@ -70,13 +70,16 @@ export default class ExclusionsHandler {
         await this.handleExclusionsUpdate(exclusion);
     };
 
-    removeFromExclusionsByHostname = async (hostname) => {
+    disableExclusionByHostname = async (hostname) => {
         const exclusion = Object.values(this._exclusions).find((val) => {
             return val.hostname === hostname;
         });
 
-        delete this._exclusions[exclusion.id];
+        if (!exclusion) {
+            return;
+        }
 
+        this._exclusions[exclusion.id] = { ...exclusion, enabled: false };
         await this.handleExclusionsUpdate(exclusion);
     };
 
