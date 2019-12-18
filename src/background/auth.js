@@ -21,6 +21,8 @@ import notifier from '../lib/notifier';
 class Auth {
     socialAuthState = null;
 
+    accessTokenData = null;
+
     async authenticate(credentials) {
         // turn off proxy to be sure it is not enabled before authentication
         try {
@@ -47,7 +49,6 @@ class Auth {
         try {
             accessToken = await this.getAccessToken();
         } catch (e) {
-            log.error(e.message);
             return false;
         }
 
@@ -132,19 +133,13 @@ class Auth {
     }
 
     async deauthenticate() {
-        const token = await storage.get(AUTH_ACCESS_TOKEN_KEY);
-
-        // remove token from storage
-        await storage.remove(AUTH_ACCESS_TOKEN_KEY);
-
-        // revoke token from api
-        const accessToken = token && token.accessToken;
-        if (accessToken) {
-            try {
-                await authApi.revokeToken(accessToken);
-            } catch (e) {
-                log.error('Unable to revoke token. Error: ', e.message);
-            }
+        try {
+            const accessToken = await this.getAccessToken();
+            // revoke token from api
+            await this.removeAccessToken();
+            await authApi.revokeToken(accessToken);
+        } catch (e) {
+            log.error('Unable to revoke token. Error: ', e.message);
         }
 
         // set proxy settings to default
@@ -180,6 +175,11 @@ class Auth {
         notifier.notifyListeners(notifier.types.USER_AUTHENTICATED);
     }
 
+    async removeAccessToken() {
+        this.accessTokenData = null;
+        await storage.remove(AUTH_ACCESS_TOKEN_KEY);
+    }
+
     async getAccessToken() {
         if (this.accessTokenData && this.accessTokenData.accessToken) {
             return this.accessTokenData.accessToken;
@@ -188,6 +188,7 @@ class Auth {
         // if no access token, than try to get it from storage
         const accessTokenData = await storage.get(AUTH_ACCESS_TOKEN_KEY);
         if (accessTokenData && accessTokenData.accessToken) {
+            this.accessTokenData = accessTokenData;
             return accessTokenData.accessToken;
         }
 
