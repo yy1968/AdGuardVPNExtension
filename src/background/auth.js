@@ -1,5 +1,4 @@
 import qs from 'qs';
-import isEmpty from 'lodash/isEmpty';
 import nanoid from 'nanoid';
 import browser from 'webextension-polyfill';
 import { authApi } from './api';
@@ -23,6 +22,13 @@ class Auth {
     socialAuthState = null;
 
     async authenticate(credentials) {
+        // turn off proxy to be sure it is not enabled before authentication
+        try {
+            await proxy.turnOff();
+        } catch (e) {
+            log.error(e.message);
+        }
+
         let accessToken;
         try {
             accessToken = await authProvider.getAccessToken(credentials);
@@ -36,11 +42,26 @@ class Auth {
     }
 
     async isAuthenticated() {
-        const accessToken = await storage.get(AUTH_ACCESS_TOKEN_KEY);
-        return !isEmpty(accessToken);
+        let accessToken;
+
+        try {
+            accessToken = await this.getAccessToken();
+        } catch (e) {
+            log.error(e.message);
+            return false;
+        }
+
+        return accessToken;
     }
 
     async startSocialAuth(socialProvider) {
+        // turn off proxy to be sure it is not enabled before authentication
+        try {
+            await proxy.turnOff();
+        } catch (e) {
+            log.error(e.message);
+        }
+
         // Generates uniq state id, which will be checked on the auth end
         this.socialAuthState = nanoid();
         const authUrl = this.getImplicitAuthUrl(socialProvider);
@@ -119,7 +140,11 @@ class Auth {
         // revoke token from api
         const accessToken = token && token.accessToken;
         if (accessToken) {
-            await authApi.revokeToken(accessToken);
+            try {
+                await authApi.revokeToken(accessToken);
+            } catch (e) {
+                log.error('Unable to revoke token. Error: ', e.message);
+            }
         }
 
         // set proxy settings to default
@@ -166,7 +191,14 @@ class Auth {
             return accessTokenData.accessToken;
         }
 
-        // if no access token throw error
+        // if no access token found
+        // 1. turn off proxy just in case
+        try {
+            await proxy.turnOff();
+        } catch (e) {
+            log.error(e.message);
+        }
+        // 2. throw error
         throw new Error('No access token, user is not authenticated');
     }
 
