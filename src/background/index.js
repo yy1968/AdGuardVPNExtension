@@ -21,6 +21,7 @@ import management from './management';
 import updateService from './updateService';
 
 global.adguard = {
+    log,
     settings,
     actions,
     proxy,
