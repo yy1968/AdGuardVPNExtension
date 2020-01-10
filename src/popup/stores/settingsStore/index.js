@@ -103,30 +103,33 @@ class SettingsStore {
     }
 
     @action
-    enableProxy = () => {
+    enableProxy = (force = false, withCancel = false) => {
         this.proxyEnablingStatus = REQUEST_STATUSES.PENDING;
-        adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, true);
+        // adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, true, true);
+        adguard.settings.enableProxy(force, withCancel);
     };
 
     @action
-    disableProxy = () => {
-        adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, false);
+    disableProxy = (force = false, withCancel = false) => {
+        this.ping = 0;
+        this.proxyStats = {};
+        // adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, false, true);
+        adguard.settings.disableProxy(force, withCancel);
     };
 
     @action
     setProxyEnabled = (value) => {
         this.proxyEnabled = value;
         this.proxyEnablingStatus = REQUEST_STATUSES.DONE;
-        console.log('set proxy', value);
     };
 
     @action
     setProxyState = (value) => {
         this.setSwitcher(value);
         if (value) {
-            this.enableProxy();
+            this.enableProxy(true, true);
         } else {
-            this.disableProxy();
+            this.disableProxy(true, true);
         }
     };
 
@@ -212,7 +215,9 @@ class SettingsStore {
 
     @computed
     get stats() {
-        let { bytesDownloaded, bytesUploaded } = this.proxyEnabled ? this.proxyStats || {} : {};
+        let { bytesDownloaded, bytesUploaded } = this.proxyEnabled && !this.proxyIsEnabling
+            ? this.proxyStats || {}
+            : {};
         bytesDownloaded = formatBytes(bytesDownloaded);
         bytesUploaded = formatBytes(bytesUploaded);
         return { bytesDownloaded, bytesUploaded };
@@ -264,6 +269,11 @@ class SettingsStore {
     @computed
     get hasGlobalError() {
         return !!this.globalError;
+    }
+
+    @computed
+    get displayEnabled() {
+        return this.switcherEnabled && this.proxyEnabled;
     }
 }
 

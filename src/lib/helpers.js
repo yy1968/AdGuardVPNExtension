@@ -135,7 +135,6 @@ export const runWithCancel = (fn, ...args) => {
     const promise = new Promise((resolve, reject) => {
         // define cancel function to return it from our fn
         cancel = () => {
-            console.log('cancel');
             cancelled = true;
             // eslint-disable-next-line prefer-promise-reject-errors
             reject({ reason: 'cancelled' });

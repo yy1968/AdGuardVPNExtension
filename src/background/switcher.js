@@ -12,7 +12,9 @@ function* turnOnProxy() {
         const accessPrefix = yield credentials.getAccessPrefix();
         const { host, domainName } = yield proxy.setAccessPrefix(accessPrefix);
         const vpnToken = yield credentials.gainValidVpnToken();
+        console.log('turn proxy on');
         yield connectivity.setCredentials(host, domainName, vpnToken.token, true);
+        console.log('turn connectivity on');
         yield proxy.turnOn();
         yield actions.setIconEnabled();
         browserApi.runtime.sendMessage({ type: MESSAGES_TYPES.EXTENSION_PROXY_ENABLED });
@@ -39,21 +41,23 @@ function* turnOffProxy() {
 }
 
 class Switcher {
-    turnOn() {
-        if (this.cancel) {
+    turnOn(withCancel) {
+        if (this.cancel && withCancel) {
             this.cancel();
         }
         const { promise, cancel } = runWithCancel(turnOnProxy);
         this.cancel = cancel;
+        this.promise = promise;
         return promise;
     }
 
-    turnOff() {
-        if (this.cancel) {
+    turnOff(withCancel) {
+        if (this.cancel && withCancel) {
             this.cancel();
         }
         const { promise, cancel } = runWithCancel(turnOffProxy);
         this.cancel = cancel;
+        this.promise = promise;
         return promise;
     }
 }
