@@ -28,8 +28,7 @@ const Tooltip = observer(() => {
         tooltipStore.closeTooltip();
         uiStore.enableConnecting();
         if (settingsStore.proxyEnabled) {
-            settingsStore.disableProxy();
-            settingsStore.enableProxy();
+            await settingsStore.reconnectProxy();
         } else {
             await settingsStore.setProxyState(true);
         }

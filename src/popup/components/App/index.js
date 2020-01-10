@@ -71,8 +71,9 @@ const App = observer(() => {
                     break;
                 }
                 case MESSAGES_TYPES.EXTENSION_PROXY_DISABLED: {
+                    console.log('proxy disabled', settingsStore.switcherIgnoreProxyStateChange);
                     settingsStore.setProxyEnabled(false);
-                    settingsStore.disableSwitcher();
+                    settingsStore.setSwitcher(false);
                     break;
                 }
                 default: {

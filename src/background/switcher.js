@@ -12,9 +12,7 @@ function* turnOnProxy() {
         const accessPrefix = yield credentials.getAccessPrefix();
         const { host, domainName } = yield proxy.setAccessPrefix(accessPrefix);
         const vpnToken = yield credentials.gainValidVpnToken();
-        console.log('turn proxy on');
         yield connectivity.setCredentials(host, domainName, vpnToken.token, true);
-        console.log('turn connectivity on');
         yield proxy.turnOn();
         yield actions.setIconEnabled();
         browserApi.runtime.sendMessage({ type: MESSAGES_TYPES.EXTENSION_PROXY_ENABLED });

@@ -8,7 +8,6 @@ import {
 import tabs from '../../../background/tabs';
 import log from '../../../lib/logger';
 import { getHostname, getProtocol, formatBytes } from '../../../lib/helpers';
-import { SETTINGS_IDS } from '../../../lib/constants';
 import { REQUEST_STATUSES } from '../consts';
 
 class SettingsStore {
@@ -37,6 +36,8 @@ class SettingsStore {
     @observable canBeExcluded = true;
 
     @observable exclusionsInverted;
+
+    @observable switcherIgnoreProxyStateChange = false;
 
     @action
     prohibitExclusion = () => {
@@ -78,6 +79,9 @@ class SettingsStore {
     };
 
     setSwitcher = (value) => {
+        if (this.switcherIgnoreProxyStateChange) {
+            return;
+        }
         if (this.switcherEnabled !== value) {
             if (value) {
                 this.enableSwitcher();
@@ -88,33 +92,30 @@ class SettingsStore {
     };
 
     @action
-    async getGlobalProxyEnabled() {
-        const value = adguard.settings.getSetting(SETTINGS_IDS.PROXY_ENABLED);
-        runInAction(() => {
-            this.proxyEnabled = value;
-            this.setSwitcher(value);
-        });
-    }
-
-    @action
     setProxyEnabledStatus(isProxyEnabled) {
         this.proxyEnabled = isProxyEnabled;
         this.setSwitcher(isProxyEnabled);
     }
 
     @action
-    enableProxy = (force = false, withCancel = false) => {
+    enableProxy = async (force = false, withCancel = false) => {
         this.proxyEnablingStatus = REQUEST_STATUSES.PENDING;
-        // adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, true, true);
-        adguard.settings.enableProxy(force, withCancel);
+        await adguard.settings.enableProxy(force, withCancel);
     };
 
     @action
-    disableProxy = (force = false, withCancel = false) => {
+    disableProxy = async (force = false, withCancel = false) => {
         this.ping = 0;
         this.proxyStats = {};
-        // adguard.settings.setSetting(SETTINGS_IDS.PROXY_ENABLED, false, true);
-        adguard.settings.disableProxy(force, withCancel);
+        await adguard.settings.disableProxy(force, withCancel);
+    };
+
+    @action
+    reconnectProxy = async () => {
+        this.setSwitcherIgnoreProxyStateChange(true);
+        await this.disableProxy(true);
+        await this.enableProxy(true);
+        this.setSwitcherIgnoreProxyStateChange(false);
     };
 
     @action
@@ -124,12 +125,12 @@ class SettingsStore {
     };
 
     @action
-    setProxyState = (value) => {
+    setProxyState = async (value) => {
         this.setSwitcher(value);
         if (value) {
-            this.enableProxy(true, true);
+            await this.enableProxy(true, true);
         } else {
-            this.disableProxy(true, true);
+            await this.disableProxy(true, true);
         }
     };
 
@@ -273,7 +274,15 @@ class SettingsStore {
 
     @computed
     get displayEnabled() {
+        if (this.switcherIgnoreProxyStateChange) {
+            return true;
+        }
         return this.switcherEnabled && this.proxyEnabled;
+    }
+
+    @action
+    setSwitcherIgnoreProxyStateChange(value) {
+        this.switcherIgnoreProxyStateChange = value;
     }
 }
 
