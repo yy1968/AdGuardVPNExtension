@@ -36,7 +36,7 @@ export default class ExclusionsHandler {
 
         // check if exclusion existed
         let exclusion = Object.values(this._exclusions).find((exclusion) => {
-            return exclusion.hostname === hostname;
+            return this.areHostnamesEqual(exclusion.hostname, hostname);
         });
 
         let shouldUpdate = false;
@@ -83,11 +83,24 @@ export default class ExclusionsHandler {
         await this.handleExclusionsUpdate(exclusion);
     };
 
+    /**
+     * Compares if two hostnames w/ or w/o www are equal
+     * @param hostnameA
+     * @param hostnameB
+     * @returns {boolean}
+     */
+    areHostnamesEqual = (hostnameA, hostnameB) => {
+        const wwwRegex = /^www\./;
+        const oldHostnameWithoutWww = hostnameA.replace(wwwRegex, '');
+        const newHostnameWithoutWww = hostnameB.replace(wwwRegex, '');
+        return oldHostnameWithoutWww === newHostnameWithoutWww;
+    };
+
     isExcluded = (url) => {
         const hostname = getHostname(url);
         if (hostname) {
             const exclusion = Object.values(this._exclusions)
-                .find(exclusion => exclusion.hostname === hostname);
+                .find(exclusion => this.areHostnamesEqual(exclusion.hostname, hostname));
             return !!(exclusion && exclusion.enabled);
         }
         return false;
