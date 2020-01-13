@@ -48,7 +48,7 @@
         "message": "An error occurred, try again later"
     },
     "global_error_message": {
-        "message": "Error occurred, please contact us via <a href=\"mailto:support@adguardvpn.com\" target=\"_blank\">support@adguardvpn.com</a>"
+        "message": "Error occurred, please contact us via <a href=\"mailto:support@adguard-vpn.com\" target=\"_blank\">support@adguard-vpn.com</a>"
     },
     "global_error_can_control": {
         "message": "Other extension prevents us from setting up the tunnel. Please disable it in browser settings."
