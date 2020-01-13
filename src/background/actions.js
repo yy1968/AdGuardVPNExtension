@@ -9,7 +9,7 @@ const setIconEnabled = async () => {
     return browser.browserAction.setIcon({ path: Prefs.ICONS.GREEN });
 };
 
-const setIconDisabled = () => {
+const setIconDisabled = async () => {
     return browser.browserAction.setIcon({ path: Prefs.ICONS.GREY });
 };
 

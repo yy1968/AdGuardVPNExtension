@@ -14,11 +14,11 @@ const Endpoints = observer(() => {
         await vpnStore.selectEndpoint(id);
         uiStore.closeEndpointsSearch();
         if (settingsStore.proxyEnabled && prevId !== vpnStore.selectedEndpoint.id) {
-            settingsStore.reconnectProxy();
+            await settingsStore.reconnectProxy();
             return;
         }
         if (!settingsStore.proxyEnabled) {
-            settingsStore.setProxyState(true);
+            await settingsStore.setProxyState(true);
         }
     };
 

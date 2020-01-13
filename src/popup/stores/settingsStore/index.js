@@ -37,12 +37,13 @@ class SettingsStore {
 
     @observable switcherIgnoreProxyStateChange = false;
 
+    @observable checkPermissionsState = REQUEST_STATUSES.DONE;
+
     @action
     prohibitExclusion = () => {
         this.canBeExcluded = false;
     };
 
-    @observable checkPermissionsState = REQUEST_STATUSES.DONE;
 
     constructor(rootStore) {
         this.rootStore = rootStore;
