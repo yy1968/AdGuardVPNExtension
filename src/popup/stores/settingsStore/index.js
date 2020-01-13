@@ -19,8 +19,6 @@ class SettingsStore {
 
     @observable canControlProxy = false;
 
-    @observable gettingEndpointsState;
-
     @observable isExcluded;
 
     @observable currentTabHostname;
@@ -107,6 +105,7 @@ class SettingsStore {
     disableProxy = async (force = false, withCancel = false) => {
         this.ping = 0;
         this.proxyStats = {};
+        this.proxyEnabled = false;
         await adguard.settings.disableProxy(force, withCancel);
     };
 
@@ -121,7 +120,9 @@ class SettingsStore {
     @action
     setProxyEnabled = (value) => {
         this.proxyEnabled = value;
-        this.proxyEnablingStatus = REQUEST_STATUSES.DONE;
+        if (!this.switcherIgnoreProxyStateChange) {
+            this.proxyEnablingStatus = REQUEST_STATUSES.DONE;
+        }
     };
 
     @action
@@ -274,9 +275,6 @@ class SettingsStore {
 
     @computed
     get displayEnabled() {
-        if (this.switcherIgnoreProxyStateChange) {
-            return true;
-        }
         return this.switcherEnabled && this.proxyEnabled;
     }
 
