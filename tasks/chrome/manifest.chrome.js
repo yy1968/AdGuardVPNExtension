@@ -10,5 +10,7 @@ module.exports = {
         '*://*.adguard.com/*',
         '*://*.adguard.io/*',
         'management',
+        'webRequest',
+        'webRequestBlocking',
     ],
 };

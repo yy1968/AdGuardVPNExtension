@@ -9,7 +9,7 @@ import storage from '../storage';
 import { NON_ROUTABLE_NETS } from '../routability/nonRoutableNets';
 import { MESSAGES_TYPES } from '../../lib/constants';
 import browserApi from '../browserApi';
-import { CONNECTION_MODES, LEVELS_OF_CONTROL } from './proxyConsts';
+import {CONNECTION_MODES, LEVELS_OF_CONTROL, NON_ROUTABLE_SITES} from './proxyConsts';
 
 const CURRENT_ENDPOINT_KEY = 'proxyCurrentEndpoint';
 
@@ -92,6 +92,7 @@ class ExtensionProxy {
             port: 443,
             scheme: 'https',
             inverted: this.inverted,
+            credentials: this.credentials,
         };
     }
 
@@ -108,9 +109,9 @@ class ExtensionProxy {
 
     getBypassList() {
         if (this.bypassList) {
-            return [...NON_ROUTABLE_NETS, ...this.bypassList];
+            return [...NON_ROUTABLE_NETS, ...this.bypassList, ...NON_ROUTABLE_SITES];
         }
-        return [...NON_ROUTABLE_NETS];
+        return [...NON_ROUTABLE_NETS, ...NON_ROUTABLE_SITES];
     }
 
     setBypassList = async (exclusions = [], inverted = false) => {
@@ -124,15 +125,17 @@ class ExtensionProxy {
         await this.applyConfig();
     };
 
-    setAccessPrefix = async (accessPrefix) => {
+    setAccessCredentials = async (accessCredentials) => {
+        const { credentials, prefix } = accessCredentials;
         const endpoint = await this.getCurrentEndpoint();
         if (!endpoint) {
             throw new Error('current endpoint is empty');
         }
         const { domainName } = endpoint;
-        const host = `${accessPrefix}.${domainName}`;
-        this.currentAccessPrefix = accessPrefix;
-        this.setHost(host);
+        const host = `${prefix}.${domainName}`;
+        this.currentAccessPrefix = prefix;
+        this.credentials = credentials;
+        this.setHost(domainName);
         return { host, domainName };
     };
 

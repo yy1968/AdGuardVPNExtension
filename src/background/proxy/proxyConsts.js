@@ -11,3 +11,8 @@ export const LEVELS_OF_CONTROL = {
     NOT_CONTROLLABLE: 'not_controllable',
     CONTROLLED_BY_OTHER_EXTENSION: 'controlled_by_other_extensions',
 };
+
+export const NON_ROUTABLE_SITES = [
+    '*adguard.io',
+    '*adguard.com',
+];

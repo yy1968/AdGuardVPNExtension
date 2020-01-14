@@ -70,24 +70,45 @@ const toChromeConfig = (proxyConfig) => {
     };
 };
 
-/**
- * Sets proxy config
- * @param {proxyConfig} config - proxy config
- * @returns {Promise<void>}
- */
-const proxySet = config => new Promise((resolve) => {
-    const chromeConfig = toChromeConfig(config);
-    browser.proxy.settings.set(chromeConfig, () => {
-        resolve();
-    });
-});
+let globalConfig;
+
+const onAuthRequiredHandler = (details) => {
+    console.log(details);
+    console.log(globalConfig);
+    const { challenger } = details;
+    if (challenger && challenger.host !== globalConfig.host) {
+        return {};
+    }
+    const { username, password } = globalConfig.credentials;
+    return { authCredentials: { username, password } };
+};
 
 /**
  * Clears proxy settings
  * @returns {Promise<void>}
  */
 const proxyClear = () => new Promise((resolve) => {
+    console.log('clear');
     browser.proxy.settings.clear({}, () => {
+        browser.webRequest.onAuthRequired.removeListener(onAuthRequiredHandler);
+        resolve();
+    });
+});
+
+/**
+ * Sets proxy config
+ * @param {proxyConfig} config - proxy config
+ * @returns {Promise<void>}
+ */
+const proxySet = config => new Promise(async (resolve) => {
+    await proxyClear();
+    console.log('proxy set', config.credentials);
+    globalConfig = config;
+    const chromeConfig = toChromeConfig(config);
+
+    browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
+
+    browser.proxy.settings.set(chromeConfig, () => {
         resolve();
     });
 });
