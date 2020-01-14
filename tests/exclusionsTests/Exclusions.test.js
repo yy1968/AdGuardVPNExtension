@@ -165,3 +165,15 @@ describe('urls w/ www and w/o www', () => {
         expect(exclusions.current.getExclusionsList().length).toBe(1);
     });
 });
+
+describe('works with wildcards', () => {
+    it('finds simple wildcards', async () => {
+        await exclusions.current.addToExclusions('*mail.com');
+        expect(exclusions.current.isExcluded('https://mail.com')).toBeTruthy();
+        expect(exclusions.current.isExcluded('https://www.mail.com')).toBeTruthy();
+
+        await exclusions.current.addToExclusions('*.adguard.com');
+        expect(exclusions.current.isExcluded('https://bit.adguard.com')).toBeTruthy();
+        expect(exclusions.current.isExcluded('https://jira.adguard.com')).toBeTruthy();
+    });
+});

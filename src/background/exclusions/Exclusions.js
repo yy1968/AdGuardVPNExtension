@@ -48,11 +48,11 @@ class Exclusions {
         log.info('ExclusionsHandler list is ready');
     };
 
-    handleExclusionsUpdate = async (exclusion) => {
-        if (exclusion) {
+    handleExclusionsUpdate = async (exclusions) => {
+        if (exclusions) {
             this.browser.runtime.sendMessage({
-                type: MESSAGES_TYPES.EXCLUSION_UPDATED,
-                data: { exclusion },
+                type: MESSAGES_TYPES.EXCLUSIONS_UPDATED,
+                data: { exclusions },
             });
         }
 
@@ -62,13 +62,13 @@ class Exclusions {
 
         await this.proxy.setBypassList(enabledExclusions, this.inverted);
 
-        const exclusions = {
+        const exclusionsRepository = {
             inverted: this.inverted,
             [this.TYPES.WHITELIST]: this.whitelist.exclusions,
             [this.TYPES.BLACKLIST]: this.blacklist.exclusions,
         };
 
-        this.settings.setExclusions(exclusions);
+        this.settings.setExclusions(exclusionsRepository);
     };
 
     async setCurrentHandler(type) {
