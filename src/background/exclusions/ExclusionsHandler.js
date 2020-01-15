@@ -1,6 +1,6 @@
 import nanoid from 'nanoid';
 import { getHostname } from '../../lib/helpers';
-import { areHostnamesEqual } from '../../lib/string-utils';
+import { areHostnamesEqual, shExpMatch } from '../../lib/string-utils';
 import log from '../../lib/logger';
 
 export default class ExclusionsHandler {
@@ -83,19 +83,6 @@ export default class ExclusionsHandler {
     };
 
     /**
-     * Checks is wildcard pattern matches with url
-     * @param url
-     * @param pattern
-     * @returns {boolean}
-     */
-    shExpMatch = (url, pattern) => {
-        let regexpStr = pattern.replace(/\./g, '\\.');
-        regexpStr = regexpStr.replace(/\*/g, '.*');
-        const regexp = new RegExp(`^${regexpStr}$`);
-        return regexp.test(url);
-    };
-
-    /**
      * Returns exclusion by id
      * @param url
      * @param includeWildcards
@@ -108,7 +95,7 @@ export default class ExclusionsHandler {
         }
         return Object.values(this._exclusions)
             .filter(exclusion => areHostnamesEqual(hostname, exclusion.hostname)
-                || (includeWildcards && this.shExpMatch(url, exclusion.hostname)));
+                || (includeWildcards && shExpMatch(url, exclusion.hostname)));
     };
 
     isExcluded = (url) => {
