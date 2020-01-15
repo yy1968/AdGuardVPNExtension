@@ -16,6 +16,7 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  * @property {string} [host] - proxy host address
  * @property {number} [port] - proxy port
  * @property {string} [scheme] - proxy scheme
+ * @property {{username: string, password: string}} credentials
  * e.g.   const config = {
  *            mode: 'system',
  *            bypassList: [],
@@ -23,6 +24,10 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  *            port: 443,
  *            scheme: 'https',
  *            inverted: false,
+ *            credentials: {
+ *                username: 'foo',
+ *                password: 'bar',
+ *            }
  *        };
  */
 
@@ -46,7 +51,7 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  * @param proxyConfig
  * @returns chromeConfig
  */
-const toChromeConfig = (proxyConfig) => {
+const convertToChromeConfig = (proxyConfig) => {
     const {
         mode, bypassList, host, port, inverted,
     } = proxyConfig;
@@ -70,16 +75,14 @@ const toChromeConfig = (proxyConfig) => {
     };
 };
 
-let globalConfig;
+let GLOBAL_PROXY_CONFIG;
 
 const onAuthRequiredHandler = (details) => {
-    console.log(details);
-    console.log(globalConfig);
     const { challenger } = details;
-    if (challenger && challenger.host !== globalConfig.host) {
+    if (challenger && challenger.host !== GLOBAL_PROXY_CONFIG.host) {
         return {};
     }
-    const { username, password } = globalConfig.credentials;
+    const { username, password } = GLOBAL_PROXY_CONFIG.credentials;
     return { authCredentials: { username, password } };
 };
 
@@ -88,27 +91,22 @@ const onAuthRequiredHandler = (details) => {
  * @returns {Promise<void>}
  */
 const proxyClear = () => new Promise((resolve) => {
-    console.log('clear');
     browser.proxy.settings.clear({}, () => {
-        browser.webRequest.onAuthRequired.removeListener(onAuthRequiredHandler);
+        GLOBAL_PROXY_CONFIG = {};
         resolve();
     });
 });
+
+browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
 
 /**
  * Sets proxy config
  * @param {proxyConfig} config - proxy config
  * @returns {Promise<void>}
  */
-const proxySet = config => new Promise(async (resolve) => {
-    await proxyClear();
-    console.log('proxy set', config.credentials);
-    globalConfig = config;
-    const chromeConfig = toChromeConfig(config);
-
-    browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
-
-    browser.proxy.settings.set(chromeConfig, () => {
+const proxySet = config => new Promise((resolve) => {
+    browser.proxy.settings.set(convertToChromeConfig(config), () => {
+        GLOBAL_PROXY_CONFIG = config;
         resolve();
     });
 });

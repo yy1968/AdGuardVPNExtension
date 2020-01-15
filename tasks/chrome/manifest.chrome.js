@@ -12,5 +12,6 @@ module.exports = {
         'management',
         'webRequest',
         'webRequestBlocking',
+        '<all_urls>',
     ],
 };
