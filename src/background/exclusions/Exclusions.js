@@ -41,7 +41,7 @@ class Exclusions {
 
         notifier.addSpecifiedListener(notifier.types.ADD_NON_ROUTABLE_DOMAIN, (payload) => {
             if (this.currentHandler.type === this.TYPES.BLACKLIST) {
-                this.currentHandler.addToExclusions(payload, false);
+                this.currentHandler.addToExclusions(payload, true, { forceEnable: false });
             }
         });
 

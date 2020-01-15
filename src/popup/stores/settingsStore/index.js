@@ -139,7 +139,11 @@ class SettingsStore {
     @action
     addToExclusions = async () => {
         try {
-            await adguard.exclusions.current.addToExclusions(this.currentTabHostname, true, false);
+            await adguard.exclusions.current.addToExclusions(
+                this.currentTabHostname,
+                true,
+                { considerWildcard: false }
+            );
             runInAction(() => {
                 this.isExcluded = true;
             });
