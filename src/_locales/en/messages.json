@@ -120,13 +120,25 @@
         "message": "Add website"
     },
     "settings_exclusion_title": {
-        "message": "Exclusions"
+        "message": "VPN connection mode"
     },
-    "settings_exclusion_blacklist": {
-        "message": "Regular mode. AdGuard VPN does not work on the websites from this list:"
+    "settings_exclusion_regular_title": {
+        "message": "Regular mode"
     },
-    "settings_exclusion_whitelist": {
-        "message": "Selective mode. AdGuard VPN works only on the websites from this list:"
+    "settings_exclusion_regular_description": {
+        "message": "AdGuard VPN does not work on the websites from this list:"
+    },
+    "settings_exclusion_selective_title": {
+        "message": "Selective mode"
+    },
+    "settings_exclusion_selective_description": {
+        "message": "AdGuard VPN works only on the websites from this list:"
+    },
+    "settings_exclusion_subdomains_title": {
+        "message": "Subdomains"
+    },
+    "settings_exclusion_subdomains_description": {
+        "message": "Add all subdomains to your list. Record them this way: *.domain.com. For example: if you want to exclude all Google subdomains such as mail.google.com, play.google.com, etc., you should put *.google.com in the exclusions."
     },
     "global_error_title": {
         "message": "Error occurred"
