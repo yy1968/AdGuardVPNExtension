@@ -1,7 +1,6 @@
-import React, { useState, Fragment } from 'react';
-import browser from 'webextension-polyfill';
+import React, { useState } from 'react';
 
-import Popover from '../../ui/Popover';
+import SubdomainsHelp from '../Exclusions/SubdomainsHelp';
 import './checkbox.pcss';
 
 const Checkbox = ({
@@ -63,16 +62,7 @@ const Checkbox = ({
                     value={hostname}
                 />
                 <div className="checkbox__help">
-                    <Popover>
-                        <Fragment>
-                            <div className="popover__title">
-                                {browser.i18n.getMessage('settings_exclusion_subdomains_title')}
-                            </div>
-                            <div className="popover__text">
-                                {browser.i18n.getMessage('settings_exclusion_subdomains_description')}
-                            </div>
-                        </Fragment>
-                    </Popover>
+                    <SubdomainsHelp />
                 </div>
                 {isChanged ? (
                     <button

@@ -1,11 +1,11 @@
-import React, { useContext, useRef, Fragment } from 'react';
+import React, { useContext, useRef } from 'react';
 import { observer } from 'mobx-react';
 import browser from 'webextension-polyfill';
 import classnames from 'classnames';
 
 import useOutsideClick from '../../helpers/useOutsideClick';
 import rootStore from '../../../stores';
-import Popover from '../../ui/Popover';
+import SubdomainsHelp from './SubdomainsHelp';
 
 const Form = observer(({ exclusionsType, enabled }) => {
     const ref = useRef();
@@ -13,14 +13,17 @@ const Form = observer(({ exclusionsType, enabled }) => {
     const {
         areFormsVisible,
         exclusionsInputs,
+        exclusionsCheckboxes,
         addToExclusions,
         onExclusionsInputChange,
+        onExclusionsCheckboxChange,
         openExclusionsForm,
         closeExclusionsForm,
     } = settingsStore;
 
     const isFormVisible = areFormsVisible[exclusionsType];
     const exclusionInput = exclusionsInputs[exclusionsType];
+    const exclusionCheckbox = exclusionsCheckboxes[exclusionsType];
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -30,6 +33,10 @@ const Form = observer(({ exclusionsType, enabled }) => {
     const inputChangeHandler = (e) => {
         const { target: { value } } = e;
         onExclusionsInputChange(exclusionsType, value);
+    };
+
+    const checkboxChangeHandler = () => {
+        onExclusionsCheckboxChange(exclusionsType, !exclusionCheckbox);
     };
 
     const openForm = () => {
@@ -61,18 +68,24 @@ const Form = observer(({ exclusionsType, enabled }) => {
                         onSubmit={submitHandler}
                         className="form"
                     >
-                        <div className="checkbox checkbox--disabled">
+                        <div className="checkbox">
                             <input
                                 id="newHostname"
                                 type="checkbox"
                                 className="checkbox__input"
-                                checked
-                                readOnly
+                                onChange={checkboxChangeHandler}
+                                checked={exclusionCheckbox}
                             />
-                            <label htmlFor="newHostname" className="checkbox__label checkbox__label--disabled">
-                                <svg className="icon icon--button icon--checked">
-                                    <use xlinkHref="#checked" />
-                                </svg>
+                            <label htmlFor="newHostname" className="checkbox__label">
+                                {exclusionCheckbox ? (
+                                    <svg className="icon icon--button icon--checked">
+                                        <use xlinkHref="#checked" />
+                                    </svg>
+                                ) : (
+                                    <svg className="icon icon--button icon--unchecked">
+                                        <use xlinkHref="#unchecked" />
+                                    </svg>
+                                )}
                             </label>
                             <input
                                 type="text"
@@ -82,16 +95,7 @@ const Form = observer(({ exclusionsType, enabled }) => {
                                 // eslint-disable-next-line jsx-a11y/no-autofocus
                                 autoFocus
                             />
-                            <Popover>
-                                <Fragment>
-                                    <div className="popover__title">
-                                        {browser.i18n.getMessage('settings_exclusion_subdomains_title')}
-                                    </div>
-                                    <div className="popover__text">
-                                        {browser.i18n.getMessage('settings_exclusion_subdomains_description')}
-                                    </div>
-                                </Fragment>
-                            </Popover>
+                            <SubdomainsHelp />
                             {exclusionInput ? (
                                 <button
                                     type="submit"
