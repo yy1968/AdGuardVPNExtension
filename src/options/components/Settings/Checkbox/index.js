@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
+import browser from 'webextension-polyfill';
 
+import Popover from '../../ui/Popover';
 import './checkbox.pcss';
 
 const Checkbox = ({
@@ -22,6 +24,12 @@ const Checkbox = ({
         e.preventDefault();
         handleRename(hostname);
         setIsChanged(false);
+    };
+
+    const handleBlur = (e) => {
+        if (e.target.value.length <= 0) {
+            handleRemove();
+        }
     };
 
     return (
@@ -51,8 +59,21 @@ const Checkbox = ({
                     name="hostname"
                     className="form__input form__input--transparent checkbox__edit"
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     value={hostname}
                 />
+                <div className="checkbox__help">
+                    <Popover>
+                        <Fragment>
+                            <div className="popover__title">
+                                {browser.i18n.getMessage('settings_exclusion_subdomains_title')}
+                            </div>
+                            <div className="popover__text">
+                                {browser.i18n.getMessage('settings_exclusion_subdomains_description')}
+                            </div>
+                        </Fragment>
+                    </Popover>
+                </div>
                 {isChanged ? (
                     <button
                         type="submit"
