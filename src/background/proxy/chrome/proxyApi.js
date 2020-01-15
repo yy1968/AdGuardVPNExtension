@@ -75,7 +75,7 @@ const convertToChromeConfig = (proxyConfig) => {
     };
 };
 
-let GLOBAL_PROXY_CONFIG;
+let GLOBAL_PROXY_CONFIG = {};
 
 const onAuthRequiredHandler = (details) => {
     const { challenger } = details;
