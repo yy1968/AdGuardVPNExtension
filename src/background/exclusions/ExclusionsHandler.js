@@ -25,10 +25,12 @@ export default class ExclusionsHandler {
     /**
      * Adds url to exclusions
      * @param {string} url
-     * @param {boolean} enable - enable if was disabled by user
+     * @param {boolean} [enabled] - sets state of exclusion
+     * @param {boolean} [considerWildcard] - used to add new exclusions without affecting exclusions
+     *      with wildcard patterns
      * @returns {Promise<void>}
      */
-    addToExclusions = async (url, enable = true, considerWildcard = true) => {
+    addToExclusions = async (url, enabled = true, considerWildcard = true) => {
         const hostname = getHostname(url);
 
         if (!hostname) {
@@ -45,13 +47,13 @@ export default class ExclusionsHandler {
         // if it was disabled, enable, otherwise add the new one
         if (exclusions.length > 0) {
             [exclusion] = exclusions;
-            if (!exclusion.enabled && enable) {
-                this._exclusions[exclusion.id] = { ...exclusion, enabled: true };
+            if (!exclusion.enabled && enabled) {
+                this._exclusions[exclusion.id] = { ...exclusion, enabled };
                 shouldUpdate = true;
             }
         } else {
             const id = nanoid();
-            exclusion = { id, hostname, enabled: true };
+            exclusion = { id, hostname, enabled };
             this._exclusions[id] = exclusion;
             log.info(`Added to exclusions: ${hostname}`);
             shouldUpdate = true;
