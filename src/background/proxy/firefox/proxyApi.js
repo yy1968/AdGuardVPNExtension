@@ -39,9 +39,9 @@ import { CONNECTION_MODES, CONNECTION_TYPE_FIREFOX } from '../proxyConsts';
  * @param proxyConfig
  * @returns {firefoxConfig}
  */
-const toFirefoxConfig = (proxyConfig) => {
+const convertToFirefoxConfig = (proxyConfig) => {
     const {
-        mode, bypassList, host, port, scheme, inverted,
+        mode, bypassList, host, port, scheme, inverted, credentials,
     } = proxyConfig;
     if (mode === CONNECTION_MODES.SYSTEM) {
         return {
@@ -58,6 +58,7 @@ const toFirefoxConfig = (proxyConfig) => {
             host,
             port,
         },
+        credentials,
     };
 };
 
@@ -65,26 +66,31 @@ const directConfig = {
     type: CONNECTION_TYPE_FIREFOX.DIRECT,
 };
 
-let config = {
+let GLOBAL_FIREFOX_CONFIG = {
     proxyConfig: directConfig,
 };
 
 const isBypassed = (url) => {
     const hostname = getHostname(url);
-    return !!(config.bypassList && config.bypassList.includes(hostname));
+    const { bypassList } = GLOBAL_FIREFOX_CONFIG;
+    console.log(bypassList);
+    if (!bypassList) {
+        return true;
+    }
+    return !!(bypassList.includes(hostname));
 };
 
 
 const proxyHandler = (details) => {
     let shouldBypass = isBypassed(details.url);
 
-    shouldBypass = config.inverted ? !shouldBypass : shouldBypass;
+    shouldBypass = GLOBAL_FIREFOX_CONFIG.inverted ? !shouldBypass : shouldBypass;
 
     if (shouldBypass) {
         return directConfig;
     }
 
-    return config.proxyConfig;
+    return GLOBAL_FIREFOX_CONFIG.proxyConfig;
 };
 
 /**
@@ -93,7 +99,7 @@ const proxyHandler = (details) => {
  * @returns {Promise<void>}
  */
 const proxySet = async (proxyConfig) => {
-    config = toFirefoxConfig(proxyConfig);
+    GLOBAL_FIREFOX_CONFIG = convertToFirefoxConfig(proxyConfig);
     if (browser.proxy.onRequest.hasListener(proxyHandler)) {
         return;
     }
@@ -118,8 +124,22 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
 });
 
 const proxyClear = () => {
+    GLOBAL_FIREFOX_CONFIG = {
+        proxyConfig: directConfig,
+    };
     browser.proxy.onRequest.removeListener(proxyHandler);
 };
+
+const onAuthRequiredHandler = (details) => {
+    const { challenger } = details;
+    if (challenger && challenger.host !== GLOBAL_FIREFOX_CONFIG.host) {
+        return {};
+    }
+    const { username, password } = GLOBAL_FIREFOX_CONFIG.credentials;
+    return { authCredentials: { username, password } };
+};
+
+browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
 
 const proxyApi = {
     proxySet,
