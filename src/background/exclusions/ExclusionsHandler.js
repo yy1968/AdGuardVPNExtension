@@ -26,24 +26,27 @@ export default class ExclusionsHandler {
      * Adds url to exclusions
      * @param {string} url
      * @param {boolean} [enabled] - sets state of exclusion
-     * @param {boolean} [considerWildcard] - used to add new exclusions without affecting exclusions
-     *      with wildcard patterns
-     * @param {boolean} [forceEnable] - urls added by non routable sites handler should not
+     * @param {object} [options]
+     * @param {boolean} [options.considerWildcard] - used to add new exclusions without affecting
+     *      exclusions with wildcard patterns
+     * @param {boolean} [options.forceEnable] - urls added by non routable sites handler should not
      *      enable exclusions disabled by user
      * @returns {Promise<void>}
      */
     addToExclusions = async (
         url,
         enabled = true,
-        {
-            considerWildcard = true,
-            forceEnable = true,
-        }) => {
+        options = {}) => {
         const hostname = getHostname(url);
 
         if (!hostname) {
             return;
         }
+
+        const {
+            considerWildcard = true,
+            forceEnable = true,
+        } = options;
 
         // check there are already exclusions for current url
         const exclusions = this.getExclusionsByUrl(url, considerWildcard);
