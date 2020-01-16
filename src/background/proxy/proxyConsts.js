@@ -12,7 +12,7 @@ export const LEVELS_OF_CONTROL = {
     CONTROLLED_BY_OTHER_EXTENSION: 'controlled_by_other_extensions',
 };
 
-export const NON_ROUTABLE_SITES = [
+export const DEFAULT_EXCLUSIONS = [
     '*adguard.io',
     '*adguard.com',
 ];

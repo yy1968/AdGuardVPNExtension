@@ -20,7 +20,7 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  * e.g.   const config = {
  *            mode: 'system',
  *            bypassList: [],
- *            host: 'feabca59e815de4faab448d75a628118.do-de-fra1-01.adguard.io',
+ *            host: 'do-de-fra1-01.adguard.io',
  *            port: 443,
  *            scheme: 'https',
  *            inverted: false,
@@ -80,7 +80,7 @@ let GLOBAL_PROXY_CONFIG = {};
 /**
  * Handles onAuthRequired events
  * @param details
- * @returns {{}|{authCredentials: {password: *, username: *}}}
+ * @returns {{}|{authCredentials: {password: string, username: string}}}
  */
 const onAuthRequiredHandler = (details) => {
     const { challenger } = details;

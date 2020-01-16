@@ -9,7 +9,7 @@ import storage from '../storage';
 import { NON_ROUTABLE_NETS } from '../routability/nonRoutableNets';
 import { MESSAGES_TYPES } from '../../lib/constants';
 import browserApi from '../browserApi';
-import {CONNECTION_MODES, LEVELS_OF_CONTROL, NON_ROUTABLE_SITES} from './proxyConsts';
+import {CONNECTION_MODES, LEVELS_OF_CONTROL, DEFAULT_EXCLUSIONS} from './proxyConsts';
 import browser from 'webextension-polyfill';
 
 const CURRENT_ENDPOINT_KEY = 'proxyCurrentEndpoint';
@@ -110,9 +110,9 @@ class ExtensionProxy {
 
     getBypassList() {
         if (this.bypassList) {
-            return [...NON_ROUTABLE_NETS, ...this.bypassList, ...NON_ROUTABLE_SITES];
+            return [...this.bypassList, ...DEFAULT_EXCLUSIONS];
         }
-        return [...NON_ROUTABLE_NETS, ...NON_ROUTABLE_SITES];
+        return [...DEFAULT_EXCLUSIONS];
     }
 
     setBypassList = async (exclusions = [], inverted = false) => {

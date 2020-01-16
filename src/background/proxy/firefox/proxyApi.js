@@ -15,7 +15,7 @@ import { areHostnamesEqual, shExpMatch } from '../../../lib/string-utils';
  * e.g.   const config = {
  *            mode: 'system',
  *            bypassList: ['example.org', 'localhost', '0.0.0.0/8'],
- *            host: 'feabca59e815de4faab448d75a628118.do-de-fra1-01.adguard.io',
+ *            host: 'do-de-fra1-01.adguard.io',
  *            port: 443,
  *            scheme: 'https',
  *            inverted: false,
