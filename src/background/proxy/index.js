@@ -89,6 +89,7 @@ class ExtensionProxy {
         return {
             mode: CONNECTION_MODES.FIXED_SERVERS,
             bypassList: this.getBypassList(),
+            defaultExclusions: DEFAULT_EXCLUSIONS,
             host: this.currentHost,
             port: 443,
             scheme: 'https',
@@ -110,9 +111,9 @@ class ExtensionProxy {
 
     getBypassList() {
         if (this.bypassList) {
-            return [...this.bypassList, ...DEFAULT_EXCLUSIONS];
+            return [...this.bypassList];
         }
-        return [...DEFAULT_EXCLUSIONS];
+        return [];
     }
 
     setBypassList = async (exclusions = [], inverted = false) => {

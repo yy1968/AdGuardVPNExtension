@@ -53,7 +53,7 @@ const proxyGet = (config = {}) => new Promise((resolve) => {
  */
 const convertToChromeConfig = (proxyConfig) => {
     const {
-        mode, bypassList, host, port, inverted,
+        mode, bypassList, host, port, inverted, defaultExclusions,
     } = proxyConfig;
 
     let pacScript;
@@ -61,7 +61,7 @@ const convertToChromeConfig = (proxyConfig) => {
         pacScript = pacGenerator.generate();
     } else {
         const proxyAddress = `${host}:${port}`;
-        pacScript = pacGenerator.generate(proxyAddress, bypassList, inverted);
+        pacScript = pacGenerator.generate(proxyAddress, bypassList, inverted, defaultExclusions);
     }
 
     return {

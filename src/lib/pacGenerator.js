@@ -1,4 +1,4 @@
-function proxyPacScript(proxy, exclusionsList, inverted) {
+function proxyPacScript(proxy, exclusionsList, inverted, defaultExclusions) {
     return `function FindProxyForURL(url, host) {
                 const DIRECT = "DIRECT";
                 const PROXY = "HTTPS ${proxy}";
@@ -12,6 +12,11 @@ function proxyPacScript(proxy, exclusionsList, inverted) {
 
                 if (isPlainHostName(host)
                     || shExpMatch(host, 'localhost')) {
+                    return DIRECT;
+                }
+
+                const defaultExclusions = [${defaultExclusions.map(l => `"${l}"`).join(', ')}];
+                if (defaultExclusions.some(el => (areHostnamesEqual(host, el) || shExpMatch(host, el)))) {
                     return DIRECT;
                 }
 
@@ -36,12 +41,12 @@ function directPacScript() {
     }`;
 }
 
-const generate = (proxy, exclusionsList = [], inverted = false) => {
+const generate = (proxy, exclusionsList = [], inverted = false, defaultExclusions = []) => {
     if (!proxy) {
         return directPacScript();
     }
 
-    return proxyPacScript(proxy, exclusionsList, inverted);
+    return proxyPacScript(proxy, exclusionsList, inverted, defaultExclusions);
 };
 
 export default { generate };

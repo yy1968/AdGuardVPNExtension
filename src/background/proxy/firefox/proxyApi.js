@@ -51,7 +51,7 @@ import { areHostnamesEqual, shExpMatch } from '../../../lib/string-utils';
  */
 const convertToFirefoxConfig = (proxyConfig) => {
     const {
-        mode, bypassList, host, port, scheme, inverted, credentials,
+        mode, bypassList, host, port, scheme, inverted, credentials, defaultExclusions,
     } = proxyConfig;
     if (mode === CONNECTION_MODES.SYSTEM) {
         return {
@@ -69,6 +69,7 @@ const convertToFirefoxConfig = (proxyConfig) => {
             port,
         },
         credentials,
+        defaultExclusions,
     };
 };
 
@@ -80,13 +81,13 @@ let GLOBAL_FIREFOX_CONFIG = {
     proxyConfig: directConfig,
 };
 
-const isBypassed = (url) => {
-    const hostname = getHostname(url);
-    const { bypassList } = GLOBAL_FIREFOX_CONFIG;
-    if (!bypassList) {
+const isBypassed = (url, exclusionsPatterns) => {
+    if (!exclusionsPatterns) {
         return true;
     }
-    return bypassList.some(exclusionPattern => areHostnamesEqual(hostname, exclusionPattern)
+    const hostname = getHostname(url);
+
+    return exclusionsPatterns.some(exclusionPattern => areHostnamesEqual(hostname, exclusionPattern)
         || shExpMatch(hostname, exclusionPattern));
 };
 
@@ -111,7 +112,11 @@ const removeAuthHandler = () => {
 };
 
 const proxyHandler = (details) => {
-    let shouldBypass = isBypassed(details.url);
+    if (isBypassed(details.url, GLOBAL_FIREFOX_CONFIG.defaultExclusions)) {
+        return directConfig;
+    }
+
+    let shouldBypass = isBypassed(details.url, GLOBAL_FIREFOX_CONFIG.bypassList);
 
     shouldBypass = GLOBAL_FIREFOX_CONFIG.inverted ? !shouldBypass : shouldBypass;
 

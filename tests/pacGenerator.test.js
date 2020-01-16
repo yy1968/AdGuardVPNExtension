@@ -98,4 +98,36 @@ describe('Pac generator', () => {
         resultWwwAdguard = await FindProxyForUrl('https://www.adguard.com/', 'www.adguard.com');
         expect(resultWwwAdguard).toBe(`HTTPS ${proxy}`);
     });
+
+    it('supports default exclusions list', async () => {
+        const proxy = 'do-de-fra1-01.adguard.io:443';
+        let pacScript = pacGenerator.generate(proxy, ['example.com'], false, ['adguard.com', 'adguard.io']);
+        let FindProxyForUrl = pac(pacScript);
+
+        let resultExample = await FindProxyForUrl('https://example.com/foo', 'example.com');
+        expect(resultExample).toBe('DIRECT');
+
+        let resultAnotherExample = await FindProxyForUrl('https://another-example.com/foo', 'another-example.com');
+        expect(resultAnotherExample).toBe(`HTTPS ${proxy}`);
+
+        let resultAdguard = await FindProxyForUrl('https://adguard.com/foo', 'adguard.com');
+        expect(resultAdguard).toBe('DIRECT');
+        let resultAdguardIo = await FindProxyForUrl('https://adguard.io/foo', 'adguard.io');
+        expect(resultAdguardIo).toBe('DIRECT');
+
+        pacScript = pacGenerator.generate(proxy, ['example.com'], true, ['*.adguard.com', '*.adguard.io']);
+        FindProxyForUrl = pac(pacScript);
+
+        resultExample = await FindProxyForUrl('https://example.com/foo', 'example.com');
+        expect(resultExample).toBe(`HTTPS ${proxy}`);
+
+        resultAnotherExample = await FindProxyForUrl('https://another-example.com/foo', 'another-example.com');
+        expect(resultAnotherExample).toBe('DIRECT');
+
+        resultAdguard = await FindProxyForUrl('https://prod.adguard.com/foo', 'prod.adguard.com');
+        expect(resultAdguard).toBe('DIRECT');
+
+        resultAdguardIo = await FindProxyForUrl('https://dev.adguard.io/foo', 'dev.adguard.io');
+        expect(resultAdguardIo).toBe('DIRECT');
+    });
 });
