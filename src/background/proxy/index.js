@@ -188,6 +188,9 @@ class ExtensionProxy {
      * @returns {Promise<void>}
      */
     reloadActiveTabs = async () => {
+        if (!this.isActive) {
+            return;
+        }
         const tabs = await browser.tabs.query({});
         const activeTabs = tabs.filter(tab => tab.active === true);
         activeTabs.forEach((tab) => {
