@@ -73,7 +73,6 @@ let GLOBAL_FIREFOX_CONFIG = {
 const isBypassed = (url) => {
     const hostname = getHostname(url);
     const { bypassList } = GLOBAL_FIREFOX_CONFIG;
-    console.log(bypassList);
     if (!bypassList) {
         return true;
     }

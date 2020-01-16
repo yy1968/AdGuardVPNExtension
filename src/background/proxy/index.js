@@ -10,6 +10,7 @@ import { NON_ROUTABLE_NETS } from '../routability/nonRoutableNets';
 import { MESSAGES_TYPES } from '../../lib/constants';
 import browserApi from '../browserApi';
 import {CONNECTION_MODES, LEVELS_OF_CONTROL, NON_ROUTABLE_SITES} from './proxyConsts';
+import browser from 'webextension-polyfill';
 
 const CURRENT_ENDPOINT_KEY = 'proxyCurrentEndpoint';
 
@@ -180,6 +181,19 @@ class ExtensionProxy {
         this.currentHost = DEFAULTS.currentHost;
         this.currentEndpoint = DEFAULTS.currentEndpoint;
     };
+
+    /**
+     * Reloads active tabs in order to close proxy authentication window
+     * Use this method in the end of extension initialization
+     * @returns {Promise<void>}
+     */
+    reloadActiveTabs = async () => {
+        const tabs = await browser.tabs.query({});
+        const activeTabs = tabs.filter(tab => tab.active === true);
+        activeTabs.forEach((tab) => {
+            browser.tabs.reload(tab.id);
+        });
+    }
 }
 
 const proxy = new ExtensionProxy();
