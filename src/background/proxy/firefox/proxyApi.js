@@ -11,6 +11,7 @@ import { areHostnamesEqual, shExpMatch } from '../../../lib/string-utils';
  * @property {string} [host] - proxy host address
  * @property {number} [port] - proxy port
  * @property {string} [scheme] - proxy scheme
+ * @property {{username: string, password: string}} credentials
  * e.g.   const config = {
  *            mode: 'system',
  *            bypassList: ['example.org', 'localhost', '0.0.0.0/8'],
@@ -18,6 +19,10 @@ import { areHostnamesEqual, shExpMatch } from '../../../lib/string-utils';
  *            port: 443,
  *            scheme: 'https',
  *            inverted: false,
+ *            credentials: {
+ *                username: 'foo',
+ *                password: 'bar',
+ *            }
  *        };
  */
 
@@ -31,6 +36,10 @@ import { areHostnamesEqual, shExpMatch } from '../../../lib/string-utils';
  *                  type: "https",
  *                  host: "137a393d3d36ddefc11adeca9e46a763.do-de-fra1-01.adguard.io",
  *                  port: 443
+ *              },
+ *              credentials: {
+ *                  username: 'foo',
+ *                  password: 'bar',
  *              }
  *          };
  */
@@ -74,13 +83,32 @@ let GLOBAL_FIREFOX_CONFIG = {
 const isBypassed = (url) => {
     const hostname = getHostname(url);
     const { bypassList } = GLOBAL_FIREFOX_CONFIG;
-    if (!bypassList || bypassList.length === 0) {
+    if (!bypassList) {
         return true;
     }
     return bypassList.some(exclusionPattern => areHostnamesEqual(hostname, exclusionPattern)
         || shExpMatch(hostname, exclusionPattern));
 };
 
+const onAuthRequiredHandler = (details) => {
+    const { challenger } = details;
+    if (challenger && challenger.host !== GLOBAL_FIREFOX_CONFIG.proxyConfig.host) {
+        return {};
+    }
+
+    return { authCredentials: GLOBAL_FIREFOX_CONFIG.credentials };
+};
+
+const addAuthHandler = () => {
+    if (browser.webRequest.onAuthRequired.hasListener(onAuthRequiredHandler)) {
+        return;
+    }
+    browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
+};
+
+const removeAuthHandler = () => {
+    browser.webRequest.onAuthRequired.removeListener(onAuthRequiredHandler);
+};
 
 const proxyHandler = (details) => {
     let shouldBypass = isBypassed(details.url);
@@ -105,6 +133,7 @@ const proxySet = async (proxyConfig) => {
         return;
     }
     browser.proxy.onRequest.addListener(proxyHandler, { urls: ['<all_urls>'] });
+    addAuthHandler();
 };
 
 const onProxyError = (() => {
@@ -129,18 +158,8 @@ const proxyClear = () => {
         proxyConfig: directConfig,
     };
     browser.proxy.onRequest.removeListener(proxyHandler);
+    removeAuthHandler();
 };
-
-const onAuthRequiredHandler = (details) => {
-    const { challenger } = details;
-    if (challenger && challenger.host !== GLOBAL_FIREFOX_CONFIG.host) {
-        return {};
-    }
-    const { username, password } = GLOBAL_FIREFOX_CONFIG.credentials;
-    return { authCredentials: { username, password } };
-};
-
-browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
 
 const proxyApi = {
     proxySet,

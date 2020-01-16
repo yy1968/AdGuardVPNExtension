@@ -77,13 +77,30 @@ const convertToChromeConfig = (proxyConfig) => {
 
 let GLOBAL_PROXY_CONFIG = {};
 
+/**
+ * Handles onAuthRequired events
+ * @param details
+ * @returns {{}|{authCredentials: {password: *, username: *}}}
+ */
 const onAuthRequiredHandler = (details) => {
     const { challenger } = details;
+
     if (challenger && challenger.host !== GLOBAL_PROXY_CONFIG.host) {
         return {};
     }
-    const { username, password } = GLOBAL_PROXY_CONFIG.credentials;
-    return { authCredentials: { username, password } };
+
+    return { authCredentials: GLOBAL_PROXY_CONFIG.credentials };
+};
+
+const addAuthHandler = () => {
+    if (browser.webRequest.onAuthRequired.hasListener(onAuthRequiredHandler)) {
+        return;
+    }
+    browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
+};
+
+const removeAuthHandler = () => {
+    browser.webRequest.onAuthRequired.removeListener(onAuthRequiredHandler);
 };
 
 /**
@@ -91,13 +108,12 @@ const onAuthRequiredHandler = (details) => {
  * @returns {Promise<void>}
  */
 const proxyClear = () => new Promise((resolve) => {
+    removeAuthHandler();
     browser.proxy.settings.clear({}, () => {
         GLOBAL_PROXY_CONFIG = {};
         resolve();
     });
 });
-
-browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<all_urls>'] }, ['blocking']);
 
 /**
  * Sets proxy config
@@ -105,8 +121,9 @@ browser.webRequest.onAuthRequired.addListener(onAuthRequiredHandler, { urls: ['<
  * @returns {Promise<void>}
  */
 const proxySet = config => new Promise((resolve) => {
+    GLOBAL_PROXY_CONFIG = config;
+    addAuthHandler();
     browser.proxy.settings.set(convertToChromeConfig(config), () => {
-        GLOBAL_PROXY_CONFIG = config;
         resolve();
     });
 });
