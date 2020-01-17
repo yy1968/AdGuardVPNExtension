@@ -18,6 +18,7 @@ export const DEFAULT_EXCLUSIONS = [
     '*.adguard-vpn.com',
     'adguard-vpn.com',
     '*.adguard.io',
+    'adguard.ws',
     'localhost',
     '*.local',
     '127.0.0.1',
