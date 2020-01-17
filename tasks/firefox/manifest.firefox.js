@@ -29,5 +29,6 @@ module.exports = {
         'activeTab',
         '<all_urls>',
         'management',
+        'privacy',
     ],
 };

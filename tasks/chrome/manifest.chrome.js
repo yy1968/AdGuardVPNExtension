@@ -10,5 +10,6 @@ module.exports = {
         '*://*.adguard.com/*',
         '*://*.adguard.io/*',
         'management',
+        'privacy',
     ],
 };
