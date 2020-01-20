@@ -8,20 +8,20 @@ import browserApi from './browserApi';
 import { MESSAGES_TYPES } from '../lib/constants';
 import webrtc from './browserApi/webrtc';
 
-function* turnOnProxy(webRTCHandleEnabled) {
+function* turnOnProxy() {
     try {
         const accessPrefix = yield credentials.getAccessPrefix();
         const { host, domainName } = yield proxy.setAccessPrefix(accessPrefix);
         const vpnToken = yield credentials.gainValidVpnToken();
         yield connectivity.setCredentials(host, domainName, vpnToken.token, true);
         yield proxy.turnOn();
-        webrtc.enableWebRTC(webRTCHandleEnabled);
+        webrtc.blockWebRTC();
         yield actions.setIconEnabled();
         browserApi.runtime.sendMessage({ type: MESSAGES_TYPES.EXTENSION_PROXY_ENABLED });
     } catch (e) {
         yield connectivity.stop();
         yield proxy.turnOff();
-        webrtc.disableWebRTC(webRTCHandleEnabled);
+        webrtc.unblockWebRTC();
         yield actions.setIconDisabled();
         browserApi.runtime.sendMessage({ type: MESSAGES_TYPES.EXTENSION_PROXY_DISABLED });
         log.error(e && e.message);
@@ -29,11 +29,11 @@ function* turnOnProxy(webRTCHandleEnabled) {
     }
 }
 
-function* turnOffProxy(webRTCHandleEnabled) {
+function* turnOffProxy() {
     try {
         yield connectivity.stop();
         yield proxy.turnOff();
-        webrtc.disableWebRTC(webRTCHandleEnabled);
+        webrtc.unblockWebRTC();
         yield actions.setIconDisabled();
         browserApi.runtime.sendMessage({ type: MESSAGES_TYPES.EXTENSION_PROXY_DISABLED });
     } catch (e) {

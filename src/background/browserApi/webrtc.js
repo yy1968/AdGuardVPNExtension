@@ -1,75 +1,69 @@
 import browser from 'webextension-polyfill';
 
-const handleBlockWebRTC = (webRTCDisabled) => {
-    // Edge doesn't support privacy api
-    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/privacy
-    if (!browser.privacy) {
-        return;
+class WebRTC {
+    constructor() {
+        this.WEB_RTC_HANDLING_ALLOWED = false;
     }
 
-    const resetLastError = () => {
-        const ex = browser.runtime.lastError;
-        if (ex) {
-            adguard.console.error('Error updating privacy.network settings: {0}', ex);
+    handleBlockWebRTC = (webRTCDisabled) => {
+        // Edge doesn't support privacy api
+        // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/privacy
+        if (!browser.privacy) {
+            return;
+        }
+
+        // Since chromium 48
+        if (typeof browser.privacy.network.webRTCIPHandlingPolicy === 'object') {
+            if (webRTCDisabled) {
+                browser.privacy.network.webRTCIPHandlingPolicy.set({
+                    value: 'disable_non_proxied_udp',
+                    scope: 'regular',
+                });
+            } else {
+                browser.privacy.network.webRTCIPHandlingPolicy.clear({
+                    scope: 'regular',
+                });
+            }
+        }
+
+        if (typeof browser.privacy.network.peerConnectionEnabled === 'object') {
+            if (webRTCDisabled) {
+                browser.privacy.network.peerConnectionEnabled.set({
+                    value: false,
+                    scope: 'regular',
+                });
+            } else {
+                browser.privacy.network.peerConnectionEnabled.clear({
+                    scope: 'regular',
+                });
+            }
         }
     };
 
-    // Since chromium 48
-    if (typeof browser.privacy.network.webRTCIPHandlingPolicy === 'object') {
-        if (webRTCDisabled) {
-            browser.privacy.network.webRTCIPHandlingPolicy.set({
-                value: 'disable_non_proxied_udp',
-                scope: 'regular',
-            }, resetLastError);
-        } else {
-            browser.privacy.network.webRTCIPHandlingPolicy.clear({
-                scope: 'regular',
-            }, resetLastError);
+    blockWebRTC = () => {
+        if (!this.WEB_RTC_HANDLING_ALLOWED) {
+            return;
         }
-    }
+        this.handleBlockWebRTC(true);
+    };
 
-    if (typeof browser.privacy.network.peerConnectionEnabled === 'object') {
-        if (webRTCDisabled) {
-            browser.privacy.network.peerConnectionEnabled.set({
-                value: false,
-                scope: 'regular',
-            }, resetLastError);
-        } else {
-            browser.privacy.network.peerConnectionEnabled.clear({
-                scope: 'regular',
-            }, resetLastError);
+    unblockWebRTC = (force = false) => {
+        if (!this.WEB_RTC_HANDLING_ALLOWED && !force) {
+            return;
         }
-    }
-};
+        this.handleBlockWebRTC(false);
+    };
 
-let WEB_RTC_BLOCK_PERMISSION_ENABLED = false;
+    setWebRTCHandlingAllowed = (webRTCHandlingAllowed, proxyEnabled) => {
+        this.WEB_RTC_HANDLING_ALLOWED = webRTCHandlingAllowed;
+        if (!webRTCHandlingAllowed || !proxyEnabled) {
+            this.unblockWebRTC(true);
+        } else if (webRTCHandlingAllowed && proxyEnabled) {
+            this.blockWebRTC();
+        }
+    };
+}
 
-const blockWebRTC = () => {
-    if (!WEB_RTC_BLOCK_PERMISSION_ENABLED) {
-        return;
-    }
-    handleBlockWebRTC(true);
-};
+const webrtc = new WebRTC();
 
-const unblockWebRTC = (force = false) => {
-    if (!WEB_RTC_BLOCK_PERMISSION_ENABLED || !force) {
-        return;
-    }
-    handleBlockWebRTC(false);
-};
-
-const setWebRTCHandleEnabled = (webRTCPermissionEnabled, proxyEnabled) => {
-    WEB_RTC_BLOCK_PERMISSION_ENABLED = webRTCPermissionEnabled;
-    console.log(webRTCPermissionEnabled, proxyEnabled);
-    if (!webRTCPermissionEnabled) {
-        unblockWebRTC(true);
-    } else if (webRTCPermissionEnabled && proxyEnabled) {
-        blockWebRTC();
-    }
-};
-
-export default {
-    blockWebRTC,
-    unblockWebRTC,
-    setWebRTCHandleEnabled,
-};
+export default webrtc;

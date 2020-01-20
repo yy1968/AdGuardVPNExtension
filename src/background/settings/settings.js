@@ -28,6 +28,15 @@ const proxySwitcherHandler = async (value) => {
     }
 };
 
+/**
+ * Returns proxy settings enabled status
+ * @returns {boolean}
+ */
+const isProxyEnabled = () => {
+    const setting = settingsService.getSetting(SETTINGS_IDS.PROXY_ENABLED);
+    return setting === true;
+};
+
 const setSetting = async (id, value, force) => {
     const setting = settingsService.getSetting(id);
 
@@ -38,7 +47,8 @@ const setSetting = async (id, value, force) => {
 
     switch (id) {
         case SETTINGS_IDS.HANDLE_WEBRTC_ENABLED: {
-            webrtc.setWebRTCHandleEnabled(value);
+            const proxyEnabled = isProxyEnabled();
+            webrtc.setWebRTCHandlingAllowed(value, proxyEnabled);
             break;
         }
         default: {
@@ -81,15 +91,6 @@ const enableProxy = async (force, withCancel) => {
 };
 
 /**
- * Returns proxy settings enabled status
- * @returns {boolean}
- */
-const isProxyEnabled = () => {
-    const setting = settingsService.getSetting(SETTINGS_IDS.PROXY_ENABLED);
-    return setting === true;
-};
-
-/**
  * Checks if setting is enabled
  * @param settingId
  * @returns {boolean}
@@ -103,7 +104,7 @@ const isSettingEnabled = (settingId) => {
 const applySettings = async () => {
     try {
         const proxyEnabled = isProxyEnabled();
-        webrtc.setWebRTCHandleEnabled(
+        webrtc.setWebRTCHandlingAllowed(
             isSettingEnabled(SETTINGS_IDS.HANDLE_WEBRTC_ENABLED),
             proxyEnabled
         );
