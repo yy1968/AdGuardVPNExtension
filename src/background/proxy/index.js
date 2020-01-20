@@ -182,22 +182,6 @@ class ExtensionProxy {
         this.currentHost = DEFAULTS.currentHost;
         this.currentEndpoint = DEFAULTS.currentEndpoint;
     };
-
-    /**
-     * Reloads active tabs in order to close proxy authentication window
-     * Use this method in the end of extension initialization
-     * @returns {Promise<void>}
-     */
-    reloadActiveTabs = async () => {
-        if (!this.isActive) {
-            return;
-        }
-        const tabs = await browser.tabs.query({});
-        const activeTabs = tabs.filter(tab => tab.active === true);
-        activeTabs.forEach((tab) => {
-            browser.tabs.reload(tab.id);
-        });
-    }
 }
 
 const proxy = new ExtensionProxy();
