@@ -34,7 +34,7 @@ import { areHostnamesEqual, shExpMatch } from '../../../lib/string-utils';
  *              bypassList: ['example.org', 'localhost', '0.0.0.0/8'],
  *              proxyConfig: {
  *                  type: "https",
- *                  host: "137a393d3d36ddefc11adeca9e46a763.do-de-fra1-01.adguard.io",
+ *                  host: "do-de-fra1-01.adguard.io",
  *                  port: 443
  *              },
  *              credentials: {
