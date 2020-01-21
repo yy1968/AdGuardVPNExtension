@@ -140,7 +140,7 @@ describe('Pac generator', () => {
         let result = await FindProxyForUrl('https://example.org/foo', 'example.org');
         expect(result).toBe(`HTTPS ${proxy}`);
 
-        await sleep(150);
+        await sleep(1100);
         FindProxyForUrl = pac(pacScript);
         result = await FindProxyForUrl('https://example.org/foo', 'example.org');
         expect(result).toBe('DIRECT');
