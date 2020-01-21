@@ -7,9 +7,10 @@ module.exports = {
         'proxy',
         'notifications',
         'activeTab',
-        '*://*.adguard.com/*',
-        '*://*.adguard.io/*',
         'management',
         'privacy',
+        'webRequest',
+        'webRequestBlocking',
+        '<all_urls>',
     ],
 };

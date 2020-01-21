@@ -30,5 +30,7 @@ module.exports = {
         '<all_urls>',
         'management',
         'privacy',
+        'webRequest',
+        'webRequestBlocking',
     ],
 };

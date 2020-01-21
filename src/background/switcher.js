@@ -10,8 +10,8 @@ import webrtc from './browserApi/webrtc';
 
 function* turnOnProxy() {
     try {
-        const accessPrefix = yield credentials.getAccessPrefix();
-        const { host, domainName } = yield proxy.setAccessPrefix(accessPrefix);
+        const accessCredentials = yield credentials.getAccessCredentials();
+        const { host, domainName } = yield proxy.setAccessCredentials(accessCredentials);
         const vpnToken = yield credentials.gainValidVpnToken();
         yield connectivity.setCredentials(host, domainName, vpnToken.token, true);
         yield proxy.turnOn();
