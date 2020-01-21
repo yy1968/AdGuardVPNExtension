@@ -9,7 +9,7 @@
  * @returns {string}
  */
 function proxyPacScript(proxy, exclusionsList, inverted, defaultExclusions) {
-    const pacScriptTimeToLiveMs = 100;
+    const pacScriptTimeToLiveMs = 1000;
     return `
             let active = false;
             const created = ${Date.now()};
