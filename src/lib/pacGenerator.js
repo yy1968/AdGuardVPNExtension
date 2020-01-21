@@ -1,6 +1,6 @@
 /**
  * Returns pac script text
- * We use pacScriptLivingTimeMs in order to make pac script file inactive if
+ * We use pacScriptTimeToLiveMs in order to make pac script file inactive if
  * it remained in the proxy setting after browser restart
  * @param proxy
  * @param exclusionsList
@@ -9,13 +9,13 @@
  * @returns {string}
  */
 function proxyPacScript(proxy, exclusionsList, inverted, defaultExclusions) {
-    const pacScriptLivingTimeMs = 100;
+    const pacScriptTimeToLiveMs = 100;
     return `
             let active = false;
             const created = ${Date.now()};
             const started = Date.now();
 
-            if ((started - ${pacScriptLivingTimeMs}) < created) {
+            if ((started - ${pacScriptTimeToLiveMs}) < created) {
               active = true;
             }
 
