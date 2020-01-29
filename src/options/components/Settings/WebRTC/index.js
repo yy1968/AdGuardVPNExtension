@@ -3,6 +3,8 @@ import { observer } from 'mobx-react';
 import translator from '../../../../lib/translator';
 import rootStore from '../../../stores';
 
+import Switch from '../../ui/Switch';
+
 const Webrtc = observer(() => {
     const { settingsStore } = useContext(rootStore);
 
@@ -12,18 +14,14 @@ const Webrtc = observer(() => {
 
     return (
         <Fragment>
-            <div className="settings__section">
-                <div className="settings__title">
-                    {translator.translate('settings_webrtc_title')}
-                </div>
-                <div className="settings__group">
-                    <div className="settings__controls">
-                        <div>
-                            <span>Block WebRTC</span>
-                            <input type="checkbox" name="webrtc" onChange={handleCheckboxChange} checked={settingsStore.webRTCEnabled} />
-                        </div>
-                    </div>
-                </div>
+            <div className="settings__group">
+                <Switch
+                    id="webrtc"
+                    title={translator.translate('settings_webrtc_label')}
+                    desc={translator.translate('settings_webrtc_desc')}
+                    handleToggle={handleCheckboxChange}
+                    checked={settingsStore.webRTCEnabled}
+                />
             </div>
         </Fragment>
     );
