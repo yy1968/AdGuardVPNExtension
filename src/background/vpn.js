@@ -45,12 +45,7 @@ const getEndpointsRemotely = async () => {
         return null;
     }
 
-    const token = vpnToken && vpnToken.token;
-    if (!token) {
-        return null;
-    }
-
-    const endpoints = await vpnProvider.getEndpoints(token);
+    const endpoints = await vpnProvider.getEndpoints(vpnToken.token);
 
     if (!isEqual(endpoints, vpnCache.endpoints)) {
         vpnCache.endpoints = endpoints;
@@ -79,7 +74,7 @@ const getVpnInfoRemotely = async () => {
 
     if (vpnInfo.refreshTokens) {
         log.info('refreshing tokens');
-        const updatedVpnToken = await credentials.getVpnTokenRemote();
+        const updatedVpnToken = await credentials.gainValidVpnToken(true, false);
         if (vpnTokenChanged(vpnToken, updatedVpnToken)) {
             shouldReconnect = true;
         }
@@ -114,6 +109,7 @@ const getVpnInfoRemotely = async () => {
 
 const getVpnInfo = () => {
     getVpnInfoRemotely();
+
     if (vpnCache.vpnInfo) {
         return vpnCache.vpnInfo;
     }
@@ -180,10 +176,15 @@ const getSelectedEndpoint = async () => {
 };
 
 const getVpnFailurePage = async () => {
-    const vpnToken = await credentials.gainVpnToken();
+    let vpnToken;
+    try {
+        vpnToken = await credentials.gainValidVpnToken();
+    } catch (e) {
+        log.error('Unable to get valid vpn token. Error: ', e.message);
+    }
 
     // undefined values will be omitted in the querystring
-    const token = (vpnToken && vpnToken.token) || undefined;
+    const token = vpnToken.token || undefined;
 
     let { vpnInfo } = vpnCache;
 
