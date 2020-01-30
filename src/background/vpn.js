@@ -17,9 +17,10 @@ const vpnCache = {
 };
 
 const reconnectEndpoint = async (endpoint) => {
-    const { host, domainName } = await proxy.setCurrentEndpoint(endpoint);
-    const vpnToken = await credentials.gainValidVpnToken();
-    await connectivity.setCredentials(host, domainName, vpnToken.token);
+    const { domainName } = await proxy.setCurrentEndpoint(endpoint);
+    const { prefix, token } = await credentials.getAccessCredentials();
+    const wsHost = `${prefix}.${domainName}`;
+    await connectivity.setCredentials(wsHost, domainName, token);
 };
 
 const getClosestEndpointAndReconnect = async (endpoints, currentEndpoint) => {

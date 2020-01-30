@@ -129,7 +129,7 @@ class Credentials {
             return null;
         }
 
-        if (!this.areEqual(vpnCredentials, this.vpnCredentials)) {
+        if (!this.areCredentialsEqual(vpnCredentials, this.vpnCredentials)) {
             this.vpnCredentials = vpnCredentials;
             await storage.set(this.VPN_CREDENTIALS_KEY, vpnCredentials);
             await this.updateProxyCredentials();
@@ -164,7 +164,7 @@ class Credentials {
      * @param oldCred
      * @returns {boolean}
      */
-    areEqual = (newCred, oldCred) => {
+    areCredentialsEqual = (newCred, oldCred) => {
         const path = 'result.credentials';
         return lodashGet(newCred, path) === lodashGet(oldCred, path);
     };
@@ -206,8 +206,8 @@ class Credentials {
     }
 
     updateProxyCredentials = async () => {
-        const accessCredentials = await this.getAccessCredentials();
-        await proxy.setAccessCredentials(accessCredentials);
+        const { credentials } = await this.getAccessCredentials();
+        await proxy.setAccessCredentials(credentials);
     };
 
     /**
@@ -221,6 +221,7 @@ class Credentials {
         return {
             prefix: md5(`${appId}:${token}:${credentials}`).toString(),
             credentials: { username: token, password: credentials },
+            token,
         };
     }
 
