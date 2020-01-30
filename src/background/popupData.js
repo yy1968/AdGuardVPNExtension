@@ -46,30 +46,38 @@ const sleep = waitTime => new Promise((resolve) => {
 
 let retryCounter = 0;
 
-const DEFAULT_RETRY_DELAY = 200;
+const DEFAULT_RETRY_DELAY = 400;
 const getPopupDataRetry = async (url, retryNum = 1, retryDelay = DEFAULT_RETRY_DELAY) => {
     const backoffIndex = 1.5;
     const data = await getPopupData(url);
     retryCounter += 1;
+
     if (!data.isAuthenticated || data.permissionsError) {
         retryCounter = 0;
         return data;
     }
+
     const { vpnInfo, endpoints, selectedEndpoint } = data;
+
+    let hasRequiredData = true;
+
     if (!vpnInfo || !endpoints || !selectedEndpoint) {
         if (retryNum <= 1) {
             // it may be useful to disconnect proxy if we can't get data
             if (data.isProxyEnabled) {
                 await adguard.settings.disableProxy();
             }
-            throw new Error(`Unable to get data in ${retryCounter} retries`);
+            retryCounter = 0;
+            hasRequiredData = false;
+            return { ...data, hasRequiredData };
         }
         await sleep(retryDelay);
         log.debug(`Retry get popup data again retry: ${retryCounter}`);
         return getPopupDataRetry(url, retryNum - 1, retryDelay * backoffIndex);
     }
+
     retryCounter = 0;
-    return data;
+    return { ...data, hasRequiredData };
 };
 
 export default { getPopupDataRetry };

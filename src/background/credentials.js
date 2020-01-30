@@ -123,7 +123,6 @@ class Credentials {
         const appId = this.getAppId();
 
         const vpnToken = await this.gainValidVpnToken();
-        // TODO [maximtop] test 502 error on this api
         const vpnCredentials = await vpnProvider.getVpnCredentials(appId, vpnToken.token);
 
         if (!this.areCredentialsValid(vpnCredentials)) {
