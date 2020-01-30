@@ -8,6 +8,7 @@ import { proxy } from './proxy';
 import { getClosestEndpointByCoordinates } from '../lib/helpers';
 import connectivity from './connectivity/connectivity';
 import browserApi from './browserApi';
+import { POPUP_DEFAULT_SUPPORT_URL } from './config';
 
 const vpnCache = {
     endpoints: null,
@@ -189,8 +190,14 @@ const getVpnFailurePage = async () => {
     let { vpnInfo } = vpnCache;
 
     // if no vpn info, then get vpn failure url with empty token
+    let appendToQueryString = false;
     if (!vpnInfo) {
-        vpnInfo = await vpnProvider.getVpnExtensionInfo(token);
+        try {
+            vpnInfo = await vpnProvider.getVpnExtensionInfo(token);
+        } catch (e) {
+            vpnInfo = { vpnFailurePage: POPUP_DEFAULT_SUPPORT_URL };
+            appendToQueryString = true;
+        }
     }
 
     const vpnFailurePage = vpnInfo && vpnInfo.vpnFailurePage;
@@ -198,7 +205,9 @@ const getVpnFailurePage = async () => {
 
     const queryString = qs.stringify({ token, app_id: appId });
 
-    return `${vpnFailurePage}?${queryString}`;
+    const separator = appendToQueryString ? '&' : '?';
+
+    return `${vpnFailurePage}${separator}${queryString}`;
 };
 
 export default {
