@@ -4,11 +4,6 @@ import { VPN_API_URL } from '../config';
 
 // https://bit.adguard.com/projects/ADGUARD/repos/adguard-vpn-backend-service/browse
 class VpnApi extends Api {
-    constructor(baseUrl) { // TODO [maximtop] remove
-        super(baseUrl);
-        this.realBaseUrl = baseUrl;
-    }
-
     GET_ENDPOINTS = { path: 'endpoints', method: 'GET' };
 
     getEndpoints = (vpnToken) => {
@@ -47,16 +42,6 @@ class VpnApi extends Api {
 
     getVpnExtensionInfo = (vpnToken) => {
         const { path, method } = this.VPN_EXTENSION_INFO;
-
-        // TODO [maximtop] remove
-        if (adguard.testBad) {
-            this.baseUrl = 'http://localhost:3000';
-            try {
-                return this.makeRequest(path);
-            } finally {
-                this.baseUrl = this.realBaseUrl;
-            }
-        }
 
         const params = {
             token: vpnToken,

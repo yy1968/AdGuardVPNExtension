@@ -8,7 +8,7 @@ import log from '../../lib/logger';
 import storage from '../storage';
 import { MESSAGES_TYPES } from '../../lib/constants';
 import browserApi from '../browserApi';
-import { CONNECTION_MODES, LEVELS_OF_CONTROL, DEFAULT_EXCLUSIONS } from './proxyConsts';
+import { LEVELS_OF_CONTROL, DEFAULT_EXCLUSIONS } from './proxyConsts';
 
 const CURRENT_ENDPOINT_KEY = 'proxyCurrentEndpoint';
 
@@ -84,7 +84,6 @@ class ExtensionProxy {
 
     getConfig() {
         return {
-            mode: CONNECTION_MODES.FIXED_SERVERS,
             bypassList: this.getBypassList(),
             defaultExclusions: DEFAULT_EXCLUSIONS,
             host: this.currentHost,

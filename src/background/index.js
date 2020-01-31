@@ -40,7 +40,6 @@ global.adguard = {
     credentials,
     nonRoutable,
     management,
-    testBad: false, // TODO [maximtop] remove
 };
 
 (async () => {

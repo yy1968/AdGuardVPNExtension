@@ -13,6 +13,9 @@ class globalStore {
 
     constructor(rootStore) {
         this.rootStore = rootStore;
+        window.addEventListener('unload', () => {
+            adguard.popupData.cancelGettingPopupData('popup closed');
+        });
     }
 
     @action
@@ -25,7 +28,9 @@ class globalStore {
         const currentTab = await tabs.getCurrent();
 
         try {
-            const popupData = await adguard.popupData.getPopupDataRetry(currentTab.url, retryNum);
+            const popupData = await adguard.popupData.getPopupDataRetryWithCancel(
+                currentTab.url, retryNum
+            );
 
             const {
                 vpnInfo,
