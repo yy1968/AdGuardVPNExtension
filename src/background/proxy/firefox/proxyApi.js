@@ -79,8 +79,8 @@ const isBypassed = (url, exclusionsPatterns) => {
     }
     const hostname = getHostname(url);
 
-    return exclusionsPatterns.some(exclusionPattern => areHostnamesEqual(hostname, exclusionPattern)
-        || shExpMatch(hostname, exclusionPattern));
+    return exclusionsPatterns.some((exclusionPattern) => (
+        areHostnamesEqual(hostname, exclusionPattern) || shExpMatch(hostname, exclusionPattern)));
 };
 
 const onAuthRequiredHandler = (details) => {

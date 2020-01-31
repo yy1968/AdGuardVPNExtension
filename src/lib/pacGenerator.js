@@ -39,13 +39,13 @@ function proxyPacScript(proxy, exclusionsList, inverted, defaultExclusions) {
                     return DIRECT;
                 }
 
-                const defaultExclusions = [${defaultExclusions.map(l => `"${l}"`).join(', ')}];
+                const defaultExclusions = [${defaultExclusions.map((l) => `"${l}"`).join(', ')}];
                 if (defaultExclusions.some(el => (areHostnamesEqual(host, el) || shExpMatch(host, el)))) {
                     return DIRECT;
                 }
 
                 const inverted = ${inverted};
-                const list = [${exclusionsList.map(l => `"${l}"`).join(', ')}];
+                const list = [${exclusionsList.map((l) => `"${l}"`).join(', ')}];
 
                 if (list.some(el => (areHostnamesEqual(host, el) || shExpMatch(host, el)))) {
                     if (inverted) {

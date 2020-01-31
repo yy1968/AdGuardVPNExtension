@@ -41,7 +41,7 @@ const getPopupData = async (url) => {
     };
 };
 
-const sleep = waitTime => new Promise((resolve) => {
+const sleep = (waitTime) => new Promise((resolve) => {
     setTimeout(resolve, waitTime);
 });
 

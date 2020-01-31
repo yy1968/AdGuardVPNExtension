@@ -24,7 +24,7 @@ const reconnectEndpoint = async (endpoint) => {
 };
 
 const getClosestEndpointAndReconnect = async (endpoints, currentEndpoint) => {
-    const endpointsArr = Object.keys(endpoints).map(endpointKey => endpoints[endpointKey]);
+    const endpointsArr = Object.keys(endpoints).map((endpointKey) => endpoints[endpointKey]);
     const sameCityEndpoint = endpointsArr.find((endpoint) => {
         return endpoint.cityName === currentEndpoint.cityName;
     });
@@ -91,7 +91,7 @@ const getVpnInfoRemotely = async () => {
 
     if ((endpoints && endpoints.length > 0) && currentEndpoint) {
         const currentEndpointInEndpoints = currentEndpoint && Object.keys(endpoints)
-            .some(endpoint => endpoint === currentEndpoint.id);
+            .some((endpoint) => endpoint === currentEndpoint.id);
 
         // if there is no currently connected endpoint in the list of endpoints,
         // get closest and reconnect

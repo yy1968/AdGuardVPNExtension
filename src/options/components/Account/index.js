@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 import browser from 'webextension-polyfill';
 
@@ -14,7 +14,7 @@ const Account = observer(() => {
     };
 
     return (
-        <Fragment>
+        <>
             <h2 className="content__title">
                 {browser.i18n.getMessage('account_title')}
             </h2>
@@ -43,7 +43,7 @@ const Account = observer(() => {
                     </button>
                 </div>
             </div>
-        </Fragment>
+        </>
     );
 });
 

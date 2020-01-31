@@ -112,7 +112,7 @@ const proxyClear = () => new Promise((resolve) => {
  * @param {proxyConfig} config - proxy config
  * @returns {Promise<void>}
  */
-const proxySet = config => new Promise((resolve) => {
+const proxySet = (config) => new Promise((resolve) => {
     GLOBAL_PROXY_CONFIG = config;
     addAuthHandler();
     // TODO [maximtop] remove console.log

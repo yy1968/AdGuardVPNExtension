@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 import browser from 'webextension-polyfill';
 import rootStore from '../../stores';
@@ -10,7 +10,7 @@ const About = observer(() => {
 
     const aboutVersionStr = `${browser.i18n.getMessage('name')} ${settingsStore.appVersion}`;
     return (
-        <Fragment>
+        <>
             <h2 className="content__title">
                 {browser.i18n.getMessage('about_title')}
             </h2>
@@ -22,7 +22,7 @@ const About = observer(() => {
                     {browser.i18n.getMessage('description')}
                 </div>
             </div>
-        </Fragment>
+        </>
     );
 });
 
