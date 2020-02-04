@@ -101,7 +101,7 @@ class ExtensionProxy {
     async applyConfig() {
         this.updateConfig();
         if (this.isActive) {
-            await this.turnOn();
+            await proxyApi.proxySet(this.currentConfig);
         }
     }
 

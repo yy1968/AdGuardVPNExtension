@@ -50,7 +50,7 @@ class Connectivity {
             return;
         }
 
-        await this.setCredentials(wsHost, domainName, vpnToken.token);
+        await this.setCredentials(wsHost, domainName, vpnToken);
     };
 
     async setCredentials(wsHost, domainName, vpnToken, shouldStart) {
@@ -165,9 +165,11 @@ class Connectivity {
     };
 
     updateConnectivityInfo = async (stats) => {
+        const { bytesDownloaded = 0, bytesUploaded = 0 } = stats;
+
         await statsStorage.saveStats(this.domainName, {
-            downloaded: stats.bytesDownloaded,
-            uploaded: stats.bytesUploaded,
+            downloaded: bytesDownloaded,
+            uploaded: bytesUploaded,
         });
     };
 

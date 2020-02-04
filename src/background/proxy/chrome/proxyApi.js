@@ -115,22 +115,10 @@ const proxyClear = () => new Promise((resolve) => {
 const proxySet = (config) => new Promise((resolve) => {
     GLOBAL_PROXY_CONFIG = config;
     addAuthHandler();
-    // TODO [maximtop] remove console.log
-    /* eslint-disable no-console */
-    const start = Date.now();
-    console.log({ start });
     const chromeConfig = convertToChromeConfig(config);
-    console.log(chromeConfig);
-    const end = Date.now();
-    console.log({ end });
-    console.log('config generation took', end - start, 'ms');
     browser.proxy.settings.set(chromeConfig, () => {
-        const proxyConnected = Date.now();
-        console.log('proxy turned on at', proxyConnected);
-        console.log('proxy activation took', proxyConnected - start, 'ms');
         resolve();
     });
-    /* eslint-enable no-console */
 });
 
 const onProxyError = (() => {
