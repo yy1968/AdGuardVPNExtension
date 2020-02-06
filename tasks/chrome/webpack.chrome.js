@@ -18,7 +18,7 @@ const plugins = [new CopyWebpackPlugin([
     },
 ])];
 
-if (process.env.NODE_ENV === ENVS.BETA) {
+if (process.env.STAGING === ENVS.BETA) {
     plugins.push(
         new ZipWebpackPlugin({
             path: '../',

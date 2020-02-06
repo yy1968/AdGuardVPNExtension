@@ -15,7 +15,7 @@ const ENV_MAP = {
     [ENVS.RELEASE]: { outputPath: 'release', name: '' },
 };
 
-const IS_DEV = process.env.NODE_ENV === ENVS.DEV;
+const IS_DEV = process.env.STAGING === ENVS.DEV;
 
 module.exports = {
     LOCALES_PATH,

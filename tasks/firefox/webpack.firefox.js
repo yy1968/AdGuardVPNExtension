@@ -21,7 +21,7 @@ const plugins = [
     ]),
 ];
 
-if (process.env.NODE_ENV === ENVS.BETA) {
+if (process.env.STAGING === ENVS.BETA) {
     plugins.push(
         new ZipWebpackPlugin({
             path: '../',
