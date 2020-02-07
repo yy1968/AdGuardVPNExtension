@@ -1,4 +1,4 @@
-import Management from '../src/background/management/Management';
+import Management from '../../../src/background/management/Management';
 
 const generateBrowser = (extensions) => {
     return {
