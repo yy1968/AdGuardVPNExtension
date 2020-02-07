@@ -17,7 +17,7 @@ import popupData from './popupData';
 import log from '../lib/logger';
 import storage from './storage';
 import nonRoutable from './routability/nonRoutable';
-import management from './management/Management';
+import management from './management';
 import updateService from './updateService';
 import contextMenu from './contextMenu';
 
