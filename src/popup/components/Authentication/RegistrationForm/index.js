@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 import ReactHtmlParser from 'react-html-parser';
+
 import rootStore from '../../../stores';
+import { REQUEST_STATUSES } from '../../../stores/consts';
+
+import PasswordField from '../PasswordField';
+import Submit from '../Submit';
 
 const RegistrationForm = observer(() => {
     const { authStore } = useContext(rootStore);
+
     const submitHandler = async (e) => {
         e.preventDefault();
         await authStore.register();
@@ -15,72 +21,42 @@ const RegistrationForm = observer(() => {
         authStore.onCredentialsChange(name, value);
     };
 
+    const { requestProcessState, credentials } = authStore;
+    const { password, passwordAgain } = credentials;
+
     return (
         <form
             className="form"
             onSubmit={submitHandler}
         >
             <div className="form__inputs">
-                <div className={`form__item${authStore.error && (authStore.field === 'username' || authStore.field === '') ? ' form__item--error' : ''}`}>
-                    <label className="form__label" htmlFor="username">
-                        Email:
-                    </label>
-                    <input
-                        id="username"
-                        className="form__input"
-                        type="text"
-                        name="username"
-                        placeholder="example@mail.com"
-                        value={authStore.credentials.username}
-                        onChange={inputChangeHandler}
-                    />
-                </div>
-                <div className={`form__item${authStore.error && authStore.field === 'password' ? ' form__item--error' : ''}`}>
-                    <div className="form__item-header">
-                        <label className="form__label" htmlFor="password">
-                            Password:
-                        </label>
+                <PasswordField
+                    label="Password"
+                    id="password"
+                    inputChangeHandler={inputChangeHandler}
+                    password={password}
+                    error={authStore.error}
+                />
+                <PasswordField
+                    label="Password confirmation"
+                    id="passwordAgain"
+                    inputChangeHandler={inputChangeHandler}
+                    password={passwordAgain}
+                    error={authStore.error}
+                    autoFocus={false}
+                />
+                {authStore.error && (
+                    <div className="form__error">
+                        {ReactHtmlParser(authStore.error)}
                     </div>
-                    <input
-                        id="password"
-                        className="form__input"
-                        type="password"
-                        name="password"
-                        onChange={inputChangeHandler}
-                        value={authStore.credentials.password}
-                    />
-                </div>
-                <div className="form__item">
-                    <div className="form__item-header">
-                        <label className="form__label" htmlFor="passwordAgain">
-                            Password again:
-                        </label>
-                    </div>
-                    <input
-                        id="passwordAgain"
-                        className="form__input"
-                        type="password"
-                        name="passwordAgain"
-                        onChange={inputChangeHandler}
-                        value={authStore.credentials.passwordAgain}
-                    />
-                </div>
-                { authStore.error
-                && (
-                <div className="form__item-error">
-                    { ReactHtmlParser(authStore.error) }
-                </div>
                 )}
             </div>
-
-            <div className="form__btns">
-                <button
-                    className="form__btn button--uppercase button button--m button--hundred button--green"
-                    type="submit"
+            <div className="form__btn-wrap">
+                <Submit
+                    text="Register"
+                    processing={requestProcessState === REQUEST_STATUSES.PENDING}
                     disabled={authStore.disableRegister}
-                >
-                        Register
-                </button>
+                />
             </div>
         </form>
     );

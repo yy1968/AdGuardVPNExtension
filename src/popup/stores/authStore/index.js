@@ -9,6 +9,7 @@ import browser from 'webextension-polyfill';
 import { MAX_GET_POPUP_DATA_ATTEMPTS, REQUEST_STATUSES } from '../consts';
 
 const AUTH_STEPS = {
+    CHECK_EMAIL: 'checkEmail',
     SIGN_IN: 'signIn',
     REGISTRATION: 'registration',
     TWO_FACTOR: 'twoFactor',
@@ -26,7 +27,7 @@ const DEFAULTS = {
     need2fa: false,
     error: null,
     field: '',
-    step: AUTH_STEPS.SIGN_IN,
+    step: AUTH_STEPS.CHECK_EMAIL,
     agreement: true,
     marketingConsent: false,
 };
@@ -154,6 +155,26 @@ class AuthStore {
     };
 
     @action
+    checkEmail = async () => {
+        this.requestProcessState = REQUEST_STATUSES.PENDING;
+
+        // TODO handle /user_lookup
+        const canRegister = false;
+
+        setTimeout(() => {
+            runInAction(() => {
+                this.requestProcessState = REQUEST_STATUSES.DONE;
+            });
+
+            if (canRegister) {
+                this.switchStep(this.STEPS.REGISTRATION);
+            } else {
+                this.switchStep(this.STEPS.SIGN_IN);
+            }
+        }, 1000);
+    }
+
+    @action
     register = async () => {
         this.requestProcessState = REQUEST_STATUSES.PENDING;
         const response = await adguard.auth.register(this.credentials);
@@ -227,6 +248,11 @@ class AuthStore {
     @action
     showSignIn = () => {
         this.switchStep(AUTH_STEPS.SIGN_IN);
+    };
+
+    @action
+    showCheckEmail = () => {
+        this.switchStep(AUTH_STEPS.CHECK_EMAIL);
     };
 }
 

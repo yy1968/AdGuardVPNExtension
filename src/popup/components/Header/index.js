@@ -17,6 +17,10 @@ const Header = observer(({ showMenuButton }) => {
         'header--main': showMenuButton,
     });
 
+    if (!showMenuButton) {
+        return null;
+    }
+
     return (
         <div className={headerClass}>
             <div className="header__title">
@@ -24,18 +28,16 @@ const Header = observer(({ showMenuButton }) => {
                     <use xlinkHref="#logo" />
                 </svg>
             </div>
-            {showMenuButton && (
-                <button
-                    className="button header__setting"
-                    type="button"
-                    tabIndex="0"
-                    onClick={handleOpenModal}
-                >
-                    <svg className="icon icon--button icon--options">
-                        <use xlinkHref="#options" />
-                    </svg>
-                </button>
-            )}
+            <button
+                className="button header__setting"
+                type="button"
+                tabIndex="0"
+                onClick={handleOpenModal}
+            >
+                <svg className="icon icon--button icon--options">
+                    <use xlinkHref="#options" />
+                </svg>
+            </button>
         </div>
     );
 });

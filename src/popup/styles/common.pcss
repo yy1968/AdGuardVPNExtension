@@ -1,5 +1,11 @@
-* {
+*,
+*:before,
+*:after {
     box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
 }
 
 body {
@@ -7,6 +13,9 @@ body {
     height: 598px;
     margin: 0;
     font-family: var(--font-stack);
+    font-size: 1.6rem;
+    line-height: 1.4;
+    color: var(--gray-base);
 }
 
 .content {
@@ -29,4 +38,10 @@ body {
 
 .hidden {
     display: none;
+}
+
+button,
+input,
+textarea {
+    font-family: inherit;
 }
