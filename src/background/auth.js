@@ -17,6 +17,7 @@ import browserApi from './browserApi';
 import { MESSAGES_TYPES } from '../lib/constants';
 import log from '../lib/logger';
 import notifier from '../lib/notifier';
+import translator from '../lib/translator';
 
 class Auth {
     socialAuthState = null;
@@ -167,6 +168,23 @@ class Auth {
         }
 
         return { error: browser.i18n.getMessage('global_error_message') };
+    }
+
+    /**
+     * Checks if user had such email registered
+     * @param {string} email
+     * @param {string} appId
+     * @returns {Promise<{canRegister: string}|{error: string}>}
+     */
+    async userLookup(email, appId) {
+        let response;
+        try {
+            response = await authProvider.userLookup(email, appId);
+        } catch (e) {
+            log.error(e.message);
+            return { error: translator.translate('global_error_message') };
+        }
+        return response;
     }
 
     async setAccessToken(accessToken) {

@@ -92,7 +92,11 @@ class AuthStore {
     getAuthCacheFromBackground = () => {
         const { username, password, step } = adguard.authCache.getAuthCache();
         runInAction(() => {
-            this.credentials = { ...this.credentials, username, password };
+            this.credentials = {
+                ...this.credentials,
+                username,
+                password,
+            };
             if (step) {
                 this.step = step;
             }
@@ -172,7 +176,7 @@ class AuthStore {
                 this.switchStep(this.STEPS.SIGN_IN);
             }
         }, 1000);
-    }
+    };
 
     @action
     register = async () => {
