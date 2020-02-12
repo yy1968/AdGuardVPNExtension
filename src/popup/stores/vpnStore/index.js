@@ -95,6 +95,11 @@ class VpnStore {
     }
 
     @computed
+    get countryCodeToDisplay() {
+        return this.selectedEndpoint && this.selectedEndpoint.countryCode;
+    }
+
+    @computed
     get cityNameToDisplay() {
         return this.selectedEndpoint && this.selectedEndpoint.cityName;
     }

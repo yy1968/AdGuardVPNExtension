@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
+import classnames from 'classnames';
+
 import rootStore from '../../stores';
 
-import './settings.pcss';
 import CurrentEndpoint from './CurrentEndpoint';
-import GlobalSwitcher from './GlobalSwitcher';
+import GlobalControl from './GlobalControl';
+import Status from './Status';
+import SiteInfo from './SiteInfo';
+import StatusImage from './StatusImage';
+
+import './settings.pcss';
 
 const getStatusMessage = (proxyEnabled) => {
     if (proxyEnabled) {
@@ -20,9 +26,12 @@ const Settings = observer(() => {
         uiStore.openEndpointsSearch();
     };
 
-    const handleSwitchChange = async (e) => {
-        const { checked } = e.target;
-        await settingsStore.setProxyState(checked);
+    const handleConnect = async () => {
+        await settingsStore.setProxyState(true);
+    };
+
+    const handleDisconnect = async () => {
+        await settingsStore.setProxyState(false);
     };
 
     const {
@@ -30,18 +39,23 @@ const Settings = observer(() => {
         proxyEnabled,
     } = settingsStore;
 
+    const settingsClass = classnames('settings', { 'settings--active': proxyEnabled });
+
     return (
-        <div className="settings">
+        <div className={settingsClass}>
             <div className="settings__main">
-                <CurrentEndpoint
-                    handle={handleEndpointSelectorClick}
-                    status={getStatusMessage(proxyEnabled)}
-                />
-                <GlobalSwitcher
-                    handle={handleSwitchChange}
-                    checked={switcherEnabled}
+                <StatusImage />
+                <SiteInfo />
+                <Status status={getStatusMessage(proxyEnabled)} />
+                <GlobalControl
+                    handleConnect={handleConnect}
+                    handleDisconnect={handleDisconnect}
+                    enabled={switcherEnabled}
                 />
             </div>
+            <CurrentEndpoint
+                handle={handleEndpointSelectorClick}
+            />
         </div>
     );
 });

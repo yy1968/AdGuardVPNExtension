@@ -8,14 +8,11 @@ import browser from 'webextension-polyfill';
 import { CSSTransition } from 'react-transition-group';
 
 import Header from '../Header';
-import MapContainer from '../MapContainer';
 import InfoMessage from '../InfoMessage';
-import FeedbackMessage from '../InfoMessage/FeedbackMessage';
 import Endpoints from '../Endpoints';
 import Authentication from '../Authentication';
 import ExtraOptions from '../ExtraOptions';
 import Preloader from '../Preloader';
-import Stats from '../Stats';
 import GlobalError from '../GlobalError';
 import Settings from '../Settings';
 import Icons from '../ui/Icons';
@@ -138,12 +135,9 @@ const App = observer(() => {
             >
                 <Endpoints />
             </CSSTransition>
-            <MapContainer />
             <Settings />
             <div className="footer">
-                <Stats />
                 <InfoMessage />
-                <FeedbackMessage />
             </div>
             <Icons />
         </>

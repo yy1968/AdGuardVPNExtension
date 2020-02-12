@@ -194,12 +194,6 @@
     "popup_settings_sign_out": {
         "message": "Sign out"
     },
-    "popup_feedback_title": {
-        "message": "We'd love to hear your feedback"
-    },
-    "popup_feedback_button": {
-        "message": "Leave feedback"
-    },
     "context_menu_enable_vpn" : {
         "message": "Enable VPN on this website"
     },

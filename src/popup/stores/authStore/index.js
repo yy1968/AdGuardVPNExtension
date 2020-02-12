@@ -162,20 +162,27 @@ class AuthStore {
     checkEmail = async () => {
         this.requestProcessState = REQUEST_STATUSES.PENDING;
 
-        // TODO handle /user_lookup
-        const canRegister = false;
+        // TODO [maximtop] make possible for userLookup to receive just email
+        const appId = adguard.credentials.getAppId();
+        const response = await adguard.auth.userLookup(this.credentials.username, appId);
 
-        setTimeout(() => {
+        if (response.error) {
             runInAction(() => {
-                this.requestProcessState = REQUEST_STATUSES.DONE;
+                this.requestProcessState = REQUEST_STATUSES.ERROR;
+                this.error = response.error;
             });
+            return;
+        }
 
-            if (canRegister) {
-                this.switchStep(this.STEPS.REGISTRATION);
-            } else {
-                this.switchStep(this.STEPS.SIGN_IN);
-            }
-        }, 1000);
+        if (response.canRegister) {
+            this.switchStep(this.STEPS.REGISTRATION);
+        } else {
+            this.switchStep(this.STEPS.SIGN_IN);
+        }
+
+        runInAction(() => {
+            this.requestProcessState = REQUEST_STATUSES.DONE;
+        });
     };
 
     @action

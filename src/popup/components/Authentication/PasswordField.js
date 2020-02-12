@@ -17,7 +17,7 @@ function PasswordField({
 
     const icon = inputType === INPUT_TYPES.PASSWORD ? '#closed_eye' : '#open_eye';
 
-    const inputClassName = classnames('form__input', { 'form__input--error': error });
+    const inputClassName = classnames('form__input form__input--password', { 'form__input--error': error });
 
     return (
         <div className="form__item">

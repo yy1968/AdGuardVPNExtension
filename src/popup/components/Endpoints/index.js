@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
-import classnames from 'classnames';
 
 import rootStore from '../../stores';
+import Endpoint from './Endpoint';
+import Search from './Search';
+
 import './endpoints.pcss';
 
 const Endpoints = observer(() => {
@@ -27,44 +29,24 @@ const Endpoints = observer(() => {
         vpnStore.setSearchValue('');
     };
 
-    const getEndpointIcon = (premiumOnly, selected) => {
-        if (premiumOnly) {
-            return 'lock';
-        }
-
-        if (selected) {
-            return 'bullet_on';
-        }
-
-        return 'bullet_off';
-    };
-
     const renderEndpoints = (endpoints) => endpoints.map((endpoint) => {
         const {
-            countryName,
             id,
+            countryName,
             selected,
-            premiumOnly,
             cityName,
+            countryCode,
         } = endpoint;
-        const endpointClassNames = classnames({
-            'endpoints__item--selected': selected,
-            'endpoints__item--lock': premiumOnly,
-        });
+
         return (
-            <button
-                type="button"
+            <Endpoint
                 key={id}
-                className={`endpoints__item ${endpointClassNames}`}
-                onClick={handleEndpointSelect(id)}
-            >
-                <svg className="endpoints__item-ico">
-                    <use xlinkHref={`#${getEndpointIcon(premiumOnly, selected)}`} />
-                </svg>
-                <div className="endpoints__city">
-                    {`${countryName}, ${cityName}`}
-                </div>
-            </button>
+                id={id}
+                handleClick={handleEndpointSelect}
+                selected={selected}
+                countryCode={countryCode}
+                name={`${countryName}, ${cityName}`}
+            />
         );
     });
 
@@ -73,38 +55,54 @@ const Endpoints = observer(() => {
         vpnStore.setSearchValue(value);
     };
 
+    const handleSearchClear = () => {
+        vpnStore.setSearchValue('');
+    };
+
     const endpoints = vpnStore.filteredEndpoints;
-    const endpointsCrossClassNames = classnames({
-        'endpoints__cross--active': vpnStore.searchValue.length > 0,
-    });
 
     return (
         <div className="endpoints">
             <div className="endpoints__header">
+                Countries
+
                 <button
                     type="button"
                     className="button endpoints__back"
                     onClick={handleCloseEndpoints}
-                />
-                <div className="endpoints__search">
-                    <input
-                        className="endpoints__search-in"
-                        type="text"
-                        placeholder="search the country"
-                        value={vpnStore.searchValue}
-                        onChange={handleSearchInput}
-                    />
-                    <button
-                        onClick={() => {
-                            vpnStore.setSearchValue('');
-                        }}
-                        type="button"
-                        className={`button endpoints__cross ${endpointsCrossClassNames}`}
-                    />
-                </div>
+                >
+                    <svg className="icon icon--button">
+                        <use xlinkHref="#back" />
+                    </svg>
+                </button>
             </div>
-            <div className="endpoints__list">
-                {renderEndpoints(endpoints)}
+            <Search
+                value={vpnStore.searchValue}
+                handleChange={handleSearchInput}
+                handleClear={handleSearchClear}
+            />
+            <div className="endpoints__scroll">
+                <div className="endpoints__list">
+                    <div className="endpoints__title">
+                        History
+                    </div>
+                    {/* TODO */}
+                </div>
+
+                <div className="endpoints__list">
+                    <div className="endpoints__title">
+                        Fastest
+                    </div>
+                    {/* TODO */}
+                </div>
+
+                <div className="endpoints__list">
+                    <div className="endpoints__title">
+                        All endpoints
+                    </div>
+
+                    {renderEndpoints(endpoints)}
+                </div>
             </div>
         </div>
     );

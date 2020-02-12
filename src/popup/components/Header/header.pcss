@@ -5,11 +5,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 14px;
-
-    &--main {
-        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
-    }
+    padding: 14px 24px;
 
     &__title {
         display: flex;
@@ -17,13 +13,22 @@
     }
 
     &__logo {
-        width: 108px;
-        height: 12px;
+        font-size: 1.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    &__logo-subtitle {
+        font-weight: 400;
     }
 
     &__setting {
         width: 24px;
         height: 24px;
         padding: 0;
+    }
+
+    &__beta {
+        margin-left: 10px;
     }
 }

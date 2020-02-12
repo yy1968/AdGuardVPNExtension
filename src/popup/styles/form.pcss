@@ -54,7 +54,7 @@
         color: var(--gray-base);
         outline: none;
         height: 40px;
-        padding: 10px 25px;
+        padding: 10px 15px;
 
         &::placeholder {
             font-size: 14px;
@@ -75,6 +75,11 @@
             padding: 10px 25px;
             font-size: 3.2rem;
             letter-spacing: 5px;
+        }
+
+        &--password {
+            padding-left: 25px;
+            padding-right: 25px;
         }
     }
 
@@ -135,8 +140,9 @@
 
     &__show-password {
         position: absolute;
-        bottom: 8px;
+        bottom: 10px;
         right: 0;
+        padding: 0;
         color: var(--gray-base);
     }
 }

@@ -24,9 +24,11 @@ const Header = observer(({ showMenuButton }) => {
     return (
         <div className={headerClass}>
             <div className="header__title">
-                <svg className="header__logo">
-                    <use xlinkHref="#logo" />
-                </svg>
+                <div className="header__logo">
+                    AdGuard&nbsp;
+                    <span className="header__logo-subtitle">VPN</span>
+                </div>
+                <div className="badge header__beta">Beta</div>
             </div>
             <button
                 className="button header__setting"
