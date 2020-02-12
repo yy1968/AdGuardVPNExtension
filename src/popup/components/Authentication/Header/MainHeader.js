@@ -2,17 +2,11 @@ import React from 'react';
 
 function MainHeader() {
     return (
-        <span className="auth__header">
-            <svg className="auth__logo">
-                <use xlinkHref="#tree" />
+        <div className="auth__header">
+            <svg className="icon icon--logo">
+                <use xlinkHref="#logo" />
             </svg>
-            <div className="auth__beta">
-                Beta
-            </div>
-            <div className="auth__title">
-                AdGuard VPN
-            </div>
-        </span>
+        </div>
     );
 }
 

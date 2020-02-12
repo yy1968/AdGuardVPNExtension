@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 
 import rootStore from '../../../stores';
 import Info from './Info';
+import StatusImage from '../StatusImage';
 
 import './site-info.pcss';
 
@@ -101,7 +102,7 @@ const SiteInfo = observer(() => {
         );
     }
 
-    return null;
+    return <StatusImage enabled={settingsStore.displayEnabled} />;
 });
 
 export default SiteInfo;

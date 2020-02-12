@@ -1,10 +1,16 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import './status-image.pcss';
 
-const StatusImage = () => {
+const StatusImage = ({ enabled }) => {
+    const statusClassName = classnames(
+        'status-image',
+        { 'status-image--enabled': enabled }
+    );
+
     return (
-        <div className="status-image" />
+        <div className={statusClassName} />
     );
 };
 

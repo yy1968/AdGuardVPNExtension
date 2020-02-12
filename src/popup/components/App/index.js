@@ -99,7 +99,6 @@ const App = observer(() => {
             <>
                 {requestProcessState === REQUEST_STATUSES.PENDING
                 && <Preloader isOpen={requestProcessState === REQUEST_STATUSES.PENDING} />}
-                <Header showMenuButton={authenticated} />
                 <Authentication />
                 <Icons />
             </>

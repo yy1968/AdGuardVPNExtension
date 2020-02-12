@@ -38,13 +38,12 @@ const GlobalError = observer(() => {
 
     const errorsMap = {
         [ERROR_TYPES.CONTROL]: {
-            title: browser.i18n.getMessage('control_error_title'),
             description: browser.i18n.getMessage('control_error_description'),
             buttons: [
                 {
                     id: 1,
                     handler: handleDisableExtensions,
-                    className: 'button button--uppercase button--m button--green global-error__button',
+                    className: 'button button--medium button--green-gradient global-error__button',
                     text: browser.i18n.getMessage('control_error_disable'),
                 },
             ],
@@ -97,9 +96,11 @@ const GlobalError = observer(() => {
         <div className="global-error">
             <div className="global-error__content">
                 <div className="global-error__icon" />
-                <div className="global-error__title">
-                    {title}
-                </div>
+                {title && (
+                    <div className="global-error__title">
+                        {title}
+                    </div>
+                )}
                 <div className="global-error__description">
                     {description}
                 </div>

@@ -17,29 +17,25 @@ const Header = observer(({ showMenuButton }) => {
         'header--main': showMenuButton,
     });
 
-    if (!showMenuButton) {
-        return null;
-    }
-
     return (
         <div className={headerClass}>
-            <div className="header__title">
-                <div className="header__logo">
-                    AdGuard&nbsp;
-                    <span className="header__logo-subtitle">VPN</span>
-                </div>
-                <div className="badge header__beta">Beta</div>
-            </div>
-            <button
-                className="button header__setting"
-                type="button"
-                tabIndex="0"
-                onClick={handleOpenModal}
-            >
-                <svg className="icon icon--button icon--options">
-                    <use xlinkHref="#options" />
+            <div className="header__logo">
+                <svg className="icon icon--logo">
+                    <use xlinkHref="#logo" />
                 </svg>
-            </button>
+            </div>
+            {showMenuButton && (
+                <button
+                    className="button header__setting"
+                    type="button"
+                    tabIndex="0"
+                    onClick={handleOpenModal}
+                >
+                    <svg className="icon icon--button icon--options">
+                        <use xlinkHref="#options" />
+                    </svg>
+                </button>
+            )}
         </div>
     );
 });

@@ -8,7 +8,6 @@ import CurrentEndpoint from './CurrentEndpoint';
 import GlobalControl from './GlobalControl';
 import Status from './Status';
 import SiteInfo from './SiteInfo';
-import StatusImage from './StatusImage';
 
 import './settings.pcss';
 
@@ -44,7 +43,6 @@ const Settings = observer(() => {
     return (
         <div className={settingsClass}>
             <div className="settings__main">
-                <StatusImage />
                 <SiteInfo />
                 <Status status={getStatusMessage(proxyEnabled)} />
                 <GlobalControl
