@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react';
 
 import rootStore from '../../../stores';
@@ -11,12 +11,11 @@ import InputField from '../InputField';
 const CheckEmail = observer(() => {
     const { authStore } = useContext(rootStore);
 
-    // TODO ??? changes to signIn page
-    // useEffect(() => {
-    //     (async () => {
-    //         await authStore.getAuthCacheFromBackground();
-    //     })();
-    // }, []);
+    useEffect(() => {
+        (async () => {
+            await authStore.getAuthCacheFromBackground();
+        })();
+    }, []);
 
     const submitHandler = async (e) => {
         e.preventDefault();
