@@ -23,6 +23,8 @@ class VpnStore {
         bandwidthFreeMbits: null,
         premiumPromoEnabled: null,
         premiumPromoPage: null,
+        totalTraffic: null,
+        remainingTraffic: null,
     };
 
     @action
@@ -131,6 +133,21 @@ class VpnStore {
     @computed
     get premiumPromoPage() {
         return this.vpnInfo.premiumPromoPage;
+    }
+
+    @computed
+    get totalTraffic() {
+        return this.vpnInfo.totalTraffic;
+    }
+
+    @computed
+    get remainingTraffic() {
+        return this.vpnInfo.remainingTraffic;
+    }
+
+    @computed
+    get insufficientTraffic() {
+        return this.vpnInfo.remainingTraffic <= 0;
     }
 }
 

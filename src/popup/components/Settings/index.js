@@ -9,6 +9,7 @@ import GlobalControl from './GlobalControl';
 import Status from './Status';
 import SiteInfo from './SiteInfo';
 import ServerError from './ServerError';
+import Upgrade from './Upgrade';
 
 import './settings.pcss';
 
@@ -20,7 +21,7 @@ const getStatusMessage = (proxyEnabled) => {
 };
 
 const Settings = observer(() => {
-    const { settingsStore, uiStore } = useContext(rootStore);
+    const { settingsStore, uiStore, vpnStore } = useContext(rootStore);
 
     const handleEndpointSelectorClick = () => {
         uiStore.openEndpointsSearch();
@@ -39,8 +40,19 @@ const Settings = observer(() => {
         proxyEnabled,
         serverError,
     } = settingsStore;
+    const { premiumPromoEnabled, insufficientTraffic } = vpnStore;
 
-    const settingsClass = classnames('settings', { 'settings--active': proxyEnabled });
+    const settingsClass = classnames(
+        'settings',
+        { 'settings--active': proxyEnabled },
+        { 'settings--premium-promo': premiumPromoEnabled }
+    );
+
+    if (insufficientTraffic) {
+        return (
+            <Upgrade />
+        );
+    }
 
     return (
         <div className={settingsClass}>
