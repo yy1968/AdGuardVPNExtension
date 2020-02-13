@@ -13,7 +13,7 @@ const Status = observer(() => {
 
     const endpointStatus = classnames({
         'status__subtitle--disabled': !settingsStore.displayEnabled,
-        'status__subtitle--warning': settingsStore.displayEnabled && settingsStore.ping > PING_WITH_WARNING,
+        'status__subtitle--warning': settingsStore.displayEnabled && settingsStore.ping >= PING_WITH_WARNING,
         'status__subtitle--success': settingsStore.displayEnabled && settingsStore.ping < PING_WITH_WARNING,
     });
 

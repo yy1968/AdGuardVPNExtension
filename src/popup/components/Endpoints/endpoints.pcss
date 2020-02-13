@@ -86,7 +86,7 @@
     }
 
     &__city {
-        max-width: 240px;
+        max-width: 170px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -95,6 +95,14 @@
     &__ping {
         margin-left: auto;
         font-weight: 400;
+
+        &--success {
+            color: var(--green-light);
+        }
+
+        &--warning {
+            color: var(--orange);
+        }
     }
 
     &__scroll {

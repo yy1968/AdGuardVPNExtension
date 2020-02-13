@@ -89,6 +89,18 @@ class VpnStore {
         });
     }
 
+    // TODO [maximtop] fastest endpoints
+    @computed
+    get fastestEndpoints() {
+        return [];
+    }
+
+    // TODO [maximtop] history endpoints
+    @computed
+    get historyEndpoints() {
+        return [];
+    }
+
     @computed
     get countryNameToDisplay() {
         return this.selectedEndpoint && this.selectedEndpoint.countryName;

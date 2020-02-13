@@ -1,8 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
 
+const PING_WITH_WARNING = 100;
+
 const Endpoint = ({
-    id, selected, countryCode, name, handleClick,
+    id, selected, countryCode, name, handleClick, ping,
 }) => {
     const getEndpointIcon = (selected, countryCode) => {
         const icon = (countryCode && countryCode.toLowerCase()) || '';
@@ -23,6 +25,12 @@ const Endpoint = ({
         { 'endpoints__item--selected': selected }
     );
 
+    const pingClassName = classnames(
+        'endpoints__ping',
+        { 'endpoints__ping--warning': ping >= PING_WITH_WARNING },
+        { 'endpoints__ping--success': ping < PING_WITH_WARNING }
+    );
+
     return (
         <button
             type="button"
@@ -35,8 +43,15 @@ const Endpoint = ({
             <div className="endpoints__city">
                 {name}
             </div>
-            <div className="endpoints__ping">
-                ...
+            <div className={pingClassName}>
+                {ping ? (
+                    <span>
+                        {ping}
+                        &nbsp;ms
+                    </span>
+                ) : (
+                    <span>...</span>
+                )}
             </div>
         </button>
     );

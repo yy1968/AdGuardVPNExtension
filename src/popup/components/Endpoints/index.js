@@ -36,6 +36,7 @@ const Endpoints = observer(() => {
             selected,
             cityName,
             countryCode,
+            ping,
         } = endpoint;
 
         return (
@@ -46,6 +47,7 @@ const Endpoints = observer(() => {
                 selected={selected}
                 countryCode={countryCode}
                 name={`${countryName}, ${cityName}`}
+                ping={ping}
             />
         );
     });
@@ -59,7 +61,8 @@ const Endpoints = observer(() => {
         vpnStore.setSearchValue('');
     };
 
-    const endpoints = vpnStore.filteredEndpoints;
+    const { fastestEndpoints, historyEndpoints, filteredEndpoints } = vpnStore;
+    const endpoints = filteredEndpoints;
 
     return (
         <div className="endpoints">
@@ -82,25 +85,26 @@ const Endpoints = observer(() => {
                 handleClear={handleSearchClear}
             />
             <div className="endpoints__scroll">
-                <div className="endpoints__list">
-                    <div className="endpoints__title">
-                        History
+                {historyEndpoints.length > 0 && (
+                    <div className="endpoints__list">
+                        <div className="endpoints__title">
+                            History
+                        </div>
                     </div>
-                    {/* TODO */}
-                </div>
+                )}
 
-                <div className="endpoints__list">
-                    <div className="endpoints__title">
-                        Fastest
+                {fastestEndpoints.length > 0 && (
+                    <div className="endpoints__list">
+                        <div className="endpoints__title">
+                            Fastest
+                        </div>
                     </div>
-                    {/* TODO */}
-                </div>
+                )}
 
                 <div className="endpoints__list">
                     <div className="endpoints__title">
                         All endpoints
                     </div>
-
                     {renderEndpoints(endpoints)}
                 </div>
             </div>
