@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Upgrade = () => (
-    <div className="global-error">
+    <div className="global-error global-error--upgrade">
         <div className="global-error__content">
             <div className="global-error__icon global-error__icon--error" />
                 <div className="global-error__title">

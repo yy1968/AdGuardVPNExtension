@@ -20,7 +20,7 @@ const InfoMessage = observer(() => {
     };
 
     const {
-        premiumPromoEnabled, premiumPromoPage, remainingTraffic, totalTraffic,
+        premiumPromoEnabled, premiumPromoPage, remainingTraffic, totalTraffic, insufficientTraffic,
     } = vpnStore;
 
     if (!premiumPromoEnabled) {
@@ -44,11 +44,17 @@ const InfoMessage = observer(() => {
     return (
         <div className="info-message">
             <div className="info-message__text">
-                <span className={`info-message__value ${getInfoColor()}`}>
-                    {remainingTraffic}
-                    &nbsp;MB
-                </span>
-                &nbsp;remaining this month
+                {insufficientTraffic ? (
+                    <span>Monthly data limit reached. Need more?</span>
+                ) : (
+                    <>
+                        <span className={`info-message__value ${getInfoColor()}`}>
+                            {remainingTraffic}
+                            &nbsp;MB
+                        </span>
+                        &nbsp;remaining this month
+                    </>
+                )}
             </div>
             <a
                 href={premiumPromoPage}
