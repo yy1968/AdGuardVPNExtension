@@ -8,6 +8,7 @@ import CurrentEndpoint from './CurrentEndpoint';
 import GlobalControl from './GlobalControl';
 import Status from './Status';
 import SiteInfo from './SiteInfo';
+import ServerError from './ServerError';
 
 import './settings.pcss';
 
@@ -36,6 +37,7 @@ const Settings = observer(() => {
     const {
         switcherEnabled,
         proxyEnabled,
+        serverError,
     } = settingsStore;
 
     const settingsClass = classnames('settings', { 'settings--active': proxyEnabled });
@@ -43,13 +45,21 @@ const Settings = observer(() => {
     return (
         <div className={settingsClass}>
             <div className="settings__main">
-                <SiteInfo />
-                <Status status={getStatusMessage(proxyEnabled)} />
-                <GlobalControl
-                    handleConnect={handleConnect}
-                    handleDisconnect={handleDisconnect}
-                    enabled={switcherEnabled}
-                />
+                {serverError ? (
+                    <ServerError
+                        handleClick={handleEndpointSelectorClick}
+                    />
+                ) : (
+                    <>
+                        <SiteInfo />
+                        <Status status={getStatusMessage(proxyEnabled)} />
+                        <GlobalControl
+                            handleConnect={handleConnect}
+                            handleDisconnect={handleDisconnect}
+                            enabled={switcherEnabled}
+                        />
+                    </>
+                )}
             </div>
             <CurrentEndpoint
                 handle={handleEndpointSelectorClick}

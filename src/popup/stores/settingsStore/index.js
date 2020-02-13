@@ -39,6 +39,9 @@ class SettingsStore {
 
     @observable checkPermissionsState = REQUEST_STATUSES.DONE;
 
+    // TODO [maximtop] handle not responding server
+    @observable serverError = false;
+
     @action
     prohibitExclusion = () => {
         this.canBeExcluded = false;
