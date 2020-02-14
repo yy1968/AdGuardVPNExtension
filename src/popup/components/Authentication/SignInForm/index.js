@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 
 import popupActions from '../../../actions/popupActions';
 import rootStore from '../../../stores';
-import { REQUEST_STATUSES } from '../../../stores/consts';
+import { REQUEST_STATUSES, INPUT_TYPES } from '../../../stores/consts';
 
 import PasswordField from '../PasswordField';
 import Submit from '../Submit';
@@ -30,6 +30,14 @@ const SignInForm = observer(() => {
     const { requestProcessState, credentials } = authStore;
     const { password } = credentials;
 
+    const [inputType, setInputType] = useState('password');
+
+    const handleInputTypeChange = () => {
+        setInputType(inputType === INPUT_TYPES.PASSWORD ? INPUT_TYPES.TEXT : INPUT_TYPES.PASSWORD);
+    };
+
+    const icon = inputType === INPUT_TYPES.PASSWORD ? '#closed_eye' : '#open_eye';
+
     return (
         <form
             className={`form form--login ${authStore.error && 'form--error'}`}
@@ -40,7 +48,10 @@ const SignInForm = observer(() => {
                     label="Password"
                     id="password"
                     password={password}
-                    inputChangeHandler={inputChangeHandler}
+                    handleChange={inputChangeHandler}
+                    handleInputTypeChange={handleInputTypeChange}
+                    icon={icon}
+                    inputType={inputType}
                 />
                 {authStore.error && (
                     <div className="form__error">

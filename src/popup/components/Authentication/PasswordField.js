@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 
-const INPUT_TYPES = {
-    TEXT: 'text',
-    PASSWORD: 'password',
-};
-
 function PasswordField({
-    id, label, password, inputChangeHandler, error, autoFocus = true,
+    id,
+    label,
+    password,
+    handleChange,
+    error,
+    autoFocus = true,
+    inputType,
+    handleInputTypeChange,
+    icon,
 }) {
-    const [inputType, setInputType] = useState('password');
-
-    const handleInputTypeChange = () => {
-        setInputType(inputType === INPUT_TYPES.PASSWORD ? INPUT_TYPES.TEXT : INPUT_TYPES.PASSWORD);
-    };
-
-    const icon = inputType === INPUT_TYPES.PASSWORD ? '#closed_eye' : '#open_eye';
-
     const inputClassName = classnames('form__input form__input--password', { 'form__input--error': error });
 
     return (
@@ -29,20 +24,22 @@ function PasswordField({
                 name={id}
                 className={inputClassName}
                 type={inputType}
-                onChange={inputChangeHandler}
+                onChange={handleChange}
                 value={password}
                 // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus={autoFocus}
             />
-            <button
-                type="button"
-                className="button form__show-password"
-                onClick={handleInputTypeChange}
-            >
-                <svg className="icon icon--button">
-                    <use xlinkHref={icon} />
-                </svg>
-            </button>
+            {icon && (
+                <button
+                    type="button"
+                    className="button form__show-password"
+                    onClick={handleInputTypeChange}
+                >
+                    <svg className="icon icon--button">
+                        <use xlinkHref={icon} />
+                    </svg>
+                </button>
+            )}
         </div>
     );
 }

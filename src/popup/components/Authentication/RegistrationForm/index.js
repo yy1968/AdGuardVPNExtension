@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { observer } from 'mobx-react';
 import ReactHtmlParser from 'react-html-parser';
 
 import rootStore from '../../../stores';
-import { REQUEST_STATUSES } from '../../../stores/consts';
+import { REQUEST_STATUSES, INPUT_TYPES } from '../../../stores/consts';
 
 import PasswordField from '../PasswordField';
 import Submit from '../Submit';
@@ -24,6 +24,14 @@ const RegistrationForm = observer(() => {
     const { requestProcessState, credentials } = authStore;
     const { password, passwordAgain } = credentials;
 
+    const [inputType, setInputType] = useState('password');
+
+    const handleInputTypeChange = () => {
+        setInputType(inputType === INPUT_TYPES.PASSWORD ? INPUT_TYPES.TEXT : INPUT_TYPES.PASSWORD);
+    };
+
+    const icon = inputType === INPUT_TYPES.PASSWORD ? '#closed_eye' : '#open_eye';
+
     return (
         <form
             className="form"
@@ -33,17 +41,21 @@ const RegistrationForm = observer(() => {
                 <PasswordField
                     label="Password"
                     id="password"
-                    inputChangeHandler={inputChangeHandler}
                     password={password}
                     error={authStore.error}
+                    inputType={inputType}
+                    handleChange={inputChangeHandler}
+                    handleInputTypeChange={handleInputTypeChange}
+                    icon={icon}
                 />
                 <PasswordField
                     label="Password confirmation"
                     id="passwordAgain"
-                    inputChangeHandler={inputChangeHandler}
                     password={passwordAgain}
                     error={authStore.error}
                     autoFocus={false}
+                    inputType={inputType}
+                    handleChange={inputChangeHandler}
                 />
                 {authStore.error && (
                     <div className="form__error">
