@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import translator from '../../../lib/translator';
+
 const Search = ({ value, handleChange, handleClear }) => {
     const crossClassNames = classnames(
         'button endpoints__cross',
@@ -12,7 +14,7 @@ const Search = ({ value, handleChange, handleClear }) => {
             <input
                 className="endpoints__search-in"
                 type="text"
-                placeholder="search the country"
+                placeholder={translator.translate('endpoints_search')}
                 value={value}
                 onChange={handleChange}
             />

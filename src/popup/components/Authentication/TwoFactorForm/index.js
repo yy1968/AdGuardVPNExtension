@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 
+import translator from '../../../../lib/translator';
 import rootStore from '../../../stores';
 import { REQUEST_STATUSES } from '../../../stores/consts';
 
@@ -32,7 +33,7 @@ const TwoFactorForm = observer(() => {
                     id="twoFactor"
                     type="text"
                     value={twoFactor}
-                    label="Code from the authentication app"
+                    label={translator.translate('auth_code')}
                     inputChangeHandler={inputChangeHandler}
                     error={authStore.error}
                     className="form__input--big"
@@ -46,7 +47,7 @@ const TwoFactorForm = observer(() => {
 
             <div className="form__btn-wrap">
                 <Submit
-                    text="Confirm"
+                    text={translator.translate('auth_confirm')}
                     processing={requestProcessState === REQUEST_STATUSES.PENDING}
                     disabled={!twoFactor}
                 />

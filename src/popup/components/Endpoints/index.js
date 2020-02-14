@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 
+import translator from '../../../lib/translator';
 import rootStore from '../../stores';
 import Endpoint from './Endpoint';
 import Search from './Search';
@@ -67,7 +68,7 @@ const Endpoints = observer(() => {
     return (
         <div className="endpoints">
             <div className="endpoints__header">
-                Countries
+                {translator.translate('endpoints_countries')}
 
                 <button
                     type="button"
@@ -88,7 +89,7 @@ const Endpoints = observer(() => {
                 {historyEndpoints.length > 0 && (
                     <div className="endpoints__list">
                         <div className="endpoints__title">
-                            History
+                            {translator.translate('endpoints_history')}
                         </div>
                     </div>
                 )}
@@ -96,14 +97,14 @@ const Endpoints = observer(() => {
                 {fastestEndpoints.length > 0 && (
                     <div className="endpoints__list">
                         <div className="endpoints__title">
-                            Fastest
+                            {translator.translate('endpoints_fastest')}
                         </div>
                     </div>
                 )}
 
                 <div className="endpoints__list">
                     <div className="endpoints__title">
-                        All endpoints
+                        {translator.translate('endpoints_all')}
                     </div>
                     {renderEndpoints(endpoints)}
                 </div>

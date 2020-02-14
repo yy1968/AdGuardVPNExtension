@@ -7,6 +7,7 @@ import StatusImage from '../StatusImage';
 
 import './site-info.pcss';
 
+// TODO translations
 const SiteInfo = observer(() => {
     const { settingsStore } = useContext(rootStore);
 

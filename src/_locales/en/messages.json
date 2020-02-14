@@ -78,22 +78,22 @@
         "message": "Uncompromising online privacy protection. Over 20 Million people have already chosen AdGuard."
     },
     "auth_code": {
-        "message": "Code from app:"
+        "message": "Code from the authentication app"
     },
     "auth_confirm": {
         "message": "Confirm"
     },
     "auth_email": {
-        "message": "Email:"
+        "message": "Email (AdGuard account)"
     },
     "auth_password": {
-        "message": "Password:"
+        "message": "Password"
     },
     "auth_password_repeat": {
-        "message": "Password again:"
+        "message": "Password confirmation"
     },
     "auth_recover": {
-        "message": "Lost it?"
+        "message": "Forgot it?"
     },
     "auth_login": {
         "message": "Log in"
@@ -103,6 +103,12 @@
     },
     "auth_register": {
         "message": "Register"
+    },
+    "auth_next": {
+        "message": "Next"
+    },
+    "auth_welcome": {
+        "message": "Welcome"
     },
     "eula": {
         "message": "EULA"
@@ -202,5 +208,50 @@
     },
     "suggest_feature": {
         "message": "Suggest a feature"
+    },
+    "endpoints_countries": {
+        "message": "Countries"
+    },
+    "endpoints_history": {
+        "message": "History"
+    },
+    "endpoints_fastest": {
+        "message": "Fastest"
+    },
+    "endpoints_all": {
+        "message": "All endpoints"
+    },
+    "endpoints_search": {
+        "message": "search the country"
+    },
+    "premium_limit_reached": {
+        "message": "Monthly data limit reached. Need more?"
+    },
+    "premium_upgrade": {
+        "message": "Upgrade"
+    },
+    "settings_disconnect": {
+        "message": "Disconnect"
+    },
+    "settings_connect": {
+        "message": "Connect"
+    },
+    "settings_not_responding": {
+        "message": "Server not responding"
+    },
+    "settings_choose_another": {
+        "message": "Choose another"
+    },
+    "settings_connection_not_secured": {
+        "message": "Connection is not secured"
+    },
+    "settings_connecting": {
+        "message": "Connecting..."
+    },
+    "settings_vpn_enabled": {
+        "message": "VPN is enabled"
+    },
+    "settings_vpn_disabled": {
+        "message": "VPN is disabled"
     }
 }

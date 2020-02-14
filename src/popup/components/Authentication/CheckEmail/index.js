@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react';
 
+import translator from '../../../../lib/translator';
 import rootStore from '../../../stores';
 import { REQUEST_STATUSES } from '../../../stores/consts';
 
@@ -40,7 +41,7 @@ const CheckEmail = observer(() => {
                     id="username"
                     type="email"
                     value={username}
-                    label="Email (AdGuard account)"
+                    label={translator.translate('auth_email')}
                     inputChangeHandler={inputChangeHandler}
                     error={authStore.error}
                 />
@@ -53,7 +54,7 @@ const CheckEmail = observer(() => {
             <Terms />
             <div className="form__btn-wrap form__btn-wrap--check">
                 <Submit
-                    text="Next"
+                    text={translator.translate('auth_next')}
                     processing={requestProcessState === REQUEST_STATUSES.PENDING}
                     disabled={!username}
                 />

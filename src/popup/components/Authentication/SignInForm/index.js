@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
+import translator from '../../../../lib/translator';
 
 import popupActions from '../../../actions/popupActions';
 import rootStore from '../../../stores';
@@ -45,7 +46,7 @@ const SignInForm = observer(() => {
         >
             <div className="form__inputs">
                 <PasswordField
-                    label="Password"
+                    label={translator.translate('auth_password')}
                     id="password"
                     password={password}
                     handleChange={inputChangeHandler}
@@ -66,13 +67,13 @@ const SignInForm = observer(() => {
                     className="button button--inline form__link"
                     onClick={popupActions.openRecovery}
                 >
-                    Forgot it?
+                    {translator.translate('auth_recover')}
                 </button>
             </div>
 
             <div className="form__btn-wrap">
                 <Submit
-                    text="Log in"
+                    text={translator.translate('auth_login')}
                     processing={requestProcessState === REQUEST_STATUSES.PENDING}
                     disabled={!password}
                 />

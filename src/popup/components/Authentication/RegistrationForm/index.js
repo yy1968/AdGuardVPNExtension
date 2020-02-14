@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { observer } from 'mobx-react';
 import ReactHtmlParser from 'react-html-parser';
 
+import translator from '../../../../lib/translator';
 import rootStore from '../../../stores';
 import { REQUEST_STATUSES, INPUT_TYPES } from '../../../stores/consts';
 
@@ -39,7 +40,7 @@ const RegistrationForm = observer(() => {
         >
             <div className="form__inputs">
                 <PasswordField
-                    label="Password"
+                    label={translator.translate('auth_password')}
                     id="password"
                     password={password}
                     error={authStore.error}
@@ -49,7 +50,7 @@ const RegistrationForm = observer(() => {
                     icon={icon}
                 />
                 <PasswordField
-                    label="Password confirmation"
+                    label={translator.translate('auth_password_repeat')}
                     id="passwordAgain"
                     password={passwordAgain}
                     error={authStore.error}
@@ -65,7 +66,7 @@ const RegistrationForm = observer(() => {
             </div>
             <div className="form__btn-wrap">
                 <Submit
-                    text="Register"
+                    text={translator.translate('auth_register')}
                     processing={requestProcessState === REQUEST_STATUSES.PENDING}
                     disabled={authStore.disableRegister}
                 />

@@ -5,6 +5,7 @@ import rootStore from '../../stores';
 import popupActions from '../../actions/popupActions';
 
 import './info-message.pcss';
+import translator from '../../../lib/translator';
 
 const TRAFFIC_PERCENT = {
     DANGER: 25,
@@ -45,7 +46,7 @@ const InfoMessage = observer(() => {
         <div className="info-message">
             <div className="info-message__text">
                 {insufficientTraffic ? (
-                    <span>Monthly data limit reached. Need more?</span>
+                    <span>{translator.translate('premium_limit_reached')}</span>
                 ) : (
                     <>
                         <span className={`info-message__value ${getInfoColor()}`}>
@@ -62,7 +63,7 @@ const InfoMessage = observer(() => {
                 className="button button--medium button--red-gradient info-message__btn"
                 onClick={onClick(premiumPromoPage)}
             >
-                Upgrade
+                {translator.translate('premium_upgrade')}
             </a>
             <div className="info-message__progress">
                 <div

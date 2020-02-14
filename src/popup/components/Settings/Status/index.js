@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 
+import translator from '../../../../lib/translator';
 import rootStore from '../../../stores';
 
 import './status.pcss';
@@ -19,20 +20,20 @@ const Status = observer(() => {
 
     const renderStatus = () => {
         if (!settingsStore.switcherEnabled) {
-            return 'Connection is not secured';
+            return translator.translate('settings_connection_not_secured');
         }
         if (settingsStore.ping) {
             return `Ping ${settingsStore.ping} ms`;
         }
-        return 'Connecting...';
+        return translator.translate('settings_connecting');
     };
 
     const renderTitle = () => {
         if (settingsStore.switcherEnabled) {
-            return 'VPN is enabled';
+            return translator.translate('settings_vpn_enabled');
         }
 
-        return 'VPN is disabled';
+        return translator.translate('settings_vpn_disabled');
     };
 
     return (

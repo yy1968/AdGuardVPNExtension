@@ -1,5 +1,7 @@
 import React from 'react';
 
+import translator from '../../../../lib/translator';
+
 const GlobalControl = ({ handleConnect, handleDisconnect, enabled }) => {
     if (enabled) {
         return (
@@ -8,7 +10,7 @@ const GlobalControl = ({ handleConnect, handleDisconnect, enabled }) => {
                 className="button button--medium button--outline-secondary"
                 onClick={handleDisconnect}
             >
-                Disconnect
+                {translator.translate('settings_disconnect')}
             </button>
         );
     }
@@ -19,7 +21,7 @@ const GlobalControl = ({ handleConnect, handleDisconnect, enabled }) => {
             className="button button--medium button--green-gradient"
             onClick={handleConnect}
         >
-            Connect
+            {translator.translate('settings_connect')}
         </button>
     );
 };

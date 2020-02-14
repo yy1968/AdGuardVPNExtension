@@ -3,6 +3,7 @@ import React from 'react';
 import popupActions from '../../actions/popupActions';
 import { EULA_URL, PRIVACY_URL } from '../../../background/config';
 
+// TODO translations
 function Terms() {
     const handlePrivacyClick = async () => {
         await popupActions.openTab(PRIVACY_URL);
