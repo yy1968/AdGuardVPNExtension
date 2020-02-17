@@ -11,7 +11,7 @@ class VpnStore {
         this.rootStore = rootStore;
     }
 
-    @observable endpoints;
+    @observable endpointsList;
 
     @observable endpointsGetState;
 
@@ -37,21 +37,21 @@ class VpnStore {
 
     @action
     getEndpoints = async () => {
-        const endpoints = adguard.vpn.getEndpoints();
-        this.setEndpoints(endpoints);
+        const endpointsList = adguard.endpoints.getEndpoints();
+        this.setEndpoints(endpointsList);
     };
 
     @action
-    setEndpoints = (endpoints) => {
-        if (!endpoints) {
+    setEndpoints = (endpointsList) => {
+        if (!endpointsList) {
             return;
         }
-        this.endpoints = endpoints;
+        this.endpointsList = endpointsList;
     };
 
     @action
     selectEndpoint = async (id) => {
-        const selectedEndpoint = this.endpoints[id];
+        const selectedEndpoint = this.endpointsList[id];
         await adguard.proxy.setCurrentEndpoint(toJS(selectedEndpoint));
         runInAction(() => {
             this.selectedEndpoint = selectedEndpoint;
@@ -71,10 +71,10 @@ class VpnStore {
 
     @computed
     get filteredEndpoints() {
-        if (!this.endpoints) {
+        if (!this.endpointsList) {
             return [];
         }
-        return Object.values(this.endpoints).filter((endpoint) => {
+        return Object.values(this.endpointsList).filter((endpoint) => {
             if (!this.searchValue || this.searchValue.length === 0) {
                 return true;
             }
@@ -118,7 +118,7 @@ class VpnStore {
 
     @action
     getVpnInfo = async () => {
-        const vpnInfo = adguard.vpn.getVpnInfo();
+        const vpnInfo = adguard.endpoints.getVpnInfo();
         this.setVpnInfo(vpnInfo);
     };
 

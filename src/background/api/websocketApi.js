@@ -134,9 +134,14 @@ class WebsocketApi {
 const wsFactory = (() => {
     let ws;
 
-    const getWebsocket = async (url) => {
+    /**
+     * Creates new websocket and closes the old one if found
+     * @param {string} url
+     * @returns {Promise<WebsocketApi>}
+     */
+    const getWebsocketSingleton = async (url) => {
         if (!url) {
-            return null;
+            throw new Error('Url expected to be provided');
         }
         if (ws) {
             await ws.close();
@@ -145,8 +150,21 @@ const wsFactory = (() => {
         return ws;
     };
 
+    /**
+     * Creates new websocket whenever is called
+     * @param {string} url
+     * @returns {Promise<WebsocketApi>}
+     */
+    const getWebsocket = async (url) => {
+        if (!url) {
+            throw new Error('Url expected to be provided');
+        }
+        return new WebsocketApi(url);
+    };
+
     return {
         getWebsocket,
+        getWebsocketSingleton,
     };
 })();
 

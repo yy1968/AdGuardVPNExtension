@@ -57,13 +57,6 @@ const config = {
                 ],
             },
             {
-                test: /\.proto$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: path.resolve(__dirname, './loaders/protobuf-loader.js'),
-                },
-            },
-            {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
                 use: [
                     { loader: 'file-loader', options: { outputPath: 'assets' } },

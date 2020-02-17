@@ -1,7 +1,5 @@
-// connectivity.proto will be converted to js object by webpack
-// https://github.com/protobufjs/protobuf.js#using-generated-static-code
-// see webpack proto-loader https://github.com/PermissionData/protobufjs-loader
-import { WsConnectivityMsg, WsPingMsg } from './connectivity.proto';
+import protobuf from 'protobufjs/light';
+import connectivityJson from './connectivity.json';
 import wsFactory from '../api/websocketApi';
 import { WS_API_URL_TEMPLATE } from '../config';
 import { renderTemplate, stringToUint8Array } from '../../lib/string-utils';
@@ -9,6 +7,8 @@ import statsStorage from './statsStorage';
 import credentials from '../credentials';
 import notifier from '../../lib/notifier';
 import { proxy } from '../proxy';
+
+const { WsConnectivityMsg, WsPingMsg } = protobuf.Root.fromJSON(connectivityJson);
 
 const CONNECTIVITY_STATE = {
     WORKING: 'working',
@@ -67,7 +67,7 @@ class Connectivity {
 
         const websocketUrl = renderTemplate(WS_API_URL_TEMPLATE, { host: wsHost });
         try {
-            this.ws = await wsFactory.getWebsocket(websocketUrl);
+            this.ws = await wsFactory.getWebsocketSingleton(websocketUrl);
         } catch (e) {
             this.state = CONNECTIVITY_STATE.PAUSED;
             throw new Error(`Failed to create new websocket because of: ${JSON.stringify(e.message)}`);

@@ -9,7 +9,7 @@ import connectivity from './connectivity/connectivity';
 import appStatus from './appStatus';
 import authCache from './authentication/authCache';
 import messaging from './messaging';
-import vpn from './vpn';
+import endpoints from './endpoints/endpoints';
 import credentials from './credentials';
 import permissionsChecker from './permissionsChecker/permissionsChecker';
 import permissionsError from './permissionsChecker/permissionsError';
@@ -32,7 +32,7 @@ global.adguard = {
     connectivity,
     appStatus,
     authCache,
-    vpn,
+    endpoints,
     popupData,
     storage,
     permissionsChecker,

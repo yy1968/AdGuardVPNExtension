@@ -36,7 +36,7 @@ class globalStore {
 
             const {
                 vpnInfo,
-                endpoints,
+                endpointsList,
                 selectedEndpoint,
                 permissionsError,
                 isAuthenticated,
@@ -60,7 +60,7 @@ class globalStore {
 
             authStore.setIsAuthenticated(isAuthenticated);
             vpnStore.setVpnInfo(vpnInfo);
-            vpnStore.setEndpoints(endpoints);
+            vpnStore.setEndpoints(endpointsList);
             vpnStore.setSelectedEndpoint(selectedEndpoint);
             settingsStore.setProxyEnabledStatus(isProxyEnabled);
             settingsStore.setCanControlProxy(canControlProxy);

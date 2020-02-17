@@ -1,0 +1,83 @@
+{
+  "options": {
+    "java_multiple_files": true,
+    "java_package": "com.adguard.vpn.endpoint.generated",
+    "java_outer_classname": "UserMetricsProto",
+    "objc_class_prefix": "VPN"
+  },
+  "nested": {
+    "WsPingMsg": {
+      "fields": {
+        "requestTime": {
+          "type": "int64",
+          "id": 1
+        },
+        "token": {
+          "type": "bytes",
+          "id": 2
+        },
+        "applicationId": {
+          "type": "bytes",
+          "id": 3
+        }
+      }
+    },
+    "WsConnectivityInfoMsg": {
+      "fields": {
+        "token": {
+          "type": "bytes",
+          "id": 1
+        },
+        "refreshTokens": {
+          "type": "bool",
+          "id": 6
+        },
+        "bytesDownloaded": {
+          "type": "float",
+          "id": 7
+        },
+        "bytesUploaded": {
+          "type": "float",
+          "id": 8
+        }
+      }
+    },
+    "WsConnectivityErrorMsg": {
+      "fields": {
+        "code": {
+          "type": "string",
+          "id": 1
+        },
+        "payload": {
+          "type": "string",
+          "id": 2
+        }
+      }
+    },
+    "WsConnectivityMsg": {
+      "oneofs": {
+        "payload": {
+          "oneof": [
+            "pingMsg",
+            "connectivityInfoMsg",
+            "connectivityErrorMsg"
+          ]
+        }
+      },
+      "fields": {
+        "pingMsg": {
+          "type": "WsPingMsg",
+          "id": 1
+        },
+        "connectivityInfoMsg": {
+          "type": "WsConnectivityInfoMsg",
+          "id": 2
+        },
+        "connectivityErrorMsg": {
+          "type": "WsConnectivityErrorMsg",
+          "id": 3
+        }
+      }
+    }
+  }
+}

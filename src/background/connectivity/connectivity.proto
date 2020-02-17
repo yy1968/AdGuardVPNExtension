@@ -14,6 +14,7 @@ message WsPingMsg {
 
 message WsConnectivityInfoMsg {
     bytes token = 1;
+    // TODO [maximtop] should reconnect if refresh tokens received
     bool refreshTokens = 6;
     float bytesDownloaded = 7;
     float bytesUploaded = 8;

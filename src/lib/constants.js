@@ -6,10 +6,10 @@ export const SETTINGS_IDS = {
 };
 
 export const MESSAGES_TYPES = {
-    ENDPOINTS_UPDATED: 'vpn.updated',
+    ENDPOINTS_UPDATED: 'endpoints.updated',
     CURRENT_ENDPOINT_UPDATED: 'proxy.current.endpoint.updated',
     VPN_TOKEN_NOT_FOUND: 'vpn.token.not.found',
-    VPN_INFO_UPDATED: 'vpnInfo.updated',
+    VPN_INFO_UPDATED: 'vpn.info.updated',
     AUTHENTICATE_SOCIAL: 'authenticate.social',
     AUTHENTICATE_SOCIAL_SUCCESS: 'authenticate.social.success',
     PERMISSIONS_ERROR_UPDATE: 'permissions.error.update',

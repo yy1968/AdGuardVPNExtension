@@ -1,6 +1,6 @@
 import qs from 'qs';
 import Api from './Api';
-import { AUTH_API_URL } from '../config';
+import { AUTH_API_URL, AUTH_CLIENT_ID } from '../config';
 
 // Documentation
 // https://bit.adguard.com/projects/ADGUARD/repos/adguard-auth-service/browse/oauth.md
@@ -17,7 +17,7 @@ class AuthApi extends Api {
             password,
             scope: 'trust',
             grant_type: 'password_2fa',
-            client_id: 'adguard-vpn-extension',
+            client_id: AUTH_CLIENT_ID,
         };
 
         if (twoFactor) {
