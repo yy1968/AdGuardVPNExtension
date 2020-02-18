@@ -122,7 +122,7 @@ class ExtensionProxy {
         await this.applyConfig();
     };
 
-    setAccessCredentials = async (prefix) => {
+    setAccessPrefix = async (prefix) => {
         const endpoint = await this.getCurrentEndpoint();
         if (!endpoint) {
             throw new Error('current endpoint is empty');
