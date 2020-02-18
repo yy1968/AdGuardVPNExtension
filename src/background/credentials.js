@@ -206,8 +206,8 @@ class Credentials {
     }
 
     updateProxyCredentials = async () => {
-        const { credentials } = await this.getAccessCredentials();
-        await proxy.setAccessCredentials(credentials);
+        const { prefix } = await this.getAccessCredentials();
+        await proxy.setAccessCredentials(prefix);
     };
 
     /**

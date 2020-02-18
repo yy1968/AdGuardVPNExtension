@@ -90,7 +90,6 @@ class ExtensionProxy {
             port: 443,
             scheme: 'https',
             inverted: this.inverted,
-            credentials: this.credentials,
         };
     }
 
@@ -123,14 +122,14 @@ class ExtensionProxy {
         await this.applyConfig();
     };
 
-    setAccessCredentials = async (credentials) => {
+    setAccessCredentials = async (prefix) => {
         const endpoint = await this.getCurrentEndpoint();
         if (!endpoint) {
             throw new Error('current endpoint is empty');
         }
         const { domainName } = endpoint;
-        this.credentials = credentials;
-        this.setHost(domainName);
+        const proxyHost = `${prefix}.${domainName}`;
+        this.setHost(proxyHost);
         return { domainName };
     };
 
