@@ -211,8 +211,8 @@ class Credentials {
     };
 
     /**
-     * Returns access password and username for proxy and websocket domain prefix
-     * @returns {Promise<{credentials: {password: string, username: string}, prefix: string}>}
+     * Returns domain prefix and vpn token
+     * @returns {Promise<{prefix: string, token: string}>}
      */
     async getAccessCredentials() {
         const { token } = await this.gainValidVpnToken();
@@ -220,7 +220,6 @@ class Credentials {
         const appId = this.getAppId();
         return {
             prefix: md5(`${appId}:${token}:${credentials}`).toString(),
-            credentials: { username: token, password: credentials },
             token,
         };
     }
