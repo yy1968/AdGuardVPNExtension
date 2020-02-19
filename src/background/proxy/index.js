@@ -119,7 +119,7 @@ class ExtensionProxy {
 
     setHost = async (prefix, domainName) => {
         if (!prefix || !domainName) {
-            throw new Error('No prefix or domain name');
+            return;
         }
         this.currentHost = `${prefix}.${domainName}`;
         this.currentPrefix = prefix;
@@ -132,7 +132,7 @@ class ExtensionProxy {
             throw new Error('current endpoint is empty');
         }
         const { domainName } = endpoint;
-        this.setHost(prefix, domainName);
+        await this.setHost(prefix, domainName);
         return { domainName };
     };
 
@@ -147,7 +147,7 @@ class ExtensionProxy {
     setCurrentEndpoint = async (endpoint) => {
         this.currentEndpoint = endpoint;
         const { domainName } = this.currentEndpoint;
-        this.setHost(this.currentPrefix, domainName);
+        await this.setHost(this.currentPrefix, domainName);
         await storage.set(CURRENT_ENDPOINT_KEY, endpoint);
         browserApi.runtime.sendMessage({
             type: MESSAGES_TYPES.CURRENT_ENDPOINT_UPDATED,

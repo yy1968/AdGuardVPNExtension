@@ -307,7 +307,6 @@ class Credentials {
             const forceRemote = true;
             this.vpnToken = await this.gainValidVpnToken(forceRemote);
             this.vpnCredentials = await this.gainValidVpnCredentials(forceRemote);
-
             this.currentUsername = await this.fetchUsername();
         } catch (e) {
             log.debug('Unable to init credentials module, due to error:', e.message);
