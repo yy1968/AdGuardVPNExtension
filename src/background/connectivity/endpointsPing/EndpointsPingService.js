@@ -8,16 +8,27 @@ class EndpointsPingService {
         this.wsFactory = wsFactory;
     }
 
-    getPingToEndpoint = async (endpoint) => {
-        const { domainName } = endpoint;
+    getPingToEndpoint = async (domainName) => {
         const { prefix, token } = await this.credentials.getAccessCredentials();
         const appId = this.credentials.getAppId();
         const wsHost = `${prefix}.${domainName}`;
         const websocketUrl = renderTemplate(WS_API_URL_TEMPLATE, { host: wsHost });
-        const websocket = await this.wsFactory.getWebsocket(websocketUrl);
-        await websocket.open();
-        const averagePing = await getAveragePing(websocket, token, appId);
-        await websocket.close();
+        let averagePing;
+
+        try {
+            const websocket = await this.wsFactory.getWebsocket(websocketUrl);
+            console.time(`open ${domainName}`);
+            await websocket.open();
+            console.timeEnd(`open ${domainName}`);
+            console.time(`ping ${domainName}`);
+            averagePing = await getAveragePing(websocket, token, appId);
+            console.timeEnd(`ping ${domainName}`);
+            console.time(`close ${websocketUrl}`);
+            websocket.close();
+        } catch (e) {
+            console.log('was unable to get ping', websocketUrl);
+        }
+
         return averagePing;
     };
 }

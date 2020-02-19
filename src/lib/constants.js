@@ -7,6 +7,7 @@ export const SETTINGS_IDS = {
 
 export const MESSAGES_TYPES = {
     ENDPOINTS_UPDATED: 'endpoints.updated',
+    ENDPOINTS_PING_UPDATED: 'endpoints.ping.updated',
     CURRENT_ENDPOINT_UPDATED: 'proxy.current.endpoint.updated',
     VPN_TOKEN_NOT_FOUND: 'vpn.token.not.found',
     VPN_INFO_UPDATED: 'vpn.info.updated',

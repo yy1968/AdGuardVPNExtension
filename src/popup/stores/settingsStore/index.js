@@ -54,7 +54,7 @@ class SettingsStore {
 
     @action
     getProxyPing = () => {
-        this.ping = adguard.connectivity.getPing();
+        this.ping = adguard.connectivity.endpointConnectivity.getPing();
     };
 
     @action
@@ -212,7 +212,7 @@ class SettingsStore {
 
     @action
     getProxyStats = async () => {
-        const stats = await adguard.connectivity.getStats();
+        const stats = await adguard.connectivity.endpointConnectivity.getStats();
         runInAction(() => {
             this.proxyStats = stats;
         });

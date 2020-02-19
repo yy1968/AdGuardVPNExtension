@@ -71,6 +71,10 @@ const App = observer(() => {
                     settingsStore.setSwitcher(false);
                     break;
                 }
+                case MESSAGES_TYPES.ENDPOINTS_PING_UPDATED: {
+                    console.log(data);
+                    break;
+                }
                 default: {
                     log.debug('there is no such message type: ', type);
                     break;

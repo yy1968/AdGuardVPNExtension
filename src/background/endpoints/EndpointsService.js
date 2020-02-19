@@ -1,9 +1,11 @@
 import isEqual from 'lodash/isEqual';
 import qs from 'qs';
+import axios from 'axios';
 import log from '../../lib/logger';
 import { getClosestEndpointByCoordinates } from '../../lib/helpers';
 import { MESSAGES_TYPES } from '../../lib/constants';
 import { POPUP_DEFAULT_SUPPORT_URL } from '../config';
+import connectivity from '../connectivity';
 
 class EndpointsService {
     endpoints = null;
@@ -24,7 +26,7 @@ class EndpointsService {
         const { domainName } = await this.proxy.setCurrentEndpoint(endpoint);
         const { prefix, token } = await this.credentials.getAccessCredentials();
         const wsHost = `${prefix}.${domainName}`;
-        await this.connectivity.setCredentials(wsHost, domainName, token);
+        await this.connectivity.endpointConnectivity.setCredentials(wsHost, domainName, token);
     };
 
     getClosestEndpointAndReconnect = async (endpoints, currentEndpoint) => {
@@ -55,17 +57,113 @@ class EndpointsService {
             return null;
         }
 
-        const endpoints = await this.vpnProvider.getEndpoints(vpnToken.token);
+        const newEndpoints = await this.vpnProvider.getEndpoints(vpnToken.token);
+        const endpoints = this.updateEndpoints(newEndpoints);
+        // this.countPing();
+        return endpoints;
+    };
 
-        if (!isEqual(endpoints, this.endpoints)) {
-            this.endpoints = endpoints;
-            await this.browserApi.runtime.sendMessage({
-                type: MESSAGES_TYPES.ENDPOINTS_UPDATED,
-                data: endpoints,
-            });
+    updateEndpoints = async (endpoints) => {
+        if (isEqual(endpoints, this.endpoints)) {
+            return this.endpoints;
+        }
+        this.endpoints = endpoints;
+
+        this.browserApi.runtime.sendMessage({
+            type: MESSAGES_TYPES.ENDPOINTS_UPDATED,
+            data: endpoints,
+        });
+
+        return this.endpoints;
+    };
+
+    pollPing = async (domainName) => {
+        const start = Date.now();
+        try {
+            await axios(`https://${domainName}`);
+        } catch (e) {
+            console.log(e);
+        }
+        const end = Date.now();
+        return end - start;
+    };
+
+    determinePingToEndpoint = async (domainName) => {
+        const POLLS_NUM = 3;
+        const results = [];
+        for (let i = 0; i < POLLS_NUM; i += 1) {
+            // eslint-disable-next-line no-await-in-loop
+            const result = await this.pollPing(domainName);
+            results.push(result);
+        }
+        const sum = results.reduce((prev, next) => prev + next);
+        return Math.floor(sum / POLLS_NUM);
+    };
+
+    promiseBatchMap = async (arr, batchSize, handler) => {
+        const chunkArray = (arr, size) => arr.reduce((chunks, el, idx) => {
+            if (idx % size === 0) {
+                chunks.push([el]);
+            } else {
+                chunks[chunks.length - 1].push(el);
+            }
+            return chunks;
+        }, []);
+
+        const batches = chunkArray(arr, batchSize);
+
+        const result = [];
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const batch of batches) {
+            const promises = batch.map(handler);
+            // eslint-disable-next-line no-await-in-loop
+            const data = await Promise.all(promises);
+            result.push(data);
         }
 
-        return endpoints;
+        return result.flat(Infinity);
+    };
+
+    determinePing = async () => {
+        if (!this.endpoints) {
+            this.endpoints = await this.getEndpointsRemotely();
+        }
+
+        const currentEndpoint = await this.proxy.getCurrentEndpoint();
+
+        const endpointsValues = Object.values(this.endpoints).filter(endpoint => {
+            return endpoint.id !== currentEndpoint.id;
+        });
+        console.time('ping');
+
+        const handler = async (endpoint) => {
+            const ping = await connectivity.endpointsPing.getPingToEndpoint(endpoint.domainName);
+            endpoint.ping = ping;
+            console.log('PING: ', ping);
+            return endpoint;
+        };
+
+        const result = await this.promiseBatchMap(endpointsValues, 20, handler);
+        console.timeEnd('ping');
+        console.log(result.map(({ id, ping }) => ({ id, ping })));
+    };
+
+    countPing = async () => {
+        if (!this.endpoints) {
+            return;
+        }
+
+        // noinspection ES6MissingAwait
+        Object.values(this.endpoints).forEach(async (endpoint) => {
+            // eslint-disable-next-line no-param-reassign
+            endpoint.ping = await connectivity.endpointsPing.getPingToEndpoint(endpoint.domainName);
+
+            this.browserApi.runtime.sendMessage({
+                type: MESSAGES_TYPES.ENDPOINTS_PING_UPDATED,
+                data: endpoint,
+            });
+        });
     };
 
     vpnTokenChanged = (oldVpnToken, newVpnToken) => {

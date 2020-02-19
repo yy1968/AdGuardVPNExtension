@@ -31,9 +31,7 @@ const pollPing = (websocket, vpnToken, appId) => new Promise((resolve, reject) =
             const ping = receivedTime - requestTime;
             websocket.removeMessageListener(messageHandler);
             resolve(ping);
-            return;
         }
-        reject(new Error('Got wrong response'));
     };
 
     websocket.onMessage(messageHandler);

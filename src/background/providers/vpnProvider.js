@@ -18,7 +18,6 @@ const getEndpoints = async (vpnToken) => {
             public_key: publicKey,
         } = endpoint;
 
-        // TODO [maximtop] ping for endpoints list
         return {
             ...acc,
             [domainName]: {
@@ -30,7 +29,6 @@ const getEndpoints = async (vpnToken) => {
                 coordinates: [longitude, latitude],
                 premiumOnly,
                 publicKey,
-                ping: Math.floor(Math.random() * 300) + 10,
             },
         };
     }, {});

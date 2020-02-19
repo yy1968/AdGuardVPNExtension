@@ -2,7 +2,7 @@ import EndpointsService from './EndpointsService';
 import browserApi from '../browserApi';
 import { proxy } from '../proxy';
 import credentials from '../credentials';
-import connectivity from '../connectivity/connectivity';
+import connectivity from '../connectivity/endpointConnectivity';
 import vpnProvider from '../providers/vpnProvider';
 import wsFactory from '../api/websocketApi';
 

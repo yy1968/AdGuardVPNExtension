@@ -5,7 +5,7 @@ import tabs from './tabs';
 import exclusions from './exclusions';
 import auth from './auth';
 import { proxy } from './proxy';
-import connectivity from './connectivity/connectivity';
+import connectivity from './connectivity';
 import appStatus from './appStatus';
 import authCache from './authentication/authCache';
 import messaging from './messaging';

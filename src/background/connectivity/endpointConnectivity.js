@@ -10,16 +10,16 @@ import { proxy } from '../proxy';
 
 const { WsConnectivityMsg, WsPingMsg } = protobuf.Root.fromJSON(connectivityJson);
 
-const CONNECTIVITY_STATE = {
+const CONNECTION_STATE = {
     WORKING: 'working',
     PAUSED: 'paused',
 };
 
-class Connectivity {
+class EndpointConnectivity {
     PING_UPDATE_INTERVAL_MS = 1000 * 60;
 
     constructor() {
-        this.state = CONNECTIVITY_STATE.PAUSED;
+        this.state = CONNECTION_STATE.PAUSED;
         notifier.addSpecifiedListener(notifier.types.CREDENTIALS_UPDATED, this.updateCredentials);
     }
 
@@ -60,7 +60,7 @@ class Connectivity {
 
         let restart = false;
 
-        if (this.state === CONNECTIVITY_STATE.WORKING) {
+        if (this.state === CONNECTION_STATE.WORKING) {
             restart = true;
             await this.stop();
         }
@@ -69,7 +69,7 @@ class Connectivity {
         try {
             this.ws = await wsFactory.getWebsocketSingleton(websocketUrl);
         } catch (e) {
-            this.state = CONNECTIVITY_STATE.PAUSED;
+            this.state = CONNECTION_STATE.PAUSED;
             throw new Error(`Failed to create new websocket because of: ${JSON.stringify(e.message)}`);
         }
 
@@ -79,9 +79,9 @@ class Connectivity {
     }
 
     start = async () => {
-        if (this.state !== CONNECTIVITY_STATE.WORKING) {
+        if (this.state !== CONNECTION_STATE.WORKING) {
             await this.ws.open();
-            this.state = CONNECTIVITY_STATE.WORKING;
+            this.state = CONNECTION_STATE.WORKING;
         }
         this.startGettingPing();
         this.startGettingConnectivityInfo();
@@ -102,7 +102,7 @@ class Connectivity {
             await this.ws.close();
         }
 
-        this.state = CONNECTIVITY_STATE.PAUSED;
+        this.state = CONNECTION_STATE.PAUSED;
     };
 
     preparePingMessage = (currentTime) => {
@@ -200,14 +200,14 @@ class Connectivity {
     };
 
     getPing = () => {
-        if (!this.ping || this.state === CONNECTIVITY_STATE.PAUSED) {
+        if (!this.ping || this.state === CONNECTION_STATE.PAUSED) {
             return null;
         }
         return this.ping;
     };
 
     getStats = async () => {
-        if (this.state === CONNECTIVITY_STATE.PAUSED) {
+        if (this.state === CONNECTION_STATE.PAUSED) {
             return null;
         }
         const stats = await statsStorage.getStats(this.domainName);
@@ -215,6 +215,6 @@ class Connectivity {
     };
 }
 
-const connectivity = new Connectivity();
+const endpointConnectivity = new EndpointConnectivity();
 
-export default connectivity;
+export default endpointConnectivity;
