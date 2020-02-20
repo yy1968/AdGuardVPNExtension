@@ -1,6 +1,6 @@
 import protobuf from 'protobufjs/light';
 import connectivityJson from './connectivity.json';
-import wsFactory from '../api/websocketApi';
+import websocketFactory from './websocket/websocketFactory';
 import { WS_API_URL_TEMPLATE } from '../config';
 import { renderTemplate, stringToUint8Array } from '../../lib/string-utils';
 import statsStorage from './statsStorage';
@@ -67,7 +67,7 @@ class EndpointConnectivity {
 
         const websocketUrl = renderTemplate(WS_API_URL_TEMPLATE, { host: wsHost });
         try {
-            this.ws = await wsFactory.getWebsocketSingleton(websocketUrl);
+            this.ws = await websocketFactory.getReconnectingWebsocket(websocketUrl);
         } catch (e) {
             this.state = CONNECTION_STATE.PAUSED;
             throw new Error(`Failed to create new websocket because of: ${JSON.stringify(e.message)}`);

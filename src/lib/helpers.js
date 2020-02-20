@@ -179,3 +179,10 @@ export const runWithCancel = (fn, ...args) => {
 
     return { promise, cancel };
 };
+
+/**
+ * Identity function, useful for filtering undefined values
+ * @param i
+ * @returns {*}
+ */
+export const identity = (i) => i;

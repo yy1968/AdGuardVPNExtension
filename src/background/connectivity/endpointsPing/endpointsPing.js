@@ -1,7 +1,7 @@
 import EndpointsPingService from './EndpointsPingService';
 import credentials from '../../credentials';
-import wsFactory from '../../api/websocketApi';
+import websocketFactory from '../websocket/websocketFactory';
 
-const endpointsPing = new EndpointsPingService(credentials, wsFactory);
+const endpointsPing = new EndpointsPingService(credentials, websocketFactory);
 
 export default endpointsPing;

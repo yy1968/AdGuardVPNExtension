@@ -1,10 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
-import { observer } from 'mobx-react';
 
 const PING_WITH_WARNING = 100;
 
-const Endpoint = observer(({
+const Endpoint = ({
     id, selected, countryCode, name, handleClick, ping,
 }) => {
     const getEndpointIcon = (selected, countryCode) => {
@@ -56,6 +55,6 @@ const Endpoint = observer(({
             </div>
         </button>
     );
-});
+};
 
 export default Endpoint;

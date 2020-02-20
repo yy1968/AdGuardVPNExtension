@@ -46,7 +46,7 @@ const buildVpnProvider = (vpnInfo, endpoints) => {
     };
 };
 
-const wsFactory = {};
+const websocketFactory = {};
 
 
 describe('endpoints class', () => {
@@ -105,7 +105,7 @@ describe('endpoints class', () => {
         const vpnProvider = buildVpnProvider(expectedVpnInfo, expectedEndpoints);
 
         const endpoints = new EndpointsService(
-            browserApi, proxy, buildCredentials(), connectivity, vpnProvider, wsFactory
+            browserApi, proxy, buildCredentials(), connectivity, vpnProvider, websocketFactory
         );
 
         let vpnInfo = endpoints.getVpnInfo();
@@ -124,7 +124,7 @@ describe('endpoints class', () => {
         const vpnProvider = buildVpnProvider();
         const credentials = buildCredentials(true);
         const endpoints = new EndpointsService(
-            browserApi, proxy, credentials, connectivity, vpnProvider, wsFactory
+            browserApi, proxy, credentials, connectivity, vpnProvider, websocketFactory
         );
         await endpoints.getVpnInfoRemotely();
         expect(credentials.gainValidVpnToken).toBeCalledTimes(1);
@@ -139,7 +139,7 @@ describe('endpoints class', () => {
         const vpnProvider = buildVpnProvider(expectedVpnInfo);
         const credentials = buildCredentials();
         const endpoints = new EndpointsService(
-            browserApi, proxy, credentials, connectivity, vpnProvider, wsFactory
+            browserApi, proxy, credentials, connectivity, vpnProvider, websocketFactory
         );
         await endpoints.getVpnInfoRemotely();
         expect(credentials.gainValidVpnToken).toBeCalledTimes(3);

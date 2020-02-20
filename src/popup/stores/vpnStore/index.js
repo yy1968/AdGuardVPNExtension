@@ -1,17 +1,20 @@
 import {
-    action,
-    computed,
-    observable,
-    runInAction,
-    toJS,
+    action, computed, observable, runInAction, toJS,
 } from 'mobx';
+import { REQUEST_STATUSES } from '../consts';
 
 class VpnStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
     }
 
-    @observable endpointsList;
+    @observable endpoints = {};
+
+    @observable pings = {};
+
+    @observable _fastestEndpoints;
+
+    @observable gettingFastestStatus;
 
     @observable endpointsGetState;
 
@@ -36,17 +39,26 @@ class VpnStore {
     };
 
     @action
-    setEndpoints = (endpointsList) => {
-        if (!endpointsList) {
+    setEndpoints = (endpoints) => {
+        if (!endpoints) {
             return;
         }
-        this.endpointsList = endpointsList;
+        this.endpoints = endpoints;
+    };
+
+    @action
+    setPing = (endpointPing) => {
+        this.pings[endpointPing.endpointId] = endpointPing;
     };
 
     @action
     selectEndpoint = async (id) => {
-        const selectedEndpoint = this.endpointsList[id];
+        const selectedEndpoint = this.endpoints?.all?.[id];
+        if (!selectedEndpoint) {
+            throw new Error(`No endpoint with id: "${id}" found`);
+        }
         await adguard.proxy.setCurrentEndpoint(toJS(selectedEndpoint));
+        await adguard.endpoints.addToHistory(selectedEndpoint.id);
         runInAction(() => {
             this.selectedEndpoint = selectedEndpoint;
         });
@@ -65,34 +77,63 @@ class VpnStore {
 
     @computed
     get filteredEndpoints() {
-        if (!this.endpointsList) {
-            return [];
-        }
-        return Object.values(this.endpointsList).filter((endpoint) => {
-            if (!this.searchValue || this.searchValue.length === 0) {
-                return true;
-            }
-            const regex = new RegExp(this.searchValue, 'ig');
-            return (endpoint.cityName && endpoint.cityName.match(regex))
+        const allEndpoints = Object.values(this.endpoints?.all || {});
+
+        return allEndpoints
+            .filter((endpoint) => {
+                if (!this.searchValue || this.searchValue.length === 0) {
+                    return true;
+                }
+                const regex = new RegExp(this.searchValue, 'ig');
+                return (endpoint.cityName && endpoint.cityName.match(regex))
                 || (endpoint.countryName && endpoint.countryName.match(regex));
-        }).map((endpoint) => {
-            if (this.selectedEndpoint && this.selectedEndpoint.id === endpoint.id) {
-                return { ...endpoint, selected: true };
-            }
-            return endpoint;
+            })
+            .map((endpoint) => {
+                if (this.selectedEndpoint && this.selectedEndpoint.id === endpoint.id) {
+                    return { ...endpoint, selected: true };
+                }
+                return endpoint;
+            })
+            .map((endpoint) => {
+                const endpointPing = this.pings[endpoint.id];
+                if (endpointPing) {
+                    return { ...endpoint, ping: endpointPing.ping };
+                }
+                return endpoint;
+            });
+    }
+
+    async requestFastestEndpoints() {
+        const fastestPromise = this.endpoints?.fastest;
+        if (!fastestPromise) {
+            throw new Error('No promise received');
+        }
+        this.gettingFastestStatus = REQUEST_STATUSES.PENDING;
+        // TODO create fastest promise with cancel
+        const fastestEndpoints = await fastestPromise;
+        runInAction(() => {
+            this._fastestEndpoints = fastestEndpoints;
+            this.gettingFastestStatus = REQUEST_STATUSES.DONE;
         });
     }
 
-    // TODO [maximtop] fastest endpoints
     @computed
     get fastestEndpoints() {
-        return [];
+        return Object.values(this._fastestEndpoints || {})
+            .sort((a, b) => a.ping - b.ping);
     }
 
-    // TODO [maximtop] history endpoints
     @computed
     get historyEndpoints() {
-        return [];
+        return Object.values(this.endpoints?.history || {})
+            .sort((a, b) => b.order - a.order)
+            .map((endpoint) => {
+                const endpointPing = this.pings[endpoint.id];
+                if (endpointPing) {
+                    return { ...endpoint, ping: endpointPing.ping };
+                }
+                return endpoint;
+            });
     }
 
     @computed
@@ -109,12 +150,6 @@ class VpnStore {
     get cityNameToDisplay() {
         return this.selectedEndpoint && this.selectedEndpoint.cityName;
     }
-
-    @action
-    getVpnInfo = async () => {
-        const vpnInfo = adguard.endpoints.getVpnInfo();
-        this.setVpnInfo(vpnInfo);
-    };
 
     @action
     setVpnInfo = (vpnInfo) => {

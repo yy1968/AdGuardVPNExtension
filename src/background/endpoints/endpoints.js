@@ -2,9 +2,9 @@ import EndpointsService from './EndpointsService';
 import browserApi from '../browserApi';
 import { proxy } from '../proxy';
 import credentials from '../credentials';
-import connectivity from '../connectivity/endpointConnectivity';
+import connectivity from '../connectivity';
 import vpnProvider from '../providers/vpnProvider';
-import wsFactory from '../api/websocketApi';
+import storage from '../storage'; // TODO [maximtop] consider moving storage into browserApi
 
 const endpoints = new EndpointsService(
     browserApi,
@@ -12,7 +12,7 @@ const endpoints = new EndpointsService(
     credentials,
     connectivity,
     vpnProvider,
-    wsFactory
+    storage
 );
 
 export default endpoints;

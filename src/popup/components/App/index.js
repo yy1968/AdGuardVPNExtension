@@ -47,8 +47,13 @@ const App = observer(() => {
                     vpnStore.setVpnInfo(data);
                     break;
                 }
+                case MESSAGES_TYPES.ENDPOINTS_HISTORY_UPDATED:
                 case MESSAGES_TYPES.ENDPOINTS_UPDATED: {
                     vpnStore.setEndpoints(data);
+                    break;
+                }
+                case MESSAGES_TYPES.ENDPOINTS_PING_UPDATED: {
+                    vpnStore.setPing(data);
                     break;
                 }
                 case MESSAGES_TYPES.CURRENT_ENDPOINT_UPDATED: {
@@ -69,10 +74,6 @@ const App = observer(() => {
                 case MESSAGES_TYPES.EXTENSION_PROXY_DISABLED: {
                     settingsStore.setProxyEnabled(false);
                     settingsStore.setSwitcher(false);
-                    break;
-                }
-                case MESSAGES_TYPES.ENDPOINTS_PING_UPDATED: {
-                    console.log(data);
                     break;
                 }
                 default: {

@@ -54,6 +54,7 @@ global.adguard = {
         await settings.applySettings(); // we have to apply settings when credentials are ready
         await nonRoutable.init();
         await contextMenu.init();
+        await endpoints.init();
         messaging.init();
         log.info('Extension loaded all necessary modules');
     } catch (e) {

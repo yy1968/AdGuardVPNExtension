@@ -19,7 +19,7 @@ const decodeMessage = (arrBufMessage) => {
     return WsConnectivityMsg.toObject(message);
 };
 
-const pollPing = (websocket, vpnToken, appId) => new Promise((resolve, reject) => {
+const pollPing = (websocket, vpnToken, appId) => new Promise((resolve) => {
     const arrBufMessage = preparePingMessage(Date.now(), vpnToken, appId);
     websocket.send(arrBufMessage);
 
@@ -32,6 +32,7 @@ const pollPing = (websocket, vpnToken, appId) => new Promise((resolve, reject) =
             websocket.removeMessageListener(messageHandler);
             resolve(ping);
         }
+        // TODO [maximtop] reject on timeout
     };
 
     websocket.onMessage(messageHandler);

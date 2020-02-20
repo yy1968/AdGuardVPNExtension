@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react';
 
 import translator from '../../../lib/translator';
@@ -10,6 +10,12 @@ import './endpoints.pcss';
 
 const Endpoints = observer(() => {
     const { vpnStore, uiStore, settingsStore } = useContext(rootStore);
+
+    useEffect(() => {
+        (async () => {
+            await vpnStore.requestFastestEndpoints();
+        })();
+    }, []);
 
     const handleEndpointSelect = (id) => async (e) => {
         e.preventDefault();
@@ -63,7 +69,6 @@ const Endpoints = observer(() => {
     };
 
     const { fastestEndpoints, historyEndpoints, filteredEndpoints } = vpnStore;
-    const endpoints = filteredEndpoints;
 
     return (
         <div className="endpoints">
@@ -91,6 +96,7 @@ const Endpoints = observer(() => {
                         <div className="endpoints__title">
                             {translator.translate('endpoints_history')}
                         </div>
+                        {renderEndpoints(historyEndpoints)}
                     </div>
                 )}
 
@@ -99,6 +105,7 @@ const Endpoints = observer(() => {
                         <div className="endpoints__title">
                             {translator.translate('endpoints_fastest')}
                         </div>
+                        {renderEndpoints(fastestEndpoints)}
                     </div>
                 )}
 
@@ -106,7 +113,7 @@ const Endpoints = observer(() => {
                     <div className="endpoints__title">
                         {translator.translate('endpoints_all')}
                     </div>
-                    {renderEndpoints(endpoints)}
+                    {renderEndpoints(filteredEndpoints)}
                 </div>
             </div>
         </div>
