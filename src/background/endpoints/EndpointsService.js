@@ -1,4 +1,5 @@
 import isEqual from 'lodash/isEqual';
+import _ from 'lodash';
 import qs from 'qs';
 import log from '../../lib/logger';
 import { getClosestEndpointByCoordinates } from '../../lib/helpers';
@@ -39,6 +40,7 @@ class EndpointsService {
     getClosestEndpointAndReconnect = async (endpoints, currentEndpoint) => {
         const endpointsArr = Object.keys(endpoints)
             .map((endpointKey) => endpoints[endpointKey]);
+
         const sameCityEndpoint = endpointsArr.find((endpoint) => {
             return endpoint.cityName === currentEndpoint.cityName;
         });
@@ -103,9 +105,9 @@ class EndpointsService {
 
         const currentEndpoint = await this.proxy.getCurrentEndpoint();
 
-        if ((endpoints && endpoints.length > 0) && currentEndpoint) {
+        if ((endpoints && !_.isEmpty(endpoints)) && currentEndpoint) {
             const currentEndpointInEndpoints = currentEndpoint && Object.keys(endpoints)
-                .some((endpoint) => endpoint === currentEndpoint.id);
+                .some((endpointId) => endpointId === currentEndpoint.id);
 
             // if there is no currently connected endpoint in the list of endpoints,
             // get closest and reconnect
@@ -120,6 +122,7 @@ class EndpointsService {
         }
 
         this.vpnInfo = vpnInfo;
+
         await this.browserApi.runtime.sendMessage({
             type: MESSAGES_TYPES.VPN_INFO_UPDATED,
             data: vpnInfo,
@@ -176,7 +179,7 @@ class EndpointsService {
         }
 
         const currentLocation = this.getCurrentLocation();
-        const endpoints = this.getEndpoints();
+        const endpoints = this.endpointsManager.getAll();
 
         if (!currentLocation || !endpoints) {
             return null;
@@ -191,7 +194,7 @@ class EndpointsService {
         return closestEndpoint;
     };
 
-    // TODO [maximtop] consider moving this login in another place
+    // TODO [maximtop] consider moving this function in another place
     getVpnFailurePage = async () => {
         let vpnToken;
         try {
