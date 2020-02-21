@@ -68,7 +68,7 @@ class VpnStore {
         await adguard.proxy.setCurrentEndpoint(toJS(selectedEndpoint));
         await adguard.endpoints.addToHistory(selectedEndpoint.id);
         runInAction(() => {
-            this.selectedEndpoint = selectedEndpoint;
+            this.selectedEndpoint = { ...selectedEndpoint, selected: true };
         });
     };
 
@@ -79,7 +79,7 @@ class VpnStore {
         }
         if (!this.selectedEndpoint
             || (this.selectedEndpoint && this.selectedEndpoint.id !== endpoint.id)) {
-            this.selectedEndpoint = endpoint;
+            this.selectedEndpoint = { ...endpoint, selected: true };
         }
     };
 
@@ -95,12 +95,6 @@ class VpnStore {
                 const regex = new RegExp(this.searchValue, 'ig');
                 return (endpoint.cityName && endpoint.cityName.match(regex))
                 || (endpoint.countryName && endpoint.countryName.match(regex));
-            })
-            .map((endpoint) => {
-                if (this.selectedEndpoint && this.selectedEndpoint.id === endpoint.id) {
-                    return { ...endpoint, selected: true };
-                }
-                return endpoint;
             })
             .map((endpoint) => {
                 const endpointPing = this.pings[endpoint.id];
@@ -127,12 +121,14 @@ class VpnStore {
     @computed
     get fastestEndpoints() {
         return Object.values(this._fastestEndpoints || {})
+            .filter((endpoint) => this.selectedEndpoint && this.selectedEndpoint.id !== endpoint.id)
             .sort((a, b) => a.ping - b.ping);
     }
 
     @computed
     get historyEndpoints() {
         return Object.values(this.endpoints?.history || {})
+            .filter((endpoint) => this.selectedEndpoint && this.selectedEndpoint.id !== endpoint.id)
             .sort((a, b) => b.order - a.order)
             .map((endpoint) => {
                 const endpointPing = this.pings[endpoint.id];

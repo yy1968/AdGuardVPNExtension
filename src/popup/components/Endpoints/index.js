@@ -5,6 +5,7 @@ import translator from '../../../lib/translator';
 import rootStore from '../../stores';
 import Endpoint from './Endpoint';
 import Search from './Search';
+import Skeleton from './Skeleton';
 
 import './endpoints.pcss';
 
@@ -68,7 +69,12 @@ const Endpoints = observer(() => {
         vpnStore.setSearchValue('');
     };
 
-    const { fastestEndpoints, historyEndpoints, filteredEndpoints } = vpnStore;
+    const {
+        fastestEndpoints,
+        historyEndpoints,
+        filteredEndpoints,
+        selectedEndpoint,
+    } = vpnStore;
 
     return (
         <div className="endpoints">
@@ -91,6 +97,13 @@ const Endpoints = observer(() => {
                 handleClear={handleSearchClear}
             />
             <div className="endpoints__scroll">
+                <div className="endpoints__list">
+                    <div className="endpoints__title">
+                        {translator.translate('endpoints_current')}
+                    </div>
+                    {renderEndpoints([selectedEndpoint])}
+                </div>
+
                 {historyEndpoints.length > 0 && (
                     <div className="endpoints__list">
                         <div className="endpoints__title">
@@ -100,14 +113,16 @@ const Endpoints = observer(() => {
                     </div>
                 )}
 
-                {fastestEndpoints.length > 0 && (
-                    <div className="endpoints__list">
-                        <div className="endpoints__title">
-                            {translator.translate('endpoints_fastest')}
-                        </div>
-                        {renderEndpoints(fastestEndpoints)}
+                <div className="endpoints__list">
+                    <div className="endpoints__title">
+                        {translator.translate('endpoints_fastest')}
                     </div>
-                )}
+                    {fastestEndpoints.length > 0 ? (
+                        renderEndpoints(fastestEndpoints)
+                    ) : (
+                        <Skeleton />
+                    )}
+                </div>
 
                 <div className="endpoints__list">
                     <div className="endpoints__title">
