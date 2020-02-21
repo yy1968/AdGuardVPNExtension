@@ -105,9 +105,9 @@ const getPopupDataRetryWithCancel = (url, retryNum) => {
  * This is done because if user doesn't wait until extension gets data and closes popup,
  * then extension freezes
  */
-const cancelGettingPopupData = () => {
+const cancelGettingPopupData = (reason) => {
     if (cancel) {
-        cancel();
+        cancel(reason);
     }
 };
 

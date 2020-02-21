@@ -16,7 +16,9 @@ class globalStore {
         // If popup closes before popup data was received, cancel receiving on the background page
         // otherwise extension will freeze
         window.addEventListener('unload', () => {
-            adguard.popupData.cancelGettingPopupData('popup closed');
+            const reason = 'Popup closed';
+            adguard.popupData.cancelGettingPopupData(reason);
+            adguard.endpoints.endpointsManager.cancelGetFastest(reason);
         });
     }
 
