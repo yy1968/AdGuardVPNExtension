@@ -53,7 +53,7 @@ class EndpointsManager {
     async getFastest(determinePingsPromise) {
         await determinePingsPromise;
         const sortedPings = _.sortBy(Object.values(this.endpointsPings), ['ping']);
-        return sortedPings
+        const fastest = sortedPings
             .map(({ endpointId }) => {
                 return this.endpoints[endpointId];
             })
@@ -61,6 +61,7 @@ class EndpointsManager {
             .slice(0, this.MAX_FASTEST_LENGTH)
             .map(this.enrichWithPing)
             .reduce(this.arrToObjConverter, {});
+        return fastest;
     }
 
     enrichWithPing = (endpoint) => {
@@ -140,7 +141,7 @@ class EndpointsManager {
     }
 
     addToHistory = async (endpointId) => {
-        if (this.historyEndpoints.includes(endpointId)) {
+        if (this.historyEndpoints[this.historyEndpoints.length - 1] === endpointId) {
             return;
         }
 
@@ -153,7 +154,7 @@ class EndpointsManager {
 
         await this.browserApi.runtime.sendMessage({
             type: MESSAGES_TYPES.ENDPOINTS_HISTORY_UPDATED,
-            data: this.getEndpoints(),
+            data: this.getHistory(),
         });
     }
 }

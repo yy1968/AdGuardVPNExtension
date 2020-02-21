@@ -47,6 +47,14 @@ class VpnStore {
     };
 
     @action
+    setHistoryEndpoints = (endpoints) => {
+        if (!endpoints) {
+            return;
+        }
+        this.endpoints.history = endpoints;
+    };
+
+    @action
     setPing = (endpointPing) => {
         this.pings[endpointPing.endpointId] = endpointPing;
     };
@@ -109,7 +117,6 @@ class VpnStore {
             throw new Error('No promise received');
         }
         this.gettingFastestStatus = REQUEST_STATUSES.PENDING;
-        // TODO create fastest promise with cancel
         const fastestEndpoints = await fastestPromise;
         runInAction(() => {
             this._fastestEndpoints = fastestEndpoints;
