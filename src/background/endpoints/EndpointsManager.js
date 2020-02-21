@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { MESSAGES_TYPES } from '../../lib/constants';
-import { identity } from '../../lib/helpers';
+import { identity, runWithCancel } from '../../lib/helpers';
+import log from '../../lib/logger';
 
 class EndpointsManager {
-    // TODO skip getting ping for currently connected endpoint, because it disconnects it
     endpoints = {};
 
     endpointsPings = {}; // { endpointId, ping }[]
@@ -50,8 +50,8 @@ class EndpointsManager {
             .reduce(this.arrToObjConverter, {});
     }
 
-    async getFastest(determinePingsPromise) {
-        await determinePingsPromise;
+    * getFastestGenerator(determinePingsPromise) {
+        yield determinePingsPromise;
         const sortedPings = _.sortBy(Object.values(this.endpointsPings), ['ping']);
         const fastest = sortedPings
             .map(({ endpointId }) => {
@@ -62,6 +62,23 @@ class EndpointsManager {
             .map(this.enrichWithPing)
             .reduce(this.arrToObjConverter, {});
         return fastest;
+    }
+
+    async getFastest(determinePingsPromise) {
+        const { promise, cancel } = runWithCancel(
+            this.getFastestGenerator.bind(this),
+            determinePingsPromise
+        );
+
+        this.fastestCancel = cancel;
+        return promise
+            .catch((e) => log.warn(e.reason));
+    }
+
+    cancelGetFastest(reason) {
+        if (this.fastestCancel) {
+            this.fastestCancel(reason);
+        }
     }
 
     enrichWithPing = (endpoint) => {
