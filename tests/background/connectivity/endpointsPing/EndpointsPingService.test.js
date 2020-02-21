@@ -69,7 +69,7 @@ describe('EndpointsPingService', () => {
 
         const endpointsPing = new EndpointsPingService(credentials, websocketFactory);
         const endpoint = { domainName: 'do-gb-lon1-01-hk7z7xez.adguard.io' };
-        const averagePing = await endpointsPing.getPingToEndpoint(endpoint);
+        const averagePing = await endpointsPing.getPingToEndpoint(endpoint.domainName);
 
         expect(averagePing).toBeDefined();
         expect(averagePing).toBeGreaterThan(expectedAveragePing);
