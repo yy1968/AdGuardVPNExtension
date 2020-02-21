@@ -215,6 +215,9 @@
     "endpoints_history": {
         "message": "History"
     },
+    "endpoints_current": {
+        "message": "Current"
+    },
     "endpoints_fastest": {
         "message": "Fastest"
     },
