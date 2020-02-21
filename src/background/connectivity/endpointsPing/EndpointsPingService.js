@@ -22,7 +22,7 @@ class EndpointsPingService {
             averagePing = await getAveragePing(websocket, token, appId);
             websocket.close();
         } catch (e) {
-            log.error('was unable to get ping', websocketUrl);
+            log.error('Was unable to get ping', websocketUrl);
         }
 
         return averagePing;

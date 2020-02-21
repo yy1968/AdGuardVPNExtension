@@ -12,7 +12,7 @@ class EndpointsManager {
 
     MAX_HISTORY_LENGTH = 2;
 
-    MAX_FASTEST_LENGTH = 2;
+    MAX_FASTEST_LENGTH = 3;
 
     PING_TTL_MS = 1000 * 60 * 2; // 2 minutes
 
@@ -31,8 +31,8 @@ class EndpointsManager {
     };
 
     arePingsFresh = () => {
-        return this.lastPingDetermination
-            && this.lastPingDetermination + this.PING_TTL_MS > Date.now();
+        return !!(this.lastPingDetermination
+            && this.lastPingDetermination + this.PING_TTL_MS > Date.now());
     };
 
     arrToObjConverter = (acc, endpoint) => {
@@ -113,8 +113,29 @@ class EndpointsManager {
         return this.endpoints;
     }
 
+    /**
+     * This function is useful to recheck pings after internet connection being turned off
+     * @returns {boolean}
+     */
+    areMajorityOfPingsEmpty() {
+        const endpointsPings = Object.values(this.endpointsPings);
+        const undefinedPings = endpointsPings
+            .filter((endpointPing) => endpointPing.ping === undefined);
+
+        if (undefinedPings.length > Math.ceil(endpointsPings.length / 2)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    shouldDeterminePings() {
+        return _.isEmpty(this.endpoints) || !this.arePingsFresh()
+            || this.areMajorityOfPingsEmpty();
+    }
+
     async determinePings() {
-        if (_.isEmpty(this.endpoints) || this.arePingsFresh()) {
+        if (!this.shouldDeterminePings()) {
             return;
         }
 
