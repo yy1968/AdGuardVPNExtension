@@ -203,6 +203,11 @@ class VpnStore {
     get insufficientTraffic() {
         return this.vpnInfo.remainingTraffic <= 0;
     }
+
+    @computed
+    get showSearchResults() {
+        return this.searchValue.length > 0;
+    }
 }
 
 export default VpnStore;

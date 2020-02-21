@@ -74,6 +74,7 @@ const Endpoints = observer(() => {
         historyEndpoints,
         filteredEndpoints,
         selectedEndpoint,
+        showSearchResults,
     } = vpnStore;
 
     return (
@@ -97,36 +98,44 @@ const Endpoints = observer(() => {
                 handleClear={handleSearchClear}
             />
             <div className="endpoints__scroll">
-                <div className="endpoints__list">
-                    <div className="endpoints__title">
-                        {translator.translate('endpoints_current')}
-                    </div>
-                    {renderEndpoints([selectedEndpoint])}
-                </div>
-
-                {historyEndpoints.length > 0 && (
-                    <div className="endpoints__list">
-                        <div className="endpoints__title">
-                            {translator.translate('endpoints_history')}
+                {!showSearchResults && (
+                    <>
+                        <div className="endpoints__list">
+                            <div className="endpoints__title">
+                                {translator.translate('endpoints_current')}
+                            </div>
+                            {renderEndpoints([selectedEndpoint])}
                         </div>
-                        {renderEndpoints(historyEndpoints)}
-                    </div>
+
+                        {historyEndpoints.length > 0 && (
+                            <div className="endpoints__list">
+                                <div className="endpoints__title">
+                                    {translator.translate('endpoints_history')}
+                                </div>
+                                {renderEndpoints(historyEndpoints)}
+                            </div>
+                        )}
+
+                        <div className="endpoints__list">
+                            <div className="endpoints__title">
+                                {translator.translate('endpoints_fastest')}
+                            </div>
+                            {fastestEndpoints.length > 0 ? (
+                                renderEndpoints(fastestEndpoints)
+                            ) : (
+                                <Skeleton />
+                            )}
+                        </div>
+                    </>
                 )}
 
                 <div className="endpoints__list">
                     <div className="endpoints__title">
-                        {translator.translate('endpoints_fastest')}
-                    </div>
-                    {fastestEndpoints.length > 0 ? (
-                        renderEndpoints(fastestEndpoints)
-                    ) : (
-                        <Skeleton />
-                    )}
-                </div>
-
-                <div className="endpoints__list">
-                    <div className="endpoints__title">
-                        {translator.translate('endpoints_all')}
+                        {showSearchResults ? (
+                            translator.translate('endpoints_search_results')
+                        ) : (
+                            translator.translate('endpoints_all')
+                        )}
                     </div>
                     {renderEndpoints(filteredEndpoints)}
                 </div>

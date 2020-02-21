@@ -224,6 +224,9 @@
     "endpoints_all": {
         "message": "All endpoints"
     },
+    "endpoints_search_results": {
+        "message": "Search result"
+    },
     "endpoints_search": {
         "message": "search the country"
     },
