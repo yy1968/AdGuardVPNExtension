@@ -3,6 +3,8 @@ import {
 } from 'mobx';
 import { REQUEST_STATUSES } from '../consts';
 
+const MAX_FASTEST_LENGTH = 3;
+
 class VpnStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
@@ -122,7 +124,8 @@ class VpnStore {
     get fastestEndpoints() {
         return Object.values(this._fastestEndpoints || {})
             .filter((endpoint) => this.selectedEndpoint && this.selectedEndpoint.id !== endpoint.id)
-            .sort((a, b) => a.ping - b.ping);
+            .sort((a, b) => a.ping - b.ping)
+            .slice(0, MAX_FASTEST_LENGTH);
     }
 
     @computed

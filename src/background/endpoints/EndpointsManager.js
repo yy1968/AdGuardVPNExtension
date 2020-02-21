@@ -10,9 +10,9 @@ class EndpointsManager {
 
     historyEndpoints = [];
 
-    MAX_HISTORY_LENGTH = 2;
+    MAX_HISTORY_LENGTH = 3;
 
-    MAX_FASTEST_LENGTH = 3;
+    MAX_FASTEST_LENGTH = 4;
 
     PING_TTL_MS = 1000 * 60 * 2; // 2 minutes
 
