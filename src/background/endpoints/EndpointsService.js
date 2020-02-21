@@ -179,15 +179,15 @@ class EndpointsService {
         }
 
         const currentLocation = this.getCurrentLocation();
-        const endpoints = this.endpointsManager.getAll();
+        const endpoints = Object.values(this.endpointsManager.getAll());
 
-        if (!currentLocation || !endpoints) {
+        if (!currentLocation || _.isEmpty(endpoints)) {
             return null;
         }
 
         const closestEndpoint = getClosestEndpointByCoordinates(
             currentLocation,
-            Object.values(endpoints)
+            endpoints
         );
 
         await this.proxy.setCurrentEndpoint(closestEndpoint);

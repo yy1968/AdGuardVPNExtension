@@ -50,7 +50,14 @@ let retryCounter = 0;
 const DEFAULT_RETRY_DELAY = 400;
 function* getPopupDataRetry(url, retryNum = 1, retryDelay = DEFAULT_RETRY_DELAY) {
     const backoffIndex = 1.5;
-    const data = yield getPopupData(url);
+    let data;
+
+    try {
+        data = yield getPopupData(url);
+    } catch (e) {
+        log.error(e);
+    }
+
     retryCounter += 1;
 
     if (!data.isAuthenticated || data.permissionsError) {
