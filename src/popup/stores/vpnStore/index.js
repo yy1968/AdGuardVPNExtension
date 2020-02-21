@@ -98,6 +98,15 @@ class VpnStore {
                 return (endpoint.cityName && endpoint.cityName.match(regex))
                 || (endpoint.countryName && endpoint.countryName.match(regex));
             })
+            .sort((a, b) => {
+                if (a.countryName < b.countryName) {
+                    return -1;
+                }
+                if (a.countryName > b.countryName) {
+                    return 1;
+                }
+                return 0;
+            })
             .map((endpoint) => {
                 const endpointPing = this.pings[endpoint.id];
                 if (endpointPing) {
