@@ -12,10 +12,14 @@ const Endpoint = ({
             'flag flag--small',
             { 'flag--active': selected }
         );
+        const flagIconClass = classnames(
+            'flag__icon',
+            { [`flag__icon--${icon}`]: icon }
+        );
 
         return (
             <div className={flagClass}>
-                <span className={`flag__icon flag__icon--${icon}`} />
+                <span className={flagIconClass} />
             </div>
         );
     };
