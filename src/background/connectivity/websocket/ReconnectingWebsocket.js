@@ -14,18 +14,13 @@ class ReconnectingWebsocket {
         debug: false,
     };
 
-    constructor(url, options, useReconnecting = true) {
+    constructor(url, options) {
         const reconnectingOptions = {
             ...this.RECONNECTING_OPTIONS,
             ...options,
         };
 
-        let ws;
-        if (useReconnecting) {
-            ws = new ReconnectingWebSocket(url, [], reconnectingOptions);
-        } else {
-            ws = new WebSocket(url);
-        }
+        const ws = new ReconnectingWebSocket(url, [], reconnectingOptions);
 
         ws.binaryType = 'arraybuffer';
         this.ws = ws;
