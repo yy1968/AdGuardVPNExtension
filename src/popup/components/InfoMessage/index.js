@@ -6,6 +6,7 @@ import popupActions from '../../actions/popupActions';
 
 import './info-message.pcss';
 import translator from '../../../lib/translator';
+import { formatBytes } from '../../../lib/helpers';
 
 const TRAFFIC_PERCENT = {
     DANGER: 25,
@@ -21,26 +22,30 @@ const InfoMessage = observer(() => {
     };
 
     const {
-        premiumPromoEnabled, premiumPromoPage, remainingTraffic, totalTraffic, insufficientTraffic,
+        premiumPromoEnabled,
+        premiumPromoPage,
+        remainingTraffic,
+        insufficientTraffic,
+        trafficUsingProgress,
     } = vpnStore;
 
     if (!premiumPromoEnabled) {
         return null;
     }
 
-    const progressPercent = Math.floor((remainingTraffic / totalTraffic) * 100);
-
     const getInfoColor = () => {
-        if (progressPercent < TRAFFIC_PERCENT.DANGER) {
+        if (trafficUsingProgress < TRAFFIC_PERCENT.DANGER) {
             return 'red';
         }
 
-        if (progressPercent < TRAFFIC_PERCENT.WARNING) {
+        if (trafficUsingProgress < TRAFFIC_PERCENT.WARNING) {
             return 'yellow';
         }
 
         return 'green';
     };
+
+    const formattedRemainingTraffic = formatBytes(remainingTraffic);
 
     return (
         <div className="info-message">
@@ -50,8 +55,9 @@ const InfoMessage = observer(() => {
                 ) : (
                     <>
                         <span className={`info-message__value ${getInfoColor()}`}>
-                            {remainingTraffic}
-                            &nbsp;MB
+                            {formattedRemainingTraffic.value}
+                            &nbsp;
+                            {formattedRemainingTraffic.unit}
                         </span>
                         &nbsp;remaining this month
                     </>
@@ -68,7 +74,7 @@ const InfoMessage = observer(() => {
             <div className="info-message__progress">
                 <div
                     className={`info-message__progress-in ${getInfoColor()}`}
-                    style={{ width: `${progressPercent}%` }}
+                    style={{ width: `${trafficUsingProgress}%` }}
                 />
             </div>
         </div>
