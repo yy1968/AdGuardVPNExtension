@@ -97,7 +97,6 @@ const getCurrentLocation = async () => {
     };
 };
 
-// TODO [maximtop] handle traffic values
 const getVpnExtensionInfo = async (vpnToken) => {
     const info = await vpnApi.getVpnExtensionInfo(vpnToken);
 
@@ -123,8 +122,6 @@ const getVpnExtensionInfo = async (vpnToken) => {
         usedUploadedBytes,
         maxDownloadedBytes,
         maxUploadedBytes,
-        totalTraffic: 500, // TODO remove stub values
-        remainingTraffic: 240,
     };
 };
 

@@ -28,8 +28,8 @@ class VpnStore {
         bandwidthFreeMbits: null,
         premiumPromoEnabled: null,
         premiumPromoPage: null,
-        totalTraffic: null,
-        remainingTraffic: null,
+        maxDownloadedBytes: null,
+        usedDownloadedBytes: null,
     };
 
     @action
@@ -190,18 +190,19 @@ class VpnStore {
     }
 
     @computed
-    get totalTraffic() {
-        return this.vpnInfo.totalTraffic;
-    }
-
-    @computed
     get remainingTraffic() {
-        return this.vpnInfo.remainingTraffic;
+        return this.vpnInfo.maxDownloadedBytes - this.vpnInfo.usedDownloadedBytes;
     }
 
     @computed
     get insufficientTraffic() {
-        return this.vpnInfo.remainingTraffic <= 0;
+        return this.remainingTraffic <= 0;
+    }
+
+    @computed
+    get trafficUsingProgress() {
+        const { maxDownloadedBytes } = this.vpnInfo;
+        return Math.floor((this.remainingTraffic / maxDownloadedBytes) * 100);
     }
 
     @computed
