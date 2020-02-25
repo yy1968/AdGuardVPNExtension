@@ -13,11 +13,11 @@ class EndpointsService {
     currentLocation = null;
 
     constructor(browserApi, proxy, credentials, connectivity, vpnProvider) {
+        this.browserApi = browserApi;
         this.proxy = proxy;
         this.credentials = credentials;
         this.connectivity = connectivity;
         this.vpnProvider = vpnProvider;
-        this.browserApi = browserApi;
     }
 
     init = async () => {
@@ -137,7 +137,9 @@ class EndpointsService {
     };
 
     getEndpoints = () => {
-        return this.endpointsManager.getEndpoints();
+        const currentEndpoint = this.proxy.getCurrentEndpoint();
+        const currentEndpointPing = this.connectivity.endpointConnectivity.getPing();
+        return this.endpointsManager.getEndpoints(currentEndpoint, currentEndpointPing);
     };
 
     getCurrentLocationRemote = async () => {

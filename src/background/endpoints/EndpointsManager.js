@@ -50,8 +50,8 @@ class EndpointsManager {
             .reduce(this.arrToObjConverter, {});
     }
 
-    * getFastestGenerator(determinePingsPromise) {
-        yield determinePingsPromise;
+    * getFastestGenerator(measurePingsPromise) {
+        yield measurePingsPromise;
         const sortedPings = _.sortBy(Object.values(this.endpointsPings), ['ping']);
         const fastest = sortedPings
             .map(({ endpointId }) => {
@@ -64,10 +64,10 @@ class EndpointsManager {
         return fastest;
     }
 
-    async getFastest(determinePingsPromise) {
+    async getFastest(measurePingsPromise) {
         const { promise, cancel } = runWithCancel(
             this.getFastestGenerator.bind(this),
-            determinePingsPromise
+            measurePingsPromise
         );
 
         this.fastestCancel = cancel;
@@ -97,14 +97,17 @@ class EndpointsManager {
             .reduce(this.arrToObjConverter, {});
     };
 
-    getEndpoints() {
+    getEndpoints(currentEndpointPromise, currentEndpointPingPromise) {
         if (_.isEmpty(this.endpoints)) {
             return null;
         }
 
-        const determinePingsPromise = this.determinePings();
+        const measurePingsPromise = this.measurePings(
+            currentEndpointPromise,
+            currentEndpointPingPromise
+        );
         const history = this.getHistory();
-        const fastest = this.getFastest(determinePingsPromise);
+        const fastest = this.getFastest(measurePingsPromise);
         const all = this.getAll();
 
         return {
@@ -146,20 +149,29 @@ class EndpointsManager {
         return false;
     }
 
-    shouldDeterminePings() {
+    shouldMeasurePings() {
         return _.isEmpty(this.endpoints) || !this.arePingsFresh()
             || this.areMajorityOfPingsEmpty();
     }
 
-    async determinePings() {
-        if (!this.shouldDeterminePings()) {
+    async measurePings(currentEndpointPromise, currentEndpointPingPromise) {
+        if (!this.shouldMeasurePings()) {
             return;
         }
+
+        const currentEndpoint = await currentEndpointPromise;
+        const currentEndpointPing = await currentEndpointPingPromise;
 
         const pingPromises = Object.values(this.endpoints)
             .map(async (endpoint) => {
                 const { id, domainName } = endpoint;
-                const ping = await this.connectivity.endpointsPing.getPingToEndpoint(domainName);
+                let ping;
+
+                if (currentEndpointPing && currentEndpoint.id === id) {
+                    ping = currentEndpointPing;
+                } else {
+                    ping = await this.connectivity.endpointsPing.getPingToEndpoint(domainName);
+                }
 
                 const pingData = {
                     endpointId: id,

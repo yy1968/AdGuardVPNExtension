@@ -77,6 +77,16 @@ const Endpoints = observer(() => {
         showSearchResults,
     } = vpnStore;
 
+    const { ping } = settingsStore;
+
+    const currentEndpoint = filteredEndpoints.find((endpoint) => {
+        return endpoint.id === selectedEndpoint.id;
+    });
+
+    if (ping) {
+        currentEndpoint.ping = ping;
+    }
+
     return (
         <div className="endpoints">
             <div className="endpoints__header">
@@ -104,7 +114,7 @@ const Endpoints = observer(() => {
                             <div className="endpoints__title">
                                 {translator.translate('endpoints_current')}
                             </div>
-                            {renderEndpoints([selectedEndpoint])}
+                            {renderEndpoints([currentEndpoint])}
                         </div>
 
                         {historyEndpoints.length > 0 && (

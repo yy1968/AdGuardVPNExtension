@@ -37,7 +37,11 @@ const buildCredentials = (throwError = false) => {
     };
 };
 
-const connectivity = {};
+const connectivity = {
+    endpointConnectivity: {
+        getPing: jest.fn(),
+    },
+};
 
 const buildVpnProvider = (vpnInfo, endpoints) => {
     return {
