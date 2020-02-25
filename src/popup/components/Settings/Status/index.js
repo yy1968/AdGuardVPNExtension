@@ -4,10 +4,9 @@ import classnames from 'classnames';
 
 import translator from '../../../../lib/translator';
 import rootStore from '../../../stores';
+import { PING_WITH_WARNING } from '../../../stores/consts';
 
 import './status.pcss';
-
-const PING_WITH_WARNING = 100;
 
 const Status = observer(() => {
     const { settingsStore } = useContext(rootStore);

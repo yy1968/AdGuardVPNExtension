@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const PING_WITH_WARNING = 100;
+import { PING_WITH_WARNING } from '../../stores/consts';
 
 const Endpoint = ({
     id, selected, countryCode, name, handleClick, ping,

@@ -10,3 +10,5 @@ export const INPUT_TYPES = {
     TEXT: 'text',
     PASSWORD: 'password',
 };
+
+export const PING_WITH_WARNING = 150;
