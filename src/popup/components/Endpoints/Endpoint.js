@@ -54,7 +54,11 @@ const Endpoint = ({
                         &nbsp;ms
                     </span>
                 ) : (
-                    <span>...</span>
+                    <span className="endpoints__dots">
+                        <span className="endpoints__dot">.</span>
+                        <span className="endpoints__dot">.</span>
+                        <span className="endpoints__dot">.</span>
+                    </span>
                 )}
             </div>
         </button>
