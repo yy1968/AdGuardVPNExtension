@@ -33,7 +33,7 @@
 
     &__search-in {
         width: 100%;
-        padding: 10px 15px;
+        padding: 10px 45px 10px 15px;
         font-size: 1.6rem;
         border: 0;
         border-radius: 4px;
@@ -45,12 +45,16 @@
         position: absolute;
         width: 24px;
         height: 24px;
-        top: calc(50% - 6px);
+        top: calc(50% - 12px);
         right: 15px;
+        padding: 0;
+        border: 0;
         visibility: hidden;
+        opacity: 0;
 
         &--active {
             visibility: visible;
+            opacity: 0.5;
         }
     }
 
