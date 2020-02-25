@@ -179,8 +179,8 @@ class EndpointsManager {
     }
 
     addToHistory = async (endpointId) => {
-        if (this.historyEndpoints[this.historyEndpoints.length - 1] === endpointId) {
-            return;
+        if (this.historyEndpoints.includes(endpointId)) {
+            this.historyEndpoints = this.historyEndpoints.filter((id) => id !== endpointId);
         }
 
         this.historyEndpoints.push(endpointId);
@@ -188,7 +188,7 @@ class EndpointsManager {
             this.historyEndpoints = this.historyEndpoints.slice(-this.MAX_HISTORY_LENGTH);
         }
 
-        this.storage.set(this.ENDPOINTS_HISTORY_STORAGE_KEY, this.historyEndpoints);
+        await this.storage.set(this.ENDPOINTS_HISTORY_STORAGE_KEY, this.historyEndpoints);
 
         await this.browserApi.runtime.sendMessage({
             type: MESSAGES_TYPES.ENDPOINTS_HISTORY_UPDATED,

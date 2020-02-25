@@ -224,8 +224,8 @@ class EndpointsService {
         return `${vpnFailurePage}${separator}${queryString}`;
     };
 
-    addToHistory(endpointId) {
-        this.endpointsManager.addToHistory(endpointId);
+    async addToHistory(endpointId) {
+        await this.endpointsManager.addToHistory(endpointId);
     }
 }
 
