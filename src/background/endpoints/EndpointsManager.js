@@ -16,7 +16,7 @@ class EndpointsManager {
 
     PING_TTL_MS = 1000 * 60 * 2; // 2 minutes
 
-    lastPingDetermination = null;
+    lastPingMeasurementTime = null;
 
     ENDPOINTS_HISTORY_STORAGE_KEY = 'endpoints.history.storage';
 
@@ -31,8 +31,8 @@ class EndpointsManager {
     };
 
     arePingsFresh = () => {
-        return !!(this.lastPingDetermination
-            && this.lastPingDetermination + this.PING_TTL_MS > Date.now());
+        return !!(this.lastPingMeasurementTime
+            && this.lastPingMeasurementTime + this.PING_TTL_MS > Date.now());
     };
 
     arrToObjConverter = (acc, endpoint) => {
@@ -106,6 +106,7 @@ class EndpointsManager {
             currentEndpointPromise,
             currentEndpointPingPromise
         );
+
         const history = this.getHistory();
         const fastest = this.getFastest(measurePingsPromise);
         const all = this.getAll();
@@ -124,11 +125,10 @@ class EndpointsManager {
 
         this.endpoints = endpoints;
 
-        // TODO [maximtop] consider how to update correctly
-        // this.browserApi.runtime.sendMessage({
-        //     type: MESSAGES_TYPES.ENDPOINTS_UPDATED,
-        //     data: this.getEndpoints(),
-        // });
+        this.browserApi.runtime.sendMessage({
+            type: MESSAGES_TYPES.ENDPOINTS_UPDATED,
+            data: this.getAll(),
+        });
 
         return this.endpoints;
     }
@@ -150,8 +150,13 @@ class EndpointsManager {
     }
 
     shouldMeasurePings() {
-        return _.isEmpty(this.endpoints) || !this.arePingsFresh()
-            || this.areMajorityOfPingsEmpty();
+        if (_.isEmpty(this.endpoints)) {
+            return false;
+        }
+        if (this.areMajorityOfPingsEmpty()) {
+            return true;
+        }
+        return !this.arePingsFresh();
     }
 
     async measurePings(currentEndpointPromise, currentEndpointPingPromise) {
@@ -184,10 +189,12 @@ class EndpointsManager {
                     type: MESSAGES_TYPES.ENDPOINTS_PING_UPDATED,
                     data: pingData,
                 });
+
+                return pingData;
             });
 
         await Promise.all(pingPromises);
-        this.lastPingDetermination = Date.now();
+        this.lastPingMeasurementTime = Date.now();
     }
 
     addToHistory = async (endpointId) => {

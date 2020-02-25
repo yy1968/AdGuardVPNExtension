@@ -66,9 +66,11 @@ class EndpointsService {
 
         const newEndpoints = await this.vpnProvider.getEndpoints(vpnToken.token);
 
-        const updatedEndpoints = this.endpointsManager.setEndpoints(newEndpoints);
+        if (newEndpoints) {
+            this.endpointsManager.setEndpoints(newEndpoints);
+        }
 
-        return updatedEndpoints;
+        return newEndpoints;
     };
 
     vpnTokenChanged = (oldVpnToken, newVpnToken) => {

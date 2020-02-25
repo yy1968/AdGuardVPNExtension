@@ -48,7 +48,7 @@ const App = observer(() => {
                     break;
                 }
                 case MESSAGES_TYPES.ENDPOINTS_UPDATED: {
-                    vpnStore.setEndpoints(data);
+                    vpnStore.setAllEndpoints(data);
                     break;
                 }
                 case MESSAGES_TYPES.ENDPOINTS_HISTORY_UPDATED: {

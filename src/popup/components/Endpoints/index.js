@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react';
 
 import translator from '../../../lib/translator';
@@ -11,12 +11,6 @@ import './endpoints.pcss';
 
 const Endpoints = observer(() => {
     const { vpnStore, uiStore, settingsStore } = useContext(rootStore);
-
-    useEffect(() => {
-        (async () => {
-            await vpnStore.requestFastestEndpoints();
-        })();
-    }, []);
 
     const handleEndpointSelect = (id) => async (e) => {
         e.preventDefault();

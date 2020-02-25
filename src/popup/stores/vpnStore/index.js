@@ -1,5 +1,9 @@
 import {
-    action, computed, observable, runInAction, toJS,
+    action,
+    computed,
+    observable,
+    runInAction,
+    toJS,
 } from 'mobx';
 import { REQUEST_STATUSES } from '../consts';
 
@@ -46,6 +50,15 @@ class VpnStore {
             return;
         }
         this.endpoints = endpoints;
+        this.requestFastestEndpoints();
+    };
+
+    @action
+    setAllEndpoints = (endpoints) => {
+        if (!endpoints) {
+            return;
+        }
+        this.endpoints.all = endpoints;
     };
 
     @action
@@ -116,6 +129,7 @@ class VpnStore {
             });
     }
 
+    @action
     async requestFastestEndpoints() {
         const fastestPromise = this.endpoints?.fastest;
         if (!fastestPromise) {
