@@ -7,7 +7,11 @@ const browserApi = {
 
         },
     },
+    storage: {
+        get: jest.fn(),
+    },
 };
+
 const proxy = {
     getCurrentEndpoint: async () => {
 
@@ -46,24 +50,16 @@ const buildVpnProvider = (vpnInfo, endpoints) => {
     };
 };
 
-const buildStorage = () => {
-    return {
-        get: jest.fn(),
-    };
-};
-
 describe('endpoints class', () => {
     it('getEndpoints returns null on init', async () => {
         const credentials = buildCredentials();
         const vpnProvider = buildVpnProvider();
-        const storage = buildStorage();
         const endpoints = new EndpointsService(
             browserApi,
             proxy,
             credentials,
             connectivity,
-            vpnProvider,
-            storage
+            vpnProvider
         );
         await endpoints.init();
         const endpointsList = endpoints.getEndpoints();
@@ -123,8 +119,7 @@ describe('endpoints class', () => {
             proxy,
             buildCredentials(),
             connectivity,
-            vpnProvider,
-            buildStorage()
+            vpnProvider
         );
         await endpointsService.init();
 
@@ -148,8 +143,7 @@ describe('endpoints class', () => {
             proxy,
             credentials,
             connectivity,
-            vpnProvider,
-            buildStorage()
+            vpnProvider
         );
         await endpoints.init();
         await endpoints.getVpnInfoRemotely();
@@ -165,7 +159,7 @@ describe('endpoints class', () => {
         const vpnProvider = buildVpnProvider(expectedVpnInfo);
         const credentials = buildCredentials();
         const endpoints = new EndpointsService(
-            browserApi, proxy, credentials, connectivity, vpnProvider, buildStorage()
+            browserApi, proxy, credentials, connectivity, vpnProvider
         );
         await endpoints.init();
         await endpoints.getVpnInfoRemotely();

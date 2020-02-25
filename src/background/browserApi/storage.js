@@ -1,7 +1,5 @@
-import browser from 'webextension-polyfill';
-
-class Storage {
-    constructor() {
+export default class Storage {
+    constructor(browser) {
         this.vault = browser.storage.local;
     }
 
@@ -18,7 +16,3 @@ class Storage {
         return this.vault.remove([key]);
     }
 }
-
-const storage = new Storage();
-
-export default storage;

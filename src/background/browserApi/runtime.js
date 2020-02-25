@@ -15,6 +15,11 @@ const sendMessage = async (...args) => {
 
 export const getUrl = (url) => browser.runtime.getURL(url);
 
+const getManifest = () => {
+    return browser.runtime.getManifest();
+};
+
 export default {
     sendMessage,
+    getManifest,
 };

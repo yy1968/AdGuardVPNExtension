@@ -15,7 +15,6 @@ import permissionsChecker from './permissionsChecker/permissionsChecker';
 import permissionsError from './permissionsChecker/permissionsError';
 import popupData from './popupData';
 import log from '../lib/logger';
-import storage from './storage';
 import nonRoutable from './routability/nonRoutable';
 import management from './management';
 import updateService from './updateService';
@@ -34,7 +33,6 @@ global.adguard = {
     authCache,
     endpoints,
     popupData,
-    storage,
     permissionsChecker,
     permissionsError,
     credentials,

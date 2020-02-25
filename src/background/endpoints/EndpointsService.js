@@ -12,20 +12,18 @@ class EndpointsService {
 
     currentLocation = null;
 
-    constructor(browserApi, proxy, credentials, connectivity, vpnProvider, storage) {
+    constructor(browserApi, proxy, credentials, connectivity, vpnProvider) {
         this.proxy = proxy;
         this.credentials = credentials;
         this.connectivity = connectivity;
         this.vpnProvider = vpnProvider;
         this.browserApi = browserApi;
-        this.storage = storage;
     }
 
     init = async () => {
         this.endpointsManager = new EndpointsManager(
             this.browserApi,
-            this.connectivity,
-            this.storage
+            this.connectivity
         );
         await this.endpointsManager.init();
     };
@@ -194,7 +192,6 @@ class EndpointsService {
         return closestEndpoint;
     };
 
-    // TODO [maximtop] consider moving this function in another place
     getVpnFailurePage = async () => {
         let vpnToken;
         try {

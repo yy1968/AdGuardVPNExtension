@@ -3,7 +3,7 @@ import nanoid from 'nanoid';
 import browser from 'webextension-polyfill';
 import { authApi } from './api';
 import authProvider from './providers/authProvider';
-import storage from './storage';
+import browserApi from './browserApi';
 import tabs from './tabs';
 import { proxy } from './proxy';
 import notifications from './notifications';
@@ -13,7 +13,6 @@ import {
     AUTH_BASE_URL,
     AUTH_REDIRECT_URI,
 } from './config';
-import browserApi from './browserApi';
 import { MESSAGES_TYPES } from '../lib/constants';
 import log from '../lib/logger';
 import notifier from '../lib/notifier';
@@ -189,13 +188,13 @@ class Auth {
 
     async setAccessToken(accessToken) {
         this.accessTokenData = accessToken;
-        await storage.set(AUTH_ACCESS_TOKEN_KEY, accessToken);
+        await browserApi.storage.set(AUTH_ACCESS_TOKEN_KEY, accessToken);
         notifier.notifyListeners(notifier.types.USER_AUTHENTICATED);
     }
 
     async removeAccessToken() {
         this.accessTokenData = null;
-        await storage.remove(AUTH_ACCESS_TOKEN_KEY);
+        await browserApi.storage.remove(AUTH_ACCESS_TOKEN_KEY);
     }
 
     async getAccessToken() {
@@ -204,7 +203,7 @@ class Auth {
         }
 
         // if no access token, than try to get it from storage
-        const accessTokenData = await storage.get(AUTH_ACCESS_TOKEN_KEY);
+        const accessTokenData = await browserApi.storage.get(AUTH_ACCESS_TOKEN_KEY);
         if (accessTokenData && accessTokenData.accessToken) {
             this.accessTokenData = accessTokenData;
             return accessTokenData.accessToken;
@@ -222,7 +221,7 @@ class Auth {
     }
 
     async init() {
-        const accessTokenData = await storage.get(AUTH_ACCESS_TOKEN_KEY);
+        const accessTokenData = await browserApi.storage.get(AUTH_ACCESS_TOKEN_KEY);
         if (!accessTokenData || !accessTokenData.accessToken) {
             return;
         }

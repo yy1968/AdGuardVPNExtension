@@ -21,7 +21,7 @@ const decodeMessage = (arrBufMessage) => {
 };
 
 const pollPing = (websocket, vpnToken, appId) => new Promise((resolve, reject) => {
-    const POLL_TIMEOUT_MS = 2000;
+    const POLL_TIMEOUT_MS = 3000;
     const arrBufMessage = preparePingMessage(Date.now(), vpnToken, appId);
     websocket.send(arrBufMessage);
 

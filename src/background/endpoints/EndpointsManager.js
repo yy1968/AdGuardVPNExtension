@@ -20,10 +20,10 @@ class EndpointsManager {
 
     ENDPOINTS_HISTORY_STORAGE_KEY = 'endpoints.history.storage';
 
-    constructor(browserApi, connectivity, storage) {
+    constructor(browserApi, connectivity) {
         this.browserApi = browserApi;
         this.connectivity = connectivity;
-        this.storage = storage;
+        this.storage = browserApi.storage;
     }
 
     init = async () => {
