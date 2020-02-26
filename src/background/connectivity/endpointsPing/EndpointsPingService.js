@@ -19,7 +19,7 @@ class EndpointsPingService {
         try {
             const websocket = await this.websocketFactory.getNativeWebsocket(websocketUrl);
             await websocket.open();
-            averagePing = await getAveragePing(websocket, token, appId);
+            averagePing = await getAveragePing(websocket, token, appId, true);
             websocket.close();
         } catch (e) {
             log.error('Was unable to get ping', websocketUrl);

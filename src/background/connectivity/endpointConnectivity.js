@@ -110,6 +110,7 @@ class EndpointConnectivity {
             requestTime: currentTime,
             token: stringToUint8Array(this.vpnToken),
             applicationId: stringToUint8Array(credentials.getAppId()),
+            ignoredHandshake: false,
         });
         const protocolMsg = WsConnectivityMsg.create({ pingMsg });
         return WsConnectivityMsg.encode(protocolMsg).finish();

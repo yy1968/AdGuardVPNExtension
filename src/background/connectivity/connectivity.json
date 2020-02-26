@@ -19,6 +19,10 @@
         "applicationId": {
           "type": "bytes",
           "id": 3
+        },
+        "ignoredHandshake": {
+          "type": "bool",
+          "id": 4
         }
       }
     },
@@ -27,6 +31,14 @@
         "token": {
           "type": "bytes",
           "id": 1
+        },
+        "mbytesDownloaded": {
+          "type": "float",
+          "id": 2
+        },
+        "mbytesUploaded": {
+          "type": "float",
+          "id": 3
         },
         "refreshTokens": {
           "type": "bool",

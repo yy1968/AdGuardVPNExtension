@@ -5,11 +5,12 @@ import log from '../../lib/logger';
 
 const { WsConnectivityMsg, WsPingMsg } = protobuf.Root.fromJSON(connectivityJson);
 
-const preparePingMessage = (currentTime, vpnToken, appId) => {
+const preparePingMessage = (currentTime, vpnToken, appId, ignoredHandshake) => {
     const pingMsg = WsPingMsg.create({
         requestTime: currentTime,
         token: stringToUint8Array(vpnToken),
         applicationId: stringToUint8Array(appId),
+        ignoredHandshake,
     });
     const protocolMsg = WsConnectivityMsg.create({ pingMsg });
     return WsConnectivityMsg.encode(protocolMsg).finish();
@@ -20,9 +21,10 @@ const decodeMessage = (arrBufMessage) => {
     return WsConnectivityMsg.toObject(message);
 };
 
-const pollPing = (websocket, vpnToken, appId) => new Promise((resolve, reject) => {
+// eslint-disable-next-line max-len
+const pollPing = (websocket, vpnToken, appId, ignoredHandshake) => new Promise((resolve, reject) => {
     const POLL_TIMEOUT_MS = 3000;
-    const arrBufMessage = preparePingMessage(Date.now(), vpnToken, appId);
+    const arrBufMessage = preparePingMessage(Date.now(), vpnToken, appId, ignoredHandshake);
     websocket.send(arrBufMessage);
 
     const timeoutId = setTimeout(reject, POLL_TIMEOUT_MS);
@@ -42,13 +44,13 @@ const pollPing = (websocket, vpnToken, appId) => new Promise((resolve, reject) =
     websocket.onMessage(messageHandler);
 });
 
-export const getAveragePing = async (websocket, vpnToken, appId) => {
+export const getAveragePing = async (websocket, vpnToken, appId, ignoredHandshake = true) => {
     const POLLS_NUM = 3;
     const results = [];
     try {
         for (let i = 0; i < POLLS_NUM; i += 1) {
             // eslint-disable-next-line no-await-in-loop
-            const result = await pollPing(websocket, vpnToken, appId);
+            const result = await pollPing(websocket, vpnToken, appId, ignoredHandshake);
             results.push(result);
         }
     } catch (e) {
