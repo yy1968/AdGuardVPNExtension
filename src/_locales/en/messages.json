@@ -228,7 +228,7 @@
         "message": "Search result"
     },
     "endpoints_search": {
-        "message": "search the country"
+        "message": "Search the country"
     },
     "premium_limit_reached": {
         "message": "Monthly data limit reached. Need more?"
@@ -243,7 +243,7 @@
         "message": "Connect"
     },
     "settings_not_responding": {
-        "message": "Server not responding"
+        "message": "Server is not responding"
     },
     "settings_choose_another": {
         "message": "Choose another"
