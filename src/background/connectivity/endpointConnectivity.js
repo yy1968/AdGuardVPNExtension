@@ -1,5 +1,4 @@
-import protobuf from 'protobufjs/light';
-import connectivityJson from './connectivity.json';
+import { WsConnectivityMsg, WsPingMsg } from './protobufCompiled';
 import websocketFactory from './websocket/websocketFactory';
 import { WS_API_URL_TEMPLATE } from '../config';
 import { renderTemplate, stringToUint8Array } from '../../lib/string-utils';
@@ -8,7 +7,6 @@ import credentials from '../credentials';
 import notifier from '../../lib/notifier';
 import { proxy } from '../proxy';
 
-const { WsConnectivityMsg, WsPingMsg } = protobuf.Root.fromJSON(connectivityJson);
 
 const CONNECTION_STATES = {
     WORKING: 'working',

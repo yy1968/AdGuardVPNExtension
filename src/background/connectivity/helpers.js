@@ -1,9 +1,6 @@
-import protobuf from 'protobufjs/light';
-import connectivityJson from './connectivity.json';
+import { WsConnectivityMsg, WsPingMsg } from './protobufCompiled';
 import { stringToUint8Array } from '../../lib/string-utils';
 import log from '../../lib/logger';
-
-const { WsConnectivityMsg, WsPingMsg } = protobuf.Root.fromJSON(connectivityJson);
 
 const preparePingMessage = (currentTime, vpnToken, appId, ignoredHandshake) => {
     const pingMsg = WsPingMsg.create({

@@ -77,7 +77,7 @@ const Endpoints = observer(() => {
         return endpoint.id === selectedEndpoint.id;
     });
 
-    if (ping) {
+    if (ping && currentEndpoint) {
         currentEndpoint.ping = ping;
     }
 
