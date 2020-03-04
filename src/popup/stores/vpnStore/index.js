@@ -142,7 +142,13 @@ class VpnStore {
     @computed
     get fastestEndpoints() {
         return Object.values(this._fastestEndpoints || {})
-            .sort((a, b) => a.ping - b.ping);
+            .sort((a, b) => a.ping - b.ping)
+            .map((endpoint) => {
+                if (this.selectedEndpoint && this.selectedEndpoint.id === endpoint.id) {
+                    return { ...endpoint, selected: true };
+                }
+                return endpoint;
+            });
     }
 
     @computed
