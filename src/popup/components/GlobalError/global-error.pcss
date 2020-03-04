@@ -1,8 +1,6 @@
 .global-error {
     position: relative;
-    padding: 30px 40px 40px;
-    max-width: 320px;
-    margin: 0 auto;
+    padding: 30px 20px;
     height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
@@ -37,10 +35,10 @@
 
     &__icon {
         width: 100%;
-        height: 195px;
-        margin: 0px auto 30px;
+        height: 215px;
+        margin: -20px auto 30px;
         background-image: url(../../../../src/assets/images/trouble.svg);
-        background-position: center;
+        background-position: center bottom;
         background-repeat: no-repeat;
 
         &--error {
@@ -61,6 +59,7 @@
     }
 
     &__description {
+        max-width: 240px;
         margin-bottom: 40px;
     }
 

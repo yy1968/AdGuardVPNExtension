@@ -7,8 +7,6 @@ import {
 } from 'mobx';
 import { REQUEST_STATUSES } from '../consts';
 
-const MAX_FASTEST_LENGTH = 3;
-
 class VpnStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
@@ -59,14 +57,6 @@ class VpnStore {
             return;
         }
         this.endpoints.all = endpoints;
-    };
-
-    @action
-    setHistoryEndpoints = (endpoints) => {
-        if (!endpoints) {
-            return;
-        }
-        this.endpoints.history = endpoints;
     };
 
     @action
@@ -126,6 +116,12 @@ class VpnStore {
                     return { ...endpoint, ping: endpointPing.ping };
                 }
                 return endpoint;
+            })
+            .map((endpoint) => {
+                if (this.selectedEndpoint && this.selectedEndpoint.id === endpoint.id) {
+                    return { ...endpoint, selected: true };
+                }
+                return endpoint;
             });
     }
 
@@ -146,23 +142,7 @@ class VpnStore {
     @computed
     get fastestEndpoints() {
         return Object.values(this._fastestEndpoints || {})
-            .filter((endpoint) => this.selectedEndpoint && this.selectedEndpoint.id !== endpoint.id)
-            .sort((a, b) => a.ping - b.ping)
-            .slice(0, MAX_FASTEST_LENGTH);
-    }
-
-    @computed
-    get historyEndpoints() {
-        return Object.values(this.endpoints?.history || {})
-            .filter((endpoint) => this.selectedEndpoint && this.selectedEndpoint.id !== endpoint.id)
-            .sort((a, b) => b.order - a.order)
-            .map((endpoint) => {
-                const endpointPing = this.pings[endpoint.id];
-                if (endpointPing) {
-                    return { ...endpoint, ping: endpointPing.ping };
-                }
-                return endpoint;
-            });
+            .sort((a, b) => a.ping - b.ping);
     }
 
     @computed

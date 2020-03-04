@@ -59,13 +59,28 @@
 
     &__header {
         position: relative;
-        margin-bottom: 140px;
         padding-top: 10px;
         text-align: center;
 
+        &--main {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 115px;
+            margin-bottom: 58px;
+            padding: 0;
+            font-size: 2.6rem;
+            font-weight: 700;
+            line-height: 1;
+            background-image: url(../../../../src/assets/images/welcome.svg);
+            background-repeat: no-repeat;
+            background-position: top center;
+        }
+
         &--welcome {
             margin: 50px 0 65px;
-            padding: 0
+            padding: 0;
         }
     }
 
@@ -77,15 +92,9 @@
 
     &__beta {
         position: absolute;
-        top: -5px;
-        right: 55px;
-        padding: 3px 5px;
-        font-size: 1.1rem;
-        line-height: 1;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #fff;
-        background-color: #5eb0b7;
-        border-radius: 3px;
+        top: -10px;
+        right: 53px;
+        width: 36px;
+        height: 18px;
     }
 }

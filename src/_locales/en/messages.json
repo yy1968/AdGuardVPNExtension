@@ -212,12 +212,6 @@
     "endpoints_countries": {
         "message": "Countries"
     },
-    "endpoints_history": {
-        "message": "History"
-    },
-    "endpoints_current": {
-        "message": "Current"
-    },
     "endpoints_fastest": {
         "message": "Fastest"
     },
@@ -259,5 +253,14 @@
     },
     "settings_vpn_disabled": {
         "message": "VPN is disabled"
+    },
+    "popup_feedback_title": {
+        "message": "We'd love to hear your feedback"
+    },
+    "popup_feedback_button": {
+        "message": "Leave feedback"
+    },
+    "settings_run_out_data": {
+        "message": "You've run out of data"
     }
 }

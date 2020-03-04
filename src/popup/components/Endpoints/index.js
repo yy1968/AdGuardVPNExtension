@@ -65,21 +65,9 @@ const Endpoints = observer(() => {
 
     const {
         fastestEndpoints,
-        historyEndpoints,
         filteredEndpoints,
-        selectedEndpoint,
         showSearchResults,
     } = vpnStore;
-
-    const { ping } = settingsStore;
-
-    const currentEndpoint = filteredEndpoints.find((endpoint) => {
-        return endpoint.id === selectedEndpoint.id;
-    });
-
-    if (ping && currentEndpoint) {
-        currentEndpoint.ping = ping;
-    }
 
     return (
         <div className="endpoints">
@@ -104,22 +92,6 @@ const Endpoints = observer(() => {
             <div className="endpoints__scroll">
                 {!showSearchResults && (
                     <>
-                        <div className="endpoints__list">
-                            <div className="endpoints__title">
-                                {translator.translate('endpoints_current')}
-                            </div>
-                            {renderEndpoints([currentEndpoint])}
-                        </div>
-
-                        {historyEndpoints.length > 0 && (
-                            <div className="endpoints__list">
-                                <div className="endpoints__title">
-                                    {translator.translate('endpoints_history')}
-                                </div>
-                                {renderEndpoints(historyEndpoints)}
-                            </div>
-                        )}
-
                         <div className="endpoints__list">
                             <div className="endpoints__title">
                                 {translator.translate('endpoints_fastest')}

@@ -9,7 +9,6 @@ import GlobalControl from './GlobalControl';
 import Status from './Status';
 import SiteInfo from './SiteInfo';
 import ServerError from './ServerError';
-import Upgrade from './Upgrade';
 
 import './settings.pcss';
 
@@ -40,19 +39,13 @@ const Settings = observer(() => {
         proxyEnabled,
         serverError,
     } = settingsStore;
-    const { premiumPromoEnabled, insufficientTraffic } = vpnStore;
+    const { premiumPromoEnabled } = vpnStore;
 
     const settingsClass = classnames(
-        'settings',
+        'settings settings--feedback',
         { 'settings--active': proxyEnabled },
         { 'settings--premium-promo': premiumPromoEnabled }
     );
-
-    if (insufficientTraffic) {
-        return (
-            <Upgrade />
-        );
-    }
 
     return (
         <div className={settingsClass}>

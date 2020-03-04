@@ -8,7 +8,7 @@ import browser from 'webextension-polyfill';
 import { CSSTransition } from 'react-transition-group';
 
 import Header from '../Header';
-import InfoMessage from '../InfoMessage';
+import FeedbackMessage from '../InfoMessage/FeedbackMessage';
 import Endpoints from '../Endpoints';
 import Authentication from '../Authentication';
 import ExtraOptions from '../ExtraOptions';
@@ -144,7 +144,7 @@ const App = observer(() => {
             </CSSTransition>
             <Settings />
             <div className="footer">
-                <InfoMessage />
+                <FeedbackMessage />
             </div>
             <Icons />
         </>
