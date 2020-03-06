@@ -1,5 +1,6 @@
 import sortBy from 'lodash/sortBy';
 import getDistance from 'geolib/es/getDistance';
+import chunk from 'lodash/chunk';
 
 /**
  * Returns the value of the property from the cache,
@@ -189,3 +190,26 @@ export const runWithCancel = (fn, ...args) => {
  * @returns {*}
  */
 export const identity = (i) => i;
+
+/**
+ * Handles data asynchronously by small chunks
+ * @param {any[]} arr - array of data
+ * @param {number} size - size of the chunk
+ * @param {Function} handler - async function which handles data and returns promise
+ * @returns {Promise<any[]>}
+ */
+export const asyncMapByChunks = async (arr, handler, size) => {
+    const chunks = chunk(arr, size);
+
+    const result = [];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const chunk of chunks) {
+        const promises = chunk.map(handler);
+        // eslint-disable-next-line no-await-in-loop
+        const data = await Promise.all(promises);
+        result.push(data);
+    }
+
+    return result.flat(1);
+};

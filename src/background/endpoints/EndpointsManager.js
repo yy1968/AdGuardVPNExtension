@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { MESSAGES_TYPES } from '../../lib/constants';
-import { identity, runWithCancel } from '../../lib/helpers';
+import { asyncMapByChunks, identity, runWithCancel } from '../../lib/helpers';
 import log from '../../lib/logger';
 
 /**
@@ -160,33 +160,40 @@ class EndpointsManager {
         const currentEndpoint = await currentEndpointPromise;
         const currentEndpointPing = await currentEndpointPingPromise;
 
-        const pingPromises = Object.values(this.endpoints)
-            .map(async (endpoint) => {
-                const { id, domainName } = endpoint;
-                let ping;
+        const handleEndpointPingMeasurement = async (endpoint) => {
+            const { id, domainName } = endpoint;
+            let ping;
 
-                if (currentEndpointPing && currentEndpoint.id === id) {
-                    ping = currentEndpointPing;
-                } else {
-                    ping = await this.connectivity.endpointsPing.measurePingToEndpoint(domainName);
-                }
+            if (currentEndpointPing && currentEndpoint.id === id) {
+                ping = currentEndpointPing;
+            } else {
+                ping = await this.connectivity.endpointsPing.measurePingToEndpoint(domainName);
+            }
 
-                const pingData = {
-                    endpointId: id,
-                    ping,
-                };
+            const pingData = {
+                endpointId: id,
+                ping,
+            };
 
-                this.endpointsPings[id] = pingData;
+            this.endpointsPings[id] = pingData;
 
-                await this.browserApi.runtime.sendMessage({
-                    type: MESSAGES_TYPES.ENDPOINTS_PING_UPDATED,
-                    data: pingData,
-                });
-
-                return pingData;
+            await this.browserApi.runtime.sendMessage({
+                type: MESSAGES_TYPES.ENDPOINTS_PING_UPDATED,
+                data: pingData,
             });
 
-        await Promise.all(pingPromises);
+            return pingData;
+        };
+
+        // Experimentally determined that fastest results of measurements
+        // can be achieved with this batch size
+        const BATCH_SIZE = 10;
+        await asyncMapByChunks(
+            Object.values(this.endpoints),
+            handleEndpointPingMeasurement,
+            BATCH_SIZE
+        );
+
         this.lastPingMeasurementTime = Date.now();
     }
 }
