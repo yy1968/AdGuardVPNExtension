@@ -41,7 +41,7 @@ const SignInForm = observer(() => {
 
     return (
         <form
-            className={`form form--login ${authStore.error && 'form--error'}`}
+            className="form form--login"
             onSubmit={submitHandler}
         >
             <div className="form__inputs">
@@ -53,6 +53,7 @@ const SignInForm = observer(() => {
                     handleInputTypeChange={handleInputTypeChange}
                     icon={icon}
                     inputType={inputType}
+                    error={authStore.error}
                 />
                 {authStore.error && (
                     <div className="form__error">
