@@ -1,17 +1,22 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import log from '../../../lib/logger';
 
+/**
+ * This class wraps reconnecting-websocket and provides async open and close methods
+ * To read how reconnections works read documentation here
+ * https://github.com/pladaria/reconnecting-websocket
+ */
 class ReconnectingWebsocket {
     RECONNECTING_OPTIONS = {
-        maxReconnectionDelay: 10000,
-        minReconnectionDelay: 1000 + Math.random() * 4000,
-        reconnectionDelayGrowFactor: 1.3,
-        minUptime: 5000,
-        connectionTimeout: 4000,
-        maxRetries: Infinity,
-        maxEnqueuedMessages: Infinity,
-        startClosed: true,
-        debug: false,
+        maxReconnectionDelay: 10000, // max delay in ms between reconnections
+        minReconnectionDelay: 1000 + Math.random() * 4000, // min delay in ms between reconnections
+        reconnectionDelayGrowFactor: 1.3, // how fast the reconnection delay grows
+        minUptime: 5000, // min time in ms to consider connection as stable
+        connectionTimeout: 4000, // retry connect if not connected after this time, in ms
+        maxRetries: Infinity, // maximum number of retries
+        maxEnqueuedMessages: Infinity, // maximum number of messages to buffer until reconnection
+        startClosed: true, // start websocket in CLOSED state, call `.reconnect()` to connect
+        debug: false, // enables debug output
     };
 
     constructor(url, options) {

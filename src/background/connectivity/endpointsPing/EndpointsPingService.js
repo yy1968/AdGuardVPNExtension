@@ -1,15 +1,18 @@
 import { renderTemplate } from '../../../lib/string-utils';
 import { WS_API_URL_TEMPLATE } from '../../config';
-import { getAveragePing } from '../helpers';
+import { calculateAveragePing } from '../helpers';
 import log from '../../../lib/logger';
 
+/**
+ * Measures ping to endpoint with provided domain name and credentials
+ */
 class EndpointsPingService {
     constructor(credentials, websocketFactory) {
         this.credentials = credentials;
         this.websocketFactory = websocketFactory;
     }
 
-    getPingToEndpoint = async (domainName) => {
+    measurePingToEndpoint = async (domainName) => {
         const { prefix, token } = await this.credentials.getAccessCredentials();
         const appId = this.credentials.getAppId();
         const wsHost = `${prefix}.${domainName}`;
@@ -17,9 +20,9 @@ class EndpointsPingService {
 
         let averagePing;
         try {
-            const websocket = await this.websocketFactory.getNativeWebsocket(websocketUrl);
+            const websocket = await this.websocketFactory.createNativeWebsocket(websocketUrl);
             await websocket.open();
-            averagePing = await getAveragePing(websocket, token, appId, true);
+            averagePing = await calculateAveragePing(websocket, token, appId, true);
             websocket.close();
         } catch (e) {
             log.error('Was unable to get ping', websocketUrl);

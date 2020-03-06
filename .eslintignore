@@ -2,4 +2,3 @@ node_modules
 build
 /src/background/proxy/index.js
 /coverage
-/src/background/connectivity/protobufCompiled.js

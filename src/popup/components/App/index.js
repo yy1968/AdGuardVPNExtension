@@ -51,10 +51,6 @@ const App = observer(() => {
                     vpnStore.setAllEndpoints(data);
                     break;
                 }
-                case MESSAGES_TYPES.ENDPOINTS_HISTORY_UPDATED: {
-                    vpnStore.setHistoryEndpoints(data);
-                    break;
-                }
                 case MESSAGES_TYPES.ENDPOINTS_PING_UPDATED: {
                     vpnStore.setPing(data);
                     break;

@@ -17,7 +17,7 @@ const buildCredentials = (prefix, token, appId) => {
 const buildWsFactory = (Websocket, averagePing) => {
     let ws;
     return {
-        getNativeWebsocket: jest.fn((websocketUrl) => {
+        createNativeWebsocket: jest.fn((websocketUrl) => {
             ws = new Websocket(websocketUrl, averagePing);
             return ws;
         }),
@@ -69,7 +69,7 @@ describe('EndpointsPingService', () => {
 
         const endpointsPing = new EndpointsPingService(credentials, websocketFactory);
         const endpoint = { domainName: 'do-gb-lon1-01-hk7z7xez.adguard.io' };
-        const averagePing = await endpointsPing.getPingToEndpoint(endpoint.domainName);
+        const averagePing = await endpointsPing.measurePingToEndpoint(endpoint.domainName);
 
         expect(averagePing).toBeDefined();
         expect(averagePing).toBeGreaterThan(expectedAveragePing);

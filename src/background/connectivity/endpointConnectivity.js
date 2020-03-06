@@ -65,7 +65,7 @@ class EndpointConnectivity {
 
         const websocketUrl = renderTemplate(WS_API_URL_TEMPLATE, { host: wsHost });
         try {
-            this.ws = await websocketFactory.getReconnectingWebsocket(websocketUrl);
+            this.ws = await websocketFactory.createReconnectingWebsocket(websocketUrl);
         } catch (e) {
             this.state = CONNECTION_STATES.PAUSED;
             throw new Error(`Failed to create new websocket because of: ${JSON.stringify(e.message)}`);
@@ -84,7 +84,7 @@ class EndpointConnectivity {
         this.startGettingPing();
         this.startGettingConnectivityInfo();
         // when first ping received we can connect to proxy
-        const averagePing = await this.getAveragePing();
+        const averagePing = await this.calculateAveragePing();
         this.updatePingValue(averagePing);
         return averagePing;
     };
@@ -137,7 +137,7 @@ class EndpointConnectivity {
         this.ws.onMessage(messageHandler);
     });
 
-    getAveragePing = async () => {
+    calculateAveragePing = async () => {
         const POLLS_NUM = 3;
         const results = [];
         for (let i = 0; i < POLLS_NUM; i += 1) {
@@ -158,7 +158,7 @@ class EndpointConnectivity {
             clearInterval(this.pingGetInterval);
         }
         this.pingGetInterval = setInterval(async () => {
-            const averagePing = await this.getAveragePing();
+            const averagePing = await this.calculateAveragePing();
             this.updatePingValue(averagePing);
         }, this.PING_UPDATE_INTERVAL_MS);
     };

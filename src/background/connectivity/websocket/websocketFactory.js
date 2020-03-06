@@ -9,7 +9,7 @@ const websocketFactory = (() => {
      * @param {string} url
      * @returns {ReconnectingWebsocket}
      */
-    const getReconnectingWebsocket = async (url) => {
+    const createReconnectingWebsocket = async (url) => {
         if (!url) {
             throw new Error('Url expected to be provided');
         }
@@ -25,7 +25,7 @@ const websocketFactory = (() => {
      * @param {string} url
      * @returns {NativeWebsocket}
      */
-    const getNativeWebsocket = async (url) => {
+    const createNativeWebsocket = async (url) => {
         if (!url) {
             throw new Error('No url was provided');
         }
@@ -33,8 +33,8 @@ const websocketFactory = (() => {
     };
 
     return {
-        getNativeWebsocket,
-        getReconnectingWebsocket,
+        createNativeWebsocket,
+        createReconnectingWebsocket,
     };
 })();
 

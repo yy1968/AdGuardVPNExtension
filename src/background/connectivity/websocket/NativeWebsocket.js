@@ -1,5 +1,9 @@
 import log from '../../../lib/logger';
 
+/**
+ * Wrapper around native websocket.
+ * Implemented to add async methods for open and close actions
+ */
 class NativeWebsocket {
     constructor(url) {
         this.url = url;

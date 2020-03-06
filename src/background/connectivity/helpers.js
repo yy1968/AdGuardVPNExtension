@@ -2,6 +2,15 @@ import { WsConnectivityMsg, WsPingMsg } from './protobufCompiled';
 import { stringToUint8Array } from '../../lib/string-utils';
 import log from '../../lib/logger';
 
+/**
+ * Prepares ping message before sending to the endpoint via websocket
+ * @param {number} currentTime
+ * @param {string} vpnToken
+ * @param {string} appId
+ * @param {boolean} ignoredHandshake - flag if we should ignore handshake or not.
+ * Ping measurement should ignoreHandshake
+ * @returns {Uint8Array}
+ */
 const preparePingMessage = (currentTime, vpnToken, appId, ignoredHandshake) => {
     const pingMsg = WsPingMsg.create({
         requestTime: currentTime,
@@ -41,7 +50,15 @@ const pollPing = (websocket, vpnToken, appId, ignoredHandshake) => new Promise((
     websocket.onMessage(messageHandler);
 });
 
-export const getAveragePing = async (websocket, vpnToken, appId, ignoredHandshake = true) => {
+/**
+ * Calculates average ping to websocket making 3 consecutive requests
+ * @param websocket
+ * @param vpnToken
+ * @param appId
+ * @param ignoredHandshake
+ * @returns {Promise<null|number>}
+ */
+export const calculateAveragePing = async (websocket, vpnToken, appId, ignoredHandshake = true) => {
     const POLLS_NUM = 3;
     const results = [];
     try {

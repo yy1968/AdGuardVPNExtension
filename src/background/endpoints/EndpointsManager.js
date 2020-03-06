@@ -3,14 +3,13 @@ import { MESSAGES_TYPES } from '../../lib/constants';
 import { identity, runWithCancel } from '../../lib/helpers';
 import log from '../../lib/logger';
 
+/**
+ * EndpointsManager keeps endpoints in the memory and determines their ping on request
+ */
 class EndpointsManager {
-    endpoints = {};
+    endpoints = {}; // { endpointId: { endpointInfo } }
 
     endpointsPings = {}; // { endpointId, ping }[]
-
-    historyEndpoints = [];
-
-    MAX_HISTORY_LENGTH = 3;
 
     MAX_FASTEST_LENGTH = 3;
 
@@ -18,17 +17,11 @@ class EndpointsManager {
 
     lastPingMeasurementTime = null;
 
-    ENDPOINTS_HISTORY_STORAGE_KEY = 'endpoints.history.storage';
-
     constructor(browserApi, connectivity) {
         this.browserApi = browserApi;
         this.connectivity = connectivity;
         this.storage = browserApi.storage;
     }
-
-    init = async () => {
-        this.historyEndpoints = await this.storage.get(this.ENDPOINTS_HISTORY_STORAGE_KEY) || [];
-    };
 
     arePingsFresh = () => {
         return !!(this.lastPingMeasurementTime
@@ -40,16 +33,12 @@ class EndpointsManager {
         return acc;
     };
 
-    getHistory() {
-        return this.historyEndpoints
-            .map((id, idx) => {
-                return { ...this.endpoints[id], order: idx };
-            })
-            .filter(identity)
-            .map(this.enrichWithPing)
-            .reduce(this.arrToObjConverter, {});
-    }
-
+    /**
+     * Returns promise with fastest endpoints which resolves after measurement ping promise resolve
+     * Generator function is used here because it can be canceled.
+     * @param {Promise} measurePingsPromise
+     * @returns {Generator<*>}
+     */
     * getFastestGenerator(measurePingsPromise) {
         yield measurePingsPromise;
         const sortedPings = _.sortBy(Object.values(this.endpointsPings), ['ping']);
@@ -97,6 +86,12 @@ class EndpointsManager {
             .reduce(this.arrToObjConverter, {});
     };
 
+    /**
+     * Returns all endpoints and fastest endpoints promise in one object
+     * @param currentEndpointPromise - information about current endpoint stored in the promise
+     * @param currentEndpointPingPromise - ping of current endpoint stored in the promise
+     * @returns {{all: *, fastest: Promise<*>} | null}
+     */
     getEndpoints(currentEndpointPromise, currentEndpointPingPromise) {
         if (_.isEmpty(this.endpoints)) {
             return null;
@@ -107,12 +102,10 @@ class EndpointsManager {
             currentEndpointPingPromise
         );
 
-        const history = this.getHistory();
         const fastest = this.getFastest(measurePingsPromise);
         const all = this.getAll();
 
         return {
-            history,
             fastest,
             all,
         };
@@ -175,7 +168,7 @@ class EndpointsManager {
                 if (currentEndpointPing && currentEndpoint.id === id) {
                     ping = currentEndpointPing;
                 } else {
-                    ping = await this.connectivity.endpointsPing.getPingToEndpoint(domainName);
+                    ping = await this.connectivity.endpointsPing.measurePingToEndpoint(domainName);
                 }
 
                 const pingData = {
@@ -195,24 +188,6 @@ class EndpointsManager {
 
         await Promise.all(pingPromises);
         this.lastPingMeasurementTime = Date.now();
-    }
-
-    addToHistory = async (endpointId) => {
-        if (this.historyEndpoints.includes(endpointId)) {
-            this.historyEndpoints = this.historyEndpoints.filter((id) => id !== endpointId);
-        }
-
-        this.historyEndpoints.push(endpointId);
-        if (this.historyEndpoints.length > this.MAX_HISTORY_LENGTH) {
-            this.historyEndpoints = this.historyEndpoints.slice(-this.MAX_HISTORY_LENGTH);
-        }
-
-        await this.storage.set(this.ENDPOINTS_HISTORY_STORAGE_KEY, this.historyEndpoints);
-
-        await this.browserApi.runtime.sendMessage({
-            type: MESSAGES_TYPES.ENDPOINTS_HISTORY_UPDATED,
-            data: this.getHistory(),
-        });
     }
 }
 

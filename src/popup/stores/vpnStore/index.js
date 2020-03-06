@@ -71,7 +71,6 @@ class VpnStore {
             throw new Error(`No endpoint with id: "${id}" found`);
         }
         await adguard.proxy.setCurrentEndpoint(toJS(selectedEndpoint));
-        await adguard.endpoints.addToHistory(selectedEndpoint.id);
         runInAction(() => {
             this.selectedEndpoint = { ...selectedEndpoint, selected: true };
         });

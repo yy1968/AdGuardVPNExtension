@@ -7,6 +7,9 @@ import { MESSAGES_TYPES } from '../../lib/constants';
 import { POPUP_DEFAULT_SUPPORT_URL } from '../config';
 import EndpointsManager from './EndpointsManager';
 
+/**
+ * EndpointsService manages endpoints, vpn, current location information.
+ */
 class EndpointsService {
     vpnInfo = null;
 
@@ -25,7 +28,6 @@ class EndpointsService {
             this.browserApi,
             this.connectivity
         );
-        await this.endpointsManager.init();
     };
 
     reconnectEndpoint = async (endpoint) => {
@@ -227,10 +229,6 @@ class EndpointsService {
 
         return `${vpnFailurePage}${separator}${queryString}`;
     };
-
-    async addToHistory(endpointId) {
-        await this.endpointsManager.addToHistory(endpointId);
-    }
 }
 
 export default EndpointsService;
