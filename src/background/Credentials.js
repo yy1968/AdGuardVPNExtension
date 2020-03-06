@@ -3,12 +3,8 @@ import md5 from 'crypto-js/md5';
 import lodashGet from 'lodash/get';
 import accountProvider from './providers/accountProvider';
 import auth from './auth';
-import browserApi from './browserApi';
 import log from '../lib/logger';
-import vpnProvider from './providers/vpnProvider';
-import permissionsError from './permissionsChecker/permissionsError';
 import notifier from '../lib/notifier';
-import { proxy } from './proxy';
 
 class Credentials {
     VPN_TOKEN_KEY = 'credentials.token';
@@ -17,8 +13,13 @@ class Credentials {
 
     VPN_CREDENTIALS_KEY = 'credentials.vpn';
 
-    constructor(browserApi) {
+    constructor({
+        browserApi, vpnProvider, permissionsError, proxy,
+    }) {
         this.storage = browserApi.storage;
+        this.vpnProvider = vpnProvider;
+        this.permissionsError = permissionsError;
+        this.proxy = proxy;
     }
 
     async getVpnTokenLocal() {
@@ -94,7 +95,7 @@ class Credentials {
 
         if (!this.isValid(vpnToken)) {
             const error = Error(`Vpn token is not valid. Token: ${JSON.stringify(vpnToken)}`);
-            permissionsError.setError(error);
+            this.permissionsError.setError(error);
             throw error;
         }
 
@@ -112,7 +113,7 @@ class Credentials {
 
         if (!this.areCredentialsValid(vpnCredentials)) {
             const error = Error(`Vpn credentials are not valid: Credentials: ${JSON.stringify(vpnCredentials)}`);
-            permissionsError.setError(error);
+            this.permissionsError.setError(error);
             throw error;
         }
 
@@ -127,7 +128,7 @@ class Credentials {
         const appId = this.getAppId();
 
         const vpnToken = await this.gainValidVpnToken();
-        const vpnCredentials = await vpnProvider.getVpnCredentials(appId, vpnToken.token);
+        const vpnCredentials = await this.vpnProvider.getVpnCredentials(appId, vpnToken.token);
 
         if (!this.areCredentialsValid(vpnCredentials)) {
             return null;
@@ -211,7 +212,7 @@ class Credentials {
 
     updateProxyCredentials = async () => {
         const { prefix } = await this.getAccessCredentials();
-        await proxy.setAccessPrefix(prefix);
+        await this.proxy.setAccessPrefix(prefix);
     };
 
     /**
@@ -280,7 +281,7 @@ class Credentials {
                 if (tracked) {
                     return;
                 }
-                await vpnProvider.postExtensionInstalled(appId);
+                await this.vpnProvider.postExtensionInstalled(appId);
                 await this.storage.set(TRACKED_INSTALLATIONS_KEY, true);
                 log.info('Installation successfully tracked');
             } catch (e) {
@@ -319,6 +320,4 @@ class Credentials {
     }
 }
 
-const credentials = new Credentials(browserApi);
-
-export default credentials;
+export default Credentials;

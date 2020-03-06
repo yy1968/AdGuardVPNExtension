@@ -9,16 +9,21 @@ import connectivity from './connectivity';
 import appStatus from './appStatus';
 import authCache from './authentication/authCache';
 import messaging from './messaging';
-import endpoints from './endpoints/endpoints';
-import credentials from './credentials';
-import permissionsChecker from './permissionsChecker/permissionsChecker';
 import permissionsError from './permissionsChecker/permissionsError';
-import popupData from './popupData';
 import log from '../lib/logger';
 import nonRoutable from './routability/nonRoutable';
 import management from './management';
 import updateService from './updateService';
 import contextMenu from './contextMenu';
+import {
+    credentials,
+    permissionsChecker,
+    popupData,
+    endpoints,
+} from './serviceLocator';
+import configureServices from './configureServices';
+
+configureServices();
 
 global.adguard = {
     settings,
@@ -43,7 +48,6 @@ global.adguard = {
 (async () => {
     try {
         const runInfo = await updateService.getRunInfo();
-
         permissionsChecker.init(); // should be initiated before auth module
         await auth.init();
         await settings.init();
@@ -52,7 +56,6 @@ global.adguard = {
         await settings.applySettings(); // we have to apply settings when credentials are ready
         await nonRoutable.init();
         await contextMenu.init();
-        await endpoints.init();
         messaging.init();
         log.info('Extension loaded all necessary modules');
     } catch (e) {

@@ -3,7 +3,7 @@ import websocketFactory from './websocket/websocketFactory';
 import { WS_API_URL_TEMPLATE } from '../config';
 import { renderTemplate, stringToUint8Array } from '../../lib/string-utils';
 import statsStorage from './statsStorage';
-import credentials from '../credentials';
+import { credentials } from '../serviceLocator';
 import notifier from '../../lib/notifier';
 import { proxy } from '../proxy';
 

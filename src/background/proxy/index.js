@@ -172,5 +172,6 @@ class ExtensionProxy {
 
 const proxy = new ExtensionProxy();
 
+// TODO [maximtop] export default
 export { proxy };
 

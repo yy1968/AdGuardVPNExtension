@@ -1,5 +1,5 @@
 import { runWithCancel } from '../lib/helpers';
-import credentials from './credentials';
+import { credentials } from './serviceLocator';
 import { proxy } from './proxy';
 import connectivity from './connectivity';
 import actions from './actions';
