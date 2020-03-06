@@ -108,6 +108,7 @@ class EndpointConnectivity {
             requestTime: currentTime,
             token: stringToUint8Array(this.vpnToken),
             applicationId: stringToUint8Array(credentials.getAppId()),
+            // selected endpoint shouldn't ignore handshake, ignore only for ping measurement
             ignoredHandshake: false,
         });
         const protocolMsg = WsConnectivityMsg.create({ pingMsg });
