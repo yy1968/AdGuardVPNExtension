@@ -9,6 +9,7 @@ import PopupData from './PopupData';
 import nonRoutable from './routability/nonRoutable';
 import EndpointsService from './endpoints/EndpointsService';
 import connectivity from './connectivity';
+import auth from './auth';
 
 export default function configureServices() {
     const credentials = new Credentials({
@@ -16,6 +17,7 @@ export default function configureServices() {
         permissionsError,
         proxy,
         vpnProvider,
+        auth,
     });
 
     const permissionsChecker = new PermissionsChecker({
