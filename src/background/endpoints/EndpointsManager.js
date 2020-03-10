@@ -40,7 +40,11 @@ class EndpointsManager {
      * @returns {Generator<*>}
      */
     * getFastestGenerator(measurePingsPromise) {
-        yield measurePingsPromise;
+        try {
+            yield measurePingsPromise;
+        } catch (e) {
+            console.log(e);
+        }
         const sortedPings = _.sortBy(Object.values(this.endpointsPings), ['ping']);
         const fastest = sortedPings
             .map(({ endpointId }) => {

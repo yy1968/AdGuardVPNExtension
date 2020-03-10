@@ -1,4 +1,4 @@
-import Credentials from '../../src/background/Credentials';
+import Credentials from '../../../src/background/credentials/Credentials';
 
 const browserApi = {};
 

@@ -1,29 +1,24 @@
-import settings from './settings/settings';
 import actions from './actions';
-import { vpnApi } from './api';
-import tabs from './tabs';
-import exclusions from './exclusions';
-import auth from './auth';
-import { proxy } from './proxy';
-import connectivity from './connectivity';
 import appStatus from './appStatus';
+import auth from './auth';
 import authCache from './authentication/authCache';
-import messaging from './messaging';
-import permissionsError from './permissionsChecker/permissionsError';
-import log from '../lib/logger';
-import nonRoutable from './routability/nonRoutable';
-import management from './management';
-import updateService from './updateService';
+import connectivity from './connectivity';
 import contextMenu from './contextMenu';
-import {
-    credentials,
-    permissionsChecker,
-    popupData,
-    endpoints,
-} from './serviceLocator';
-import configureServices from './configureServices';
-
-configureServices();
+import credentials from './credentials';
+import endpoints from './endpoints';
+import exclusions from './exclusions';
+import log from '../lib/logger';
+import management from './management';
+import messaging from './messaging';
+import nonRoutable from './routability/nonRoutable';
+import permissionsChecker from './permissionsChecker';
+import permissionsError from './permissionsChecker/permissionsError';
+import popupData from './popupData';
+import proxy from './proxy';
+import settings from './settings/settings';
+import tabs from './tabs';
+import updateService from './updateService';
+import { vpnApi } from './api';
 
 global.adguard = {
     settings,

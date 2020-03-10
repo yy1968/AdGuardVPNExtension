@@ -1,7 +1,7 @@
 import throttle from 'lodash/throttle';
-import log from '../lib/logger';
-import { SETTINGS_IDS } from '../lib/constants';
-import { runWithCancel } from '../lib/helpers';
+import log from '../../lib/logger';
+import { SETTINGS_IDS } from '../../lib/constants';
+import { runWithCancel } from '../../lib/helpers';
 
 class PopupData {
     constructor({
