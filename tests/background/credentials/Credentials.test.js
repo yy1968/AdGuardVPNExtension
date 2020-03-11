@@ -7,8 +7,9 @@ const msToSec = (ms) => {
 };
 
 describe('Credentials', () => {
-    const credentials = new Credentials({ browserApi });
     describe('validates credentials', () => {
+        const credentials = new Credentials({ browserApi });
+
         it('returns false if empty or undefined credentials are provided', () => {
             expect(credentials.areCredentialsValid()).toBeFalsy();
 
@@ -49,6 +50,7 @@ describe('Credentials', () => {
     });
 
     describe('validates vpn token', () => {
+        const credentials = new Credentials({ browserApi });
         it('returns false if no token provided', () => {
             expect(credentials.isTokenValid()).toBeFalsy();
         });
