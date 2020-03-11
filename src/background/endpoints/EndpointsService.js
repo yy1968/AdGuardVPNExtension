@@ -6,6 +6,7 @@ import { getClosestEndpointByCoordinates } from '../../lib/helpers';
 import { MESSAGES_TYPES } from '../../lib/constants';
 import { POPUP_DEFAULT_SUPPORT_URL } from '../config';
 import EndpointsManager from './EndpointsManager';
+import notifier from '../../lib/notifier';
 
 /**
  * EndpointsService manages endpoints, vpn, current location information.
@@ -24,6 +25,11 @@ class EndpointsService {
         this.connectivity = connectivity;
         this.vpnProvider = vpnProvider;
         this.endpointsManager = new EndpointsManager(browserApi, connectivity);
+
+        notifier.addSpecifiedListener(
+            notifier.types.SHOULD_REFRESH_TOKENS,
+            this.refreshTokens.bind(this)
+        );
     }
 
     reconnectEndpoint = async (endpoint) => {
@@ -75,6 +81,18 @@ class EndpointsService {
         return oldVpnToken.licenseKey !== newVpnToken.licenseKey;
     };
 
+    /**
+     * Updates vpn tokens and credentials
+     * @returns {Promise<{vpnToken: *, vpnCredentials: *}>}
+     */
+    refreshTokens = async () => {
+        log.info('Refreshing tokens');
+        const vpnToken = await this.credentials.gainValidVpnToken(true, false);
+        const vpnCredentials = await this.credentials.gainValidVpnCredentials(true, false);
+        log.info('Tokens and credentials refreshed successfully');
+        return { vpnToken, vpnCredentials };
+    };
+
     getVpnInfoRemotely = async () => {
         let vpnToken;
 
@@ -89,12 +107,18 @@ class EndpointsService {
         let shouldReconnect = false;
 
         if (vpnInfo.refreshTokens) {
-            log.info('refreshing tokens');
-            const updatedVpnToken = await this.credentials.gainValidVpnToken(true, false);
+            let updatedVpnToken;
+
+            try {
+                ({ vpnToken: updatedVpnToken } = await this.refreshTokens());
+            } catch (e) {
+                log.debug('Unable to refresh tokens');
+            }
+
             if (this.vpnTokenChanged(vpnToken, updatedVpnToken)) {
                 shouldReconnect = true;
             }
-            await this.credentials.gainValidVpnCredentials(true);
+
             vpnInfo = await this.vpnProvider.getVpnExtensionInfo(updatedVpnToken.token);
         }
 

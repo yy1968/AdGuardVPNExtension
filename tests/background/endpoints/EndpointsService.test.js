@@ -170,7 +170,7 @@ describe('endpoints class', () => {
         expect(credentials.gainValidVpnToken).toBeCalledTimes(3);
         expect(credentials.gainValidVpnToken).nthCalledWith(2, true, false);
         expect(credentials.gainValidVpnCredentials).toBeCalledTimes(1);
-        expect(credentials.gainValidVpnCredentials).lastCalledWith(true);
+        expect(credentials.gainValidVpnCredentials).lastCalledWith(true, false);
     });
 
     // TODO [maximtop] add tests for uncovered methods of EndpointsService
