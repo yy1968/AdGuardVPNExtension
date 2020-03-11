@@ -9,6 +9,19 @@ import EndpointsManager from './EndpointsManager';
 import notifier from '../../lib/notifier';
 
 /**
+ * Endpoint information
+ * @typedef {Object} Endpoint
+ * @property {string} id
+ * @property {string} cityName
+ * @property {string} countryCode
+ * @property {string} countryName
+ * @property {string} domainName
+ * @property {[number, number]} coordinates
+ * @property {boolean} premiumOnly
+ * @property {string} publicKey
+ */
+
+/**
  * EndpointsService manages endpoints, vpn, current location information.
  */
 class EndpointsService {
@@ -32,30 +45,39 @@ class EndpointsService {
         );
     }
 
+    /**
+     * Reconnects to the new endpoint
+     * @param {Endpoint} endpoint
+     * @returns {Promise<void>}
+     */
     reconnectEndpoint = async (endpoint) => {
         const { domainName } = await this.proxy.setCurrentEndpoint(endpoint);
         const { prefix, token } = await this.credentials.getAccessCredentials();
         const wsHost = `${prefix}.${domainName}`;
         await this.connectivity.endpointConnectivity.setCredentials(wsHost, domainName, token);
+        log.debug(`Reconnect endpoint from ${endpoint.id} to same city ${endpoint.id}`);
     };
 
-    getClosestEndpointAndReconnect = async (endpoints, currentEndpoint) => {
-        const endpointsArr = Object.keys(endpoints)
-            .map((endpointKey) => endpoints[endpointKey]);
+
+    /**
+     * Returns closest endpoint, firstly checking if endpoints object includes
+     * endpoint with same city name
+     * @param {Object.<Endpoint>} endpoints - endpoints stored by endpoint id
+     * @param {Endpoint} currentEndpoint
+     * @returns {Endpoint}
+     */
+    getClosestEndpoint = (endpoints, currentEndpoint) => {
+        const endpointsArr = Object.values(endpoints);
 
         const sameCityEndpoint = endpointsArr.find((endpoint) => {
             return endpoint.cityName === currentEndpoint.cityName;
         });
 
         if (sameCityEndpoint) {
-            await this.reconnectEndpoint(sameCityEndpoint);
-            log.debug(`Reconnect endpoint from ${currentEndpoint.id} to same city ${sameCityEndpoint.id}`);
-            return;
+            return sameCityEndpoint;
         }
 
-        const closestCityEndpoint = getClosestEndpointByCoordinates(currentEndpoint, endpointsArr);
-        await this.reconnectEndpoint(closestCityEndpoint);
-        log.debug(`Reconnect endpoint from ${currentEndpoint.id} to closest city ${closestCityEndpoint.id}`);
+        return getClosestEndpointByCoordinates(currentEndpoint, endpointsArr);
     };
 
     getEndpointsRemotely = async () => {
@@ -134,13 +156,15 @@ class EndpointsService {
             // if there is no currently connected endpoint in the list of endpoints,
             // get closest and reconnect
             if (!currentEndpointInEndpoints) {
-                await this.getClosestEndpointAndReconnect(endpoints, currentEndpoint);
+                const closestEndpoint = this.getClosestEndpoint(endpoints, currentEndpoint);
+                this.reconnectEndpoint(closestEndpoint);
                 shouldReconnect = false;
             }
         }
 
         if (shouldReconnect) {
-            await this.getClosestEndpointAndReconnect(endpoints, currentEndpoint);
+            const closestEndpoint = this.getClosestEndpoint(endpoints, currentEndpoint);
+            this.reconnectEndpoint(closestEndpoint);
         }
 
         this.vpnInfo = vpnInfo;
